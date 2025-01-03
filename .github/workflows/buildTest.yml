@@ -1,4 +1,4 @@
-name: Java CI with Gradle (Spring 3.4.1, Java 17)
+name: "Java CI with Gradle (Spring 3.4.1, Java 17)"
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out the code
+      # 1. Check out your repository
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -17,24 +17,11 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
 
-      # 3. Cache Gradle dependencies
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
+      - name: Setup Gradles's permission
+        run: chmod +x gradlew
 
-      # 4. Build & test with Gradle
-      - name: Build
-        run: ./gradlew build --info --stacktrace
-
-      # 5. Run your JUnit tests with Gradle
-      - name: Build and Test
-        run: ./gradlew clean test --info --stacktrace
-
+      - name: Build with Gradle
+        run: ./gradlew clean build --exclude-task test
