@@ -1,4 +1,4 @@
-package org.clubs.blueheart.users.domain;
+package org.clubs.blueheart.user.domain;
 
 public enum UserRole {
     USER,

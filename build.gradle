@@ -38,6 +38,7 @@ dependencies {
     annotationProcessor 'jakarta.validation:jakarta.validation-api'
     annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
     runtimeOnly 'com.h2database:h2'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 }
 
 tasks.named('test') {

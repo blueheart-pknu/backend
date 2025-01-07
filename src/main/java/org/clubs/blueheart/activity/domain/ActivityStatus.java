@@ -1,4 +1,4 @@
-package org.clubs.blueheart.activities.domain;
+package org.clubs.blueheart.activity.domain;
 
 public enum ActivityStatus {
     PROGRESSING,

@@ -1,4 +1,4 @@
-package org.clubs.blueheart.users.domain;
+package org.clubs.blueheart.user.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.time.OffsetDateTime;
 
-import org.clubs.blueheart.groups.domain.Group;
+import org.clubs.blueheart.group.domain.Group;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
