@@ -11,8 +11,12 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    private UserDao userDao;
+    private final UserDao userDao;
     private UserCustomDaoImpl userCustomDaoImpl;
+
+    public UserRepositoryImpl(UserDao userDao) {
+        this.userDao = userDao; // 생성자 주입
+    }
 
     @Override
     public void createUser(UserInfoDto userInfoDto) {

@@ -8,16 +8,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import org.clubs.blueheart.group.domain.Group;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "users")  // DB의 'users' 테이블과 매핑
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Log4j2
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -38,10 +41,10 @@ public class User {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
-    private OffsetDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
     // ManyToMany 반대편
     @ManyToMany(mappedBy = "users")

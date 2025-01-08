@@ -58,7 +58,7 @@ public class UserApi {
             @Parameter(name = "keyword", description = "사용자이름 혹은 고유학번",
                     example = "201234567"),
     })
-    @GetMapping("/search")
+    @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserInfoDto>> findUserByKeyword(@PathVariable String keyword) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findUserByKeyword(keyword));
     }
