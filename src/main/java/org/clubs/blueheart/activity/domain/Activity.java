@@ -19,44 +19,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Log4j2
 public class Activity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name="creatorId", nullable = false)
-    private User creator_id;
-
-    @Enumerated(EnumType.STRING)
-    private ActivityStatus status;
-
-    @Column(name="max_number")
-    private Integer maxNumber;
-
-    @NotNull
-    @Column(nullable = false, length = 255)
-    private String description;
-
-    @NotNull
-    @Column(nullable = false, length = 255)
-    private String place;
-
-    @NotNull
-    @Column(name="place_url", nullable = false, length = 255)
-    private String placeUrl;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updatedAt", nullable = false)
-    private OffsetDateTime updatedAt;
-
-    @Column(name = "deleted_at")
-    private OffsetDateTime deletedAt;
-
     // ManyToMany 관계 설정
     @ManyToMany
     @JoinTable(
@@ -64,7 +26,35 @@ public class Activity {
             joinColumns = @JoinColumn(name = "activity_id"),   // groups 테이블 FK
             inverseJoinColumns = @JoinColumn(name = "user_id") // users 테이블 FK
     )
-    private java.util.Set<User> users = new java.util.HashSet<>();
+    private final java.util.Set<User> users = new java.util.HashSet<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name="creatorId", nullable = false)
+    private User creator_id;
+    @Enumerated(EnumType.STRING)
+    private ActivityStatus status;
+    @Column(name="max_number")
+    private Integer maxNumber;
+    @NotNull
+    @Column(nullable = false, length = 255)
+    private String description;
+    @NotNull
+    @Column(nullable = false, length = 255)
+    private String place;
+    @NotNull
+    @Column(name="place_url", nullable = false, length = 255)
+    private String placeUrl;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private OffsetDateTime createdAt;
+    @LastModifiedDate
+    @Column(name = "updatedAt", nullable = false)
+    private OffsetDateTime updatedAt;
+    @Column(name = "deleted_at")
+    private OffsetDateTime deletedAt;
 
     @Builder
     public Activity(ActivityStatus status, Integer maxNumber, String description, String place, String placeUrl) {

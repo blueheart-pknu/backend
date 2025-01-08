@@ -22,35 +22,28 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
+    // ManyToMany 반대편
+    @ManyToMany(mappedBy = "users")
+    private final java.util.Set<Group> groups = new java.util.HashSet<>();
+    @ManyToMany(mappedBy = "users")
+    private final java.util.Set<Group> activities = new java.util.HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     @Column(nullable = false, length = 10)
     private String username;
-
     @NotNull
     @Column(name = "student_number", nullable = false, unique = true)
     private String studentNumber;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private UserRole role;
-
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    // ManyToMany 반대편
-    @ManyToMany(mappedBy = "users")
-    private java.util.Set<Group> groups = new java.util.HashSet<>();
-
-    @ManyToMany(mappedBy = "users")
-    private java.util.Set<Group> activities = new java.util.HashSet<>();
 
 
     @Builder(toBuilder = true)

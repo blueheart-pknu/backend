@@ -41,9 +41,9 @@ public class UserApi {
             @Parameter(name = "role", description = "직책" , example = "USER")
     })
     @PostMapping("/create")
-    public ResponseEntity createUser(@RequestBody @Valid UserInfoDto userInfoDto) {
+    public ResponseEntity<HttpStatus> createUser(@RequestBody @Valid UserInfoDto userInfoDto) {
         userService.createUser(userInfoDto);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 검색", description = "사용자 정보를 검색하는 API, keyword 가 없을 시 모두 반환")
@@ -79,9 +79,9 @@ public class UserApi {
             @Parameter(name = "role", description = "사용자 역할", example = "USER")
     })
     @PutMapping("/update")
-    public ResponseEntity updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto) {
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto) {
         userService.updateUserById(userUpdateDto);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 정보 삭제", description = "특정 사용자의 정보를 삭제 하는 API 입니다.(Soft Delete)")
@@ -95,8 +95,8 @@ public class UserApi {
                     example = "1"),
     })
     @DeleteMapping("/delete")
-    public ResponseEntity deleteUser(@RequestBody @Valid UserDeleteDto userDeleteDto) {
+    public ResponseEntity<HttpStatus> deleteUser(@RequestBody @Valid UserDeleteDto userDeleteDto) {
         userService.deleteUserById(userDeleteDto);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
