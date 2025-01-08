@@ -1,7 +1,9 @@
 
 package org.clubs.blueheart.user.dao;
 
+import org.clubs.blueheart.user.dto.UserDeleteDto;
 import org.clubs.blueheart.user.dto.UserInfoDto;
+import org.clubs.blueheart.user.dto.UserUpdateDto;
 
 import java.util.List;
 
@@ -13,8 +15,8 @@ public interface UserRepository  {
 
     List<UserInfoDto> findUserByUsername(String username);
 
-//    void updateUserById(UserUpdateDto userUpdateDto);
-//
-//    void deleteUserById(UserDeleteDto userDeleteDto);
+    void updateUserById(UserUpdateDto userUpdateDto);
+
+    void deleteUserById(UserDeleteDto userDeleteDto);
 
 }

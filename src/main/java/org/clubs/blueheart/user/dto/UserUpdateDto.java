@@ -15,5 +15,5 @@ public class UserUpdateDto {
 
     private Optional<String> studentNumber = Optional.empty();
 
-    private Optional<UserRole> userRole = Optional.empty();
+    private Optional<UserRole> role = Optional.empty();
 }

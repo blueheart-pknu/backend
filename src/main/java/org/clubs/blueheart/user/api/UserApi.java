@@ -63,40 +63,40 @@ public class UserApi {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findUserByKeyword(keyword));
     }
 
-//    @Operation(summary = "사용자 정보 업데이트", description = "특정 사용자의 정보를 업데이트 하는 API 입니다.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "사용자 정보 업데이트 성공"),
-//            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
-//            @ApiResponse(responseCode= "404", description = "사용자를 찾지 못함"),
-//    })
-//    @Parameters({
-//            @Parameter(name = "id", description = "사용자ID",
-//                    example = "1"),
-//            @Parameter(name = "username", description = "사용자이름, nullable",
-//                    example = "홍길동"),
-//            @Parameter(name = "studentNumber", description = "사용자 학번, nullable",
-//                    example = "201234567"),
-//            @Parameter(name = "role", description = "사용자 역할", example = "USER")
-//    })
-//    @PutMapping("/update")
-//    public ResponseEntity updateUser(@RequestBody UserUpdateDto userUpdateDto) {
-//        userService.updateUserById(userUpdateDto);
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-//
-//    @Operation(summary = "사용자 정보 삭제", description = "특정 사용자의 정보를 삭제 하는 API 입니다.(Soft Delete)")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "사용자 정보 삭제 성공"),
-//            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
-//            @ApiResponse(responseCode= "404", description = "사용자를 찾지 못함"),
-//    })
-//    @Parameters({
-//            @Parameter(name = "id", description = "사용자ID",
-//                    example = "1"),
-//    })
-//    @DeleteMapping("/delete")
-//    public ResponseEntity deleteUser(@PathVariable UserDeleteDto userDeleteDto) {
-//        userService.deleteUserById(userDeleteDto);
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
+    @Operation(summary = "사용자 정보 업데이트", description = "특정 사용자의 정보를 업데이트 하는 API 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "사용자 정보 업데이트 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+            @ApiResponse(responseCode= "404", description = "사용자를 찾지 못함"),
+    })
+    @Parameters({
+            @Parameter(name = "id", description = "사용자ID",
+                    example = "1"),
+            @Parameter(name = "username", description = "사용자이름, nullable",
+                    example = "홍길동"),
+            @Parameter(name = "studentNumber", description = "사용자 학번, nullable",
+                    example = "201234567"),
+            @Parameter(name = "role", description = "사용자 역할", example = "USER")
+    })
+    @PutMapping("/update")
+    public ResponseEntity updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto) {
+        userService.updateUserById(userUpdateDto);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 정보 삭제", description = "특정 사용자의 정보를 삭제 하는 API 입니다.(Soft Delete)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "사용자 정보 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+            @ApiResponse(responseCode= "404", description = "사용자를 찾지 못함"),
+    })
+    @Parameters({
+            @Parameter(name = "id", description = "사용자ID",
+                    example = "1"),
+    })
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteUser(@RequestBody @Valid UserDeleteDto userDeleteDto) {
+        userService.deleteUserById(userDeleteDto);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

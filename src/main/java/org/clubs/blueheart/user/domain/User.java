@@ -53,10 +53,21 @@ public class User {
     private java.util.Set<Group> activities = new java.util.HashSet<>();
 
 
-    @Builder
-    public User(String username, String studentNumber, UserRole role) {
+    @Builder(toBuilder = true)
+    private User(Long id, String username, String studentNumber, UserRole role, LocalDateTime createdAt, LocalDateTime deletedAt) {
+        this.id = id;
         this.username = username;
         this.studentNumber = studentNumber;
         this.role = role;
+        this.createdAt = createdAt;
+        this.deletedAt = deletedAt;
+    }
+
+    public User updatedUserFields(String username, String studentNumber, UserRole role) {
+        return this.toBuilder()
+                .username(username != null ? username : this.username)
+                .studentNumber(studentNumber != null ? studentNumber : this.studentNumber)
+                .role(role != null ? role : this.role)
+                .build();
     }
 }
