@@ -1,17 +1,27 @@
 package org.clubs.blueheart.user.dao;
 
 
-import org.clubs.blueheart.user.domain.User;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.clubs.blueheart.user.domain.UserRole;
+
+import static org.clubs.blueheart.user.domain.QUser.user;
+import static org.clubs.blueheart.user.util.UserValidationUtil.validateStudentNumber;
+import static org.clubs.blueheart.user.util.UserValidationUtil.validateUsername;
+import static org.clubs.blueheart.user.util.UserValidationUtil.validateUserRole;
 
 public class UserCustomDaoImpl implements UserCustomDao {
 
-    @Override
-    public User findUsersByUserName(String userName) {
-        return null;
-    }
+    private JPAQueryFactory queryFactory;
 
     @Override
-    public User findUsersByStudentNumber(Integer studentNumber) {
-        return null;
+    public void updateUser(String username, Integer studentNumber, UserRole userRole) {
+         queryFactory
+            .selectFrom(user)
+            .where(validateUsername(username),
+                    validateStudentNumber(studentNumber),
+                    validateUserRole(userRole))
+            .fetch();
     }
+
+
 }

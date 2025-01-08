@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -16,6 +17,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Table(name = "users")  // DB의 'users' 테이블과 매핑
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Log4j2
+@Getter
 public class User {
 
     @Id
