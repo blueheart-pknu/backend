@@ -15,8 +15,8 @@ public class UserValidationUtil {
         return user.username.eq(username);
     }
 
-    public static BooleanExpression validateStudentNumber(Integer studentNumber) {
-        if (studentNumber == null || studentNumber <= 0) {
+    public static BooleanExpression validateStudentNumber(String studentNumber) {
+        if (studentNumber == null) {
             return null;
         }
         return user.studentNumber.eq(studentNumber);

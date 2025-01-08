@@ -5,6 +5,6 @@ import org.clubs.blueheart.user.dto.UserUpdateDto;
 
 public interface UserCustomDao {
 
-    void updateUser(String username, Integer studentNumber, UserRole userRole);
+    void updateUser(String username, String studentNumber, UserRole userRole);
 
 }

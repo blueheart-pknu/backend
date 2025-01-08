@@ -13,7 +13,7 @@ public class UserUpdateDto {
 
     private Optional<String> username = Optional.empty();
 
-    private Optional<Integer> studentNumber = Optional.empty();
+    private Optional<String> studentNumber = Optional.empty();
 
     private Optional<UserRole> userRole = Optional.empty();
 }

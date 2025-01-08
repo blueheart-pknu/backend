@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
 import org.clubs.blueheart.group.domain.Group;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,7 +32,7 @@ public class User {
 
     @NotNull
     @Column(name = "student_number", nullable = false, unique = true)
-    private Integer studentNumber;
+    private String studentNumber;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -55,7 +54,7 @@ public class User {
 
 
     @Builder
-    public User(String username, Integer studentNumber, UserRole role) {
+    public User(String username, String studentNumber, UserRole role) {
         this.username = username;
         this.studentNumber = studentNumber;
         this.role = role;

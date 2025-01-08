@@ -1,9 +1,7 @@
 package org.clubs.blueheart.user.dao;
 
 import org.clubs.blueheart.user.domain.User;
-import org.clubs.blueheart.user.dto.UserDeleteDto;
 import org.clubs.blueheart.user.dto.UserInfoDto;
-import org.clubs.blueheart.user.dto.UserUpdateDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.List;
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserDao userDao;
-    private UserCustomDaoImpl userCustomDaoImpl;
 
     public UserRepositoryImpl(UserDao userDao) {
         this.userDao = userDao; // 생성자 주입
@@ -37,13 +34,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserInfoDto> findUserByStudentNumber(Integer studentNumber) {
+    public List<UserInfoDto> findUserByStudentNumber(String studentNumber) {
         if (studentNumber == null) {
             throw new IllegalArgumentException("Student number must not be null");
         }
 
         // Fetch user list and map to DTOs
-        return userDao.findUsersByStudentNumber(studentNumber)
+        return userDao.findUsersByStudentNumberStartsWith(studentNumber)
                 .map(users -> users.stream()
                         .map(user -> UserInfoDto.builder()
                                 .username(user.getUsername())
@@ -63,7 +60,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         // Fetch user list and map to DTOs
-        return userDao.findUsersByUsername(username)
+        return userDao.findUsersByUsernameContains(username)
                 .map(users -> users.stream()
                         .map(user -> UserInfoDto.builder()
                                 .username(user.getUsername())

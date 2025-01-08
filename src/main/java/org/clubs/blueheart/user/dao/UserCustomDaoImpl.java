@@ -14,7 +14,7 @@ public class UserCustomDaoImpl implements UserCustomDao {
     private JPAQueryFactory queryFactory;
 
     @Override
-    public void updateUser(String username, Integer studentNumber, UserRole userRole) {
+    public void updateUser(String username, String studentNumber, UserRole userRole) {
          queryFactory
             .selectFrom(user)
             .where(validateUsername(username),

@@ -1,10 +1,7 @@
 package org.clubs.blueheart.user.application;
 
 import org.clubs.blueheart.user.dao.UserRepository;
-import org.clubs.blueheart.user.dto.UserDeleteDto;
 import org.clubs.blueheart.user.dto.UserInfoDto;
-import org.clubs.blueheart.user.dto.UserUpdateDto;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +28,7 @@ public class UserService {
 
     public List<UserInfoDto> findUserByKeyword(String keyword) {
         if (isInteger(keyword)) {
-            return userRepository.findUserByStudentNumber(Integer.parseInt(keyword));
+            return userRepository.findUserByStudentNumber(keyword);
         }
         return userRepository.findUserByUsername(keyword);
     }
