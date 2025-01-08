@@ -1,1 +1,0 @@
-package org.clubs.blueheart.notifications.application;
