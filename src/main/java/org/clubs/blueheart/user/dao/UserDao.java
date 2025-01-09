@@ -11,5 +11,4 @@ public interface UserDao extends UserCustomDao, JpaRepository<User, Long> {
     Optional<List<User>> findUsersByStudentNumberStartsWithAndDeletedAtIsNull(String studentNumber); // JPA Query Method
     Optional<User> findUserByIdAndDeletedAtIsNull(Long id);
     Boolean existsByStudentNumberAndDeletedAtIsNull(String studentNumber);
-    Boolean existsByIdAndDeletedAtIsNull(Long id);
 }
