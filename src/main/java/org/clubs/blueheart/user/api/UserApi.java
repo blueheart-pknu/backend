@@ -80,7 +80,7 @@ public class UserApi {
                             schema = @Schema(implementation = CustomExceptionStatus.class)))
     })
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<GlobalResponseHandler<List>> findUserByKeyword(@PathVariable String keyword) {
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findUserByKeyword(@PathVariable String keyword) {
         List<UserInfoDto> users = userService.findUserByKeyword(keyword);
         return GlobalResponseHandler.success(ResponseStatus.USER_SEARCHED, users);
     }

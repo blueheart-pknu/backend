@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import org.clubs.blueheart.user.domain.User;
@@ -30,31 +31,45 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name="creatorId", nullable = false)
-    private User creator_id;
+    @JoinColumn(name="creator_id", nullable = false)
+    private User creatorId;
+
+    @NotNull
+    @Column(nullable = false, length = 15)
+    private String title;
+
     @Enumerated(EnumType.STRING)
     private ActivityStatus status;
+
     @Column(name="max_number")
     private Integer maxNumber;
+
     @NotNull
     @Column(nullable = false, length = 255)
     private String description;
+
     @NotNull
     @Column(nullable = false, length = 255)
     private String place;
+
     @NotNull
     @Column(name="place_url", nullable = false, length = 255)
     private String placeUrl;
+
+    @NotNull
+    @Column(name = "expired_at", nullable = false)
+    private LocalDateTime expiredAt;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-    @LastModifiedDate
-    @Column(name = "updatedAt", nullable = false)
-    private OffsetDateTime updatedAt;
+    private LocalDateTime createdAt;
+
+
     @Column(name = "deleted_at")
-    private OffsetDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
     @Builder
     public Activity(ActivityStatus status, Integer maxNumber, String description, String place, String placeUrl) {
