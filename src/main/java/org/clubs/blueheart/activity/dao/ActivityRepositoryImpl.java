@@ -3,7 +3,6 @@ package org.clubs.blueheart.activity.dao;
 import org.clubs.blueheart.activity.domain.ActivityStatus;
 import org.clubs.blueheart.activity.dto.ActivitySearchDto;
 import org.clubs.blueheart.activity.dto.ActivityUpdateDto;
-import org.clubs.blueheart.user.dao.UserDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
