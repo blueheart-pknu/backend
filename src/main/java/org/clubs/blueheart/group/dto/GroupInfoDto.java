@@ -8,8 +8,8 @@ import lombok.Data;
 @Builder
 public class GroupInfoDto {
 
-    @NotBlank(message = "creatorId must not be blank")
-    private Long creatorId;
+    @NotBlank(message = "userId must not be blank")
+    private Long userId;
 
     @NotBlank(message = "Username must not be blank")
     private String name;

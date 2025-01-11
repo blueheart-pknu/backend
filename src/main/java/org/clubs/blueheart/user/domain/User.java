@@ -22,11 +22,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    // ManyToMany 반대편
-    @ManyToMany(mappedBy = "users")
-    private final java.util.Set<Group> groups = new java.util.HashSet<>();
-    @ManyToMany(mappedBy = "users")
-    private final java.util.Set<Group> activities = new java.util.HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
