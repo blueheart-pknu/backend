@@ -2,6 +2,8 @@ package org.clubs.blueheart.notification.dao;
 
 import org.clubs.blueheart.activity.dao.ActivityHistoryDao;
 import org.clubs.blueheart.activity.domain.ActivityHistory;
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.group.dao.GroupUserDao;
 import org.clubs.blueheart.group.domain.GroupUser;
 import org.clubs.blueheart.notification.domain.Notification;
@@ -18,14 +20,14 @@ import java.util.stream.Collectors;
 @Repository
 public class NotificationRepositoryImpl implements NotificationRepository {
 
-    private NotificationDao notificationDao;
-    private UserDao userDao;
-    private ActivityHistoryDao activityHistoryDao;
-    private GroupUserDao groupUserDao;
+    private final NotificationDao notificationDao;
+    private final UserDao userDao;
+    private final ActivityHistoryDao activityHistoryDao;
+    private final GroupUserDao groupUserDao;
 
-    public NotificationRepositoryImpl(NotificationDao notificationDao, UserDao userdao, ActivityHistoryDao activityHistoryDao, GroupUserDao groupUserDao) {
+    public NotificationRepositoryImpl(NotificationDao notificationDao, UserDao userDao, ActivityHistoryDao activityHistoryDao, GroupUserDao groupUserDao) {
         this.notificationDao = notificationDao;
-        this.userDao = userdao;
+        this.userDao = userDao;
         this.activityHistoryDao = activityHistoryDao;
         this.groupUserDao = groupUserDao;
     }
@@ -33,18 +35,18 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public void createActivityNotification(NotificationRequestDto notificationRequestDto) {
         if (notificationRequestDto == null || notificationRequestDto.getSenderId() == null || notificationRequestDto.getReceiverId() == null) {
-            throw new IllegalArgumentException("NotificationRequestDto or its fields cannot be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch sender User entity
         User sender = userDao.findById(notificationRequestDto.getSenderId())
-                .orElseThrow(() -> new IllegalArgumentException("Sender not found with ID: " + notificationRequestDto.getSenderId()));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Fetch all ActivityHistory entries for the given Activity ID (ReceiverId is treated as ActivityId)
         List<ActivityHistory> activityHistories = activityHistoryDao.findAllByActivity_IdAndDeletedAtIsNull(notificationRequestDto.getReceiverId());
 
         if (activityHistories.isEmpty()) {
-            throw new IllegalStateException("No users found for Activity ID: " + notificationRequestDto.getReceiverId());
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_HISTORY_NOT_SUBSCRIBED);
         }
 
         // Extract users from ActivityHistory
@@ -68,18 +70,18 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public void createGroupNotification(NotificationRequestDto notificationRequestDto) {
         if (notificationRequestDto == null || notificationRequestDto.getSenderId() == null || notificationRequestDto.getReceiverId() == null) {
-            throw new IllegalArgumentException("NotificationRequestDto or its fields cannot be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch sender User entity
         User sender = userDao.findById(notificationRequestDto.getSenderId())
-                .orElseThrow(() -> new IllegalArgumentException("Sender not found with ID: " + notificationRequestDto.getSenderId()));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Fetch all GroupUser entries for the given Group ID (ReceiverId is treated as GroupId)
         List<GroupUser> groupUsers = groupUserDao.findAllByGroupIdAndDeletedAtIsNull(notificationRequestDto.getReceiverId());
 
         if (groupUsers.isEmpty()) {
-            throw new IllegalStateException("No users found for Group ID: " + notificationRequestDto.getReceiverId());
+            throw new RepositoryException(ExceptionStatus.GROUP_USER_NOT_FOUND);
         }
 
         // Extract User entities from GroupUser
@@ -103,13 +105,13 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public List<NotificationResponseDto> findAllNotificationMe(Long receiverId) {
         if (receiverId == null) {
-            throw new IllegalArgumentException("Receiver ID cannot be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         List<Notification> notifications = notificationDao.findAllByReceiverId_IdAndDeletedAtIsNull(receiverId);
 
         if (notifications.isEmpty()) {
-            return List.of(); // 빈 리스트 반환
+            throw new RepositoryException(ExceptionStatus.NOTIFICATION_NOT_FOUND);
         }
 
         // Update deletedAt field for all notifications using builder pattern

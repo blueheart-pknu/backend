@@ -3,6 +3,8 @@ package org.clubs.blueheart.activity.dao;
 import org.clubs.blueheart.activity.domain.Activity;
 import org.clubs.blueheart.activity.domain.ActivityHistory;
 import org.clubs.blueheart.activity.dto.ActivitySubscribeDto;
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.domain.User;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +24,7 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
     public void subscribeActivityById(ActivitySubscribeDto activitySubscribeDto) {
 
         if (activitySubscribeDto == null) {
-            throw new IllegalArgumentException("activitySubscribeDto is null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Check if the user is already subscribed to the activity
@@ -32,8 +34,9 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
         );
 
         if (alreadySubscribed) {
-            throw new IllegalStateException("User is already subscribed to this activity");
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_HISTORY_ALREADY_SUBSCRIBED);
         }
+
 
         // Create a new ActivityHistory record
         ActivityHistory activityHistory = ActivityHistory.builder()
@@ -49,14 +52,14 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
     public void unsubscribeActivityById(ActivitySubscribeDto activitySubscribeDto) {
 
         if (activitySubscribeDto == null) {
-            throw new IllegalArgumentException("activitySubscribeDto is null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the existing ActivityHistory record
         ActivityHistory activityHistory = activityHistoryDao.findByActivityIdAndUserIdAndDeletedAtIsNull(
                 activitySubscribeDto.getActivityId(),
                 activitySubscribeDto.getUserId()
-        ).orElseThrow(() -> new IllegalStateException("User is not subscribed to this activity"));
+        ).orElseThrow(() -> new RepositoryException(ExceptionStatus.ACTIVITY_HISTORY_NOT_SUBSCRIBED));
 
         // Mark the ActivityHistory record as deleted
         ActivityHistory updatedActivityHistory = activityHistory.toBuilder()

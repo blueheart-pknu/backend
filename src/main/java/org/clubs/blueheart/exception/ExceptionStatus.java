@@ -15,7 +15,7 @@ public enum ExceptionStatus {
     USER_NOT_FOUND_STAFF(HttpStatus.NOT_FOUND, "스태프가 존재하지 않습니다"),
     USER_NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다"),
 
-    USER_USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 유저입니다"),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 유저입니다"),
     USER_INVALID_USER_INPUT(HttpStatus.BAD_REQUEST, "잘못된 사용자 입력입니다"),
     USER_UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "사용자 인증이 유효하지 않습니다"),
 
@@ -42,9 +42,12 @@ public enum ExceptionStatus {
     GROUP_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 그룹입니다"),
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다"),
     GROUP_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 그룹 요청입니다"),
+    GROUP_DELETE_FAILED(HttpStatus.BAD_REQUEST, "그룹 삭제 실패"),
+
+    // GROUP USER ERROR CODE
     GROUP_USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "그룹에 이미 사용자가 존재합니다"),
     GROUP_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹 내 사용자를 찾을 수 없습니다"),
-    GROUP_DELETE_FAILED(HttpStatus.BAD_REQUEST, "그룹 삭제 실패"),
+
 
     // NOTIFICATION ERROR CODE
     NOTIFICATION_SEND_FAILED(HttpStatus.BAD_REQUEST, "알림 전송 실패"),
