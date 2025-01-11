@@ -3,6 +3,8 @@ package org.clubs.blueheart.activity.dao;
 import org.clubs.blueheart.activity.domain.Activity;
 import org.clubs.blueheart.activity.domain.ActivityStatus;
 import org.clubs.blueheart.activity.dto.*;
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.dao.UserDao;
 import org.clubs.blueheart.user.domain.User;
 import org.springframework.stereotype.Repository;
@@ -17,7 +19,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
 
     public ActivityRepositoryImpl(UserDao userDao, ActivityDao activityDao) {
         this.userDao = userDao;
-        this.activityDao = activityDao; // 생성자 주입
+        this.activityDao = activityDao;
     }
 
     //TODO: 이중 생성의 경우 클라이언트 사이드에서 처리 해야 할듯
@@ -29,7 +31,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
         }
 
         User creator = userDao.findById(activityCreateDto.getCreatorId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + activityCreateDto.getCreatorId()));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         Activity activity = Activity.builder()
                 .creatorId(creator)
@@ -45,12 +47,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public void updateActivityById(ActivityUpdateDto activityUpdateDto) {
         if (activityUpdateDto == null) {
-            throw new IllegalArgumentException("activityUpdateDto is null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the user
         Activity existingActivity = activityDao.findActivityByIdAndDeletedAtIsNull(activityUpdateDto.getId())
-                .orElseThrow(() -> new IllegalStateException("Activity not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update fields using updateFields
         Activity updatedActivity = existingActivity.toBuilder()
@@ -73,12 +75,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public List<ActivitySearchDto> findActivityByStatus(ActivityStatus status) {
         if (status == null) {
-            throw new IllegalArgumentException("status is null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch activities by status
         List<Activity> activityInfo = activityDao.findActivityByStatus(status)
-                .orElseThrow(() -> new IllegalStateException("Activities with status " + status + " not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.ACTIVITY_NOT_FOUND));
 
         // Map Activity entities to ActivitySearchDto
         return activityInfo.stream()
@@ -118,12 +120,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public ActivityDetailDto findOneActivityDetailById(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("id must not be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the activity by ID
         Activity activity = activityDao.findActivityByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new IllegalStateException("Activity with ID " + id + " not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.ACTIVITY_NOT_FOUND));
 
         // Map to ActivitySearchDto (assuming details can be extended)
         // Map to ActivityDetailDto
@@ -144,12 +146,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public void deleteActivity(ActivityDeleteDto activityDeleteDto) {
         if (activityDeleteDto == null || activityDeleteDto.getId() == null) {
-            throw new IllegalArgumentException("ActivityDeleteDto or its ID must not be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the activity
         Activity existingActivity = activityDao.findActivityByIdAndDeletedAtIsNull(activityDeleteDto.getId())
-                .orElseThrow(() -> new IllegalStateException("Activity not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.ACTIVITY_NOT_FOUND));
 
         // Mark as deleted using the builder
         Activity deletedActivity = existingActivity.toBuilder()

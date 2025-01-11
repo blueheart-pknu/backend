@@ -11,9 +11,50 @@ import org.springframework.http.HttpStatus;
 public enum ExceptionStatus {
 
     // USER ERROR CODE
-    NOT_FOUND_ADMIN(HttpStatus.NOT_FOUND, "어드민이 존재하지 않습니다"),
-    NOT_FOUND_STAFF(HttpStatus.NOT_FOUND, "스태프가 존재하지 않습니다"),
-    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다");
+    USER_NOT_FOUND_ADMIN(HttpStatus.NOT_FOUND, "어드민이 존재하지 않습니다"),
+    USER_NOT_FOUND_STAFF(HttpStatus.NOT_FOUND, "스태프가 존재하지 않습니다"),
+    USER_NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다"),
+
+    USER_USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 유저입니다"),
+    USER_INVALID_USER_INPUT(HttpStatus.BAD_REQUEST, "잘못된 사용자 입력입니다"),
+    USER_UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "사용자 인증이 유효하지 않습니다"),
+
+    USER_INVALID_SEARCH_KEYWORD(HttpStatus.BAD_REQUEST, "검색 키워드가 유효하지 않습니다"),
+    USER_INVALID_USER_UPDATE(HttpStatus.BAD_REQUEST, "유효하지 않은 사용자 업데이트 요청입니다"),
+    USER_INVALID_USER_DELETE(HttpStatus.BAD_REQUEST, "유효하지 않은 사용자 삭제 요청입니다"),
+
+    // ACTIVITY ERROR CODE
+    ACTIVITY_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 액티비티입니다"),
+    ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "액티비티를 찾을 수 없습니다"),
+    ACTIVITY_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 액티비티 요청입니다"),
+    ACTIVITY_UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "액티비티 접근 권한이 없습니다"),
+    ACTIVITY_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "액티비티 업데이트 실패"),
+    ACTIVITY_DELETE_FAILED(HttpStatus.BAD_REQUEST, "액티비티 삭제 실패"),
+    ACTIVITY_PARTICIPATION_FAILED(HttpStatus.BAD_REQUEST, "액티비티 참여 실패"),
+
+    // ACTIVITY HISTORY ERROR CODE
+    ACTIVITY_HISTORY_SUBSCRIBE_FAILED(HttpStatus.BAD_REQUEST, "액티비티 구독 중 오류가 발생했습니다"),
+    ACTIVITY_HISTORY_UNSUBSCRIBE_FAILED(HttpStatus.BAD_REQUEST, "액티비티 구독 해제 중 오류가 발생했습니다"),
+    ACTIVITY_HISTORY_ALREADY_SUBSCRIBED(HttpStatus.CONFLICT, "이미 구독된 액티비티입니다"),
+    ACTIVITY_HISTORY_NOT_SUBSCRIBED(HttpStatus.BAD_REQUEST, "구독되지 않은 액티비티입니다"),
+
+    // GROUP ERROR CODE
+    GROUP_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 그룹입니다"),
+    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다"),
+    GROUP_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 그룹 요청입니다"),
+    GROUP_USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "그룹에 이미 사용자가 존재합니다"),
+    GROUP_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹 내 사용자를 찾을 수 없습니다"),
+    GROUP_DELETE_FAILED(HttpStatus.BAD_REQUEST, "그룹 삭제 실패"),
+
+    // NOTIFICATION ERROR CODE
+    NOTIFICATION_SEND_FAILED(HttpStatus.BAD_REQUEST, "알림 전송 실패"),
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "알림을 찾을 수 없습니다"),
+    NOTIFICATION_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 알림 요청입니다"),
+    NOTIFICATION_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "알림의 대상 사용자를 찾을 수 없습니다"),
+
+    // GENERAL ERROR CODE
+    GENERAL_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 알 수 없는 오류가 발생했습니다"),
+    GENERAL_INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "잘못된 인자롤 통한 요청입니다.");
 
     //    NOT_FOUND_LENT_HISTORY(HttpStatus.NOT_FOUND, "대여한 사물함이 존재하지 않습니다."),
 //    NOT_FOUND_CLUB(HttpStatus.NOT_FOUND, "동아리가 존재하지 않습니다."),

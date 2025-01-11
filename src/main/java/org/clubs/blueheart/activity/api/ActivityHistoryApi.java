@@ -27,12 +27,66 @@ public class ActivityHistoryApi {
         this.activityHistoryService = activityHistoryService;
     }
 
+    @Operation(summary = "Subscribe to an activity", description = "Subscribes the current user to an activity by providing the activity details.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully subscribed to the activity",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GlobalResponseHandler.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request parameters",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CustomExceptionStatus.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Activity not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CustomExceptionStatus.class)
+                    )
+            )
+    })
     @PostMapping("/subscribe")
     public ResponseEntity<GlobalResponseHandler<Void>> subscribeActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
         activityHistoryService.subscribeActivity(activitySubscribeDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
     }
 
+    @Operation(summary = "Unsubscribe from an activity", description = "Unsubscribes the current user from an activity by providing the activity details.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully unsubscribed from the activity",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GlobalResponseHandler.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request parameters",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CustomExceptionStatus.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Activity not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CustomExceptionStatus.class)
+                    )
+            )
+    })
     @PostMapping("/unsubscribe")
     public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
         activityHistoryService.unsubscribeActivity(activitySubscribeDto);
