@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Repository
 public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
 
-    private ActivityHistoryDao activityHistoryDao;
+    private final ActivityHistoryDao activityHistoryDao;
 
     public ActivityHistoryRepositoryImpl(ActivityHistoryDao activityHistoryDao) {
         this.activityHistoryDao = activityHistoryDao;

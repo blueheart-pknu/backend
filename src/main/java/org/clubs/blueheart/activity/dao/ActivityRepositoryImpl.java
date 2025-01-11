@@ -36,6 +36,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
         Activity activity = Activity.builder()
                 .creatorId(creator)
                 .title(activityCreateDto.getTitle())
+                .status(ActivityStatus.PROGRESSING)
                 .description(activityCreateDto.getDescription())
                 .place(activityCreateDto.getPlace())
                 .placeUrl(activityCreateDto.getPlaceUrl())
