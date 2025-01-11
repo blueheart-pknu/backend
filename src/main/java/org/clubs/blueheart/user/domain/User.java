@@ -47,7 +47,7 @@ public class User {
         this.username = username;
         this.studentNumber = studentNumber;
         this.role = role;
-        this.createdAt = createdAt;
+        this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
         this.deletedAt = deletedAt;
     }
 

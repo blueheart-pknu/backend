@@ -3,6 +3,8 @@ package org.clubs.blueheart.notification.application;
 import org.clubs.blueheart.activity.dto.ActivitySearchDto;
 import org.clubs.blueheart.activity.dto.ActivitySubscribeDto;
 import org.clubs.blueheart.notification.dao.NotificationRepository;
+import org.clubs.blueheart.notification.dto.NotificationRequestDto;
+import org.clubs.blueheart.notification.dto.NotificationResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +18,15 @@ public class NotificationService {
         this.notificationRepository = notificationRepository;
     }
 
-    public void subscribeActivity(ActivitySubscribeDto activitySubscribeDto) {
+    public void notificationActivity(NotificationRequestDto notificationRequestDto) {
+        notificationRepository.createActivityNotification(notificationRequestDto);
     }
 
-    public void unsubscribeActivity(ActivitySubscribeDto activitySubscribeDto) {
+    public void notificationGroup(NotificationRequestDto notificationRequestDto) {
+        notificationRepository.createGroupNotification(notificationRequestDto);
     }
 
-    public List<ActivitySearchDto> findOneActivityDetailById(Long id) {
-        return notificationRepository.findOneActivityDetailById(id);
+    public List<NotificationResponseDto> findAllNotification(Long id) {
+        return notificationRepository.findAllNotification(id);
     }
 }

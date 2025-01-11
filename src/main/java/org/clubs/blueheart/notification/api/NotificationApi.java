@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
 import org.clubs.blueheart.activity.dto.*;
 import org.clubs.blueheart.notification.application.NotificationService;
+import org.clubs.blueheart.notification.dto.NotificationRequestDto;
+import org.clubs.blueheart.notification.dto.NotificationResponseDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,21 +24,21 @@ public class NotificationApi {
     }
 
     @PostMapping("/activity")
-    public ResponseEntity<GlobalResponseHandler<Void>> notificationActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
-        notificationService.subscribeActivity(activitySubscribeDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> notificationActivity(@RequestBody @Valid NotificationRequestDto notificationRequestDto) {
+        notificationService.notificationActivity(notificationRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SUBSCRIBED);
     }
 
     @PostMapping("/group")
-    public ResponseEntity<GlobalResponseHandler<Void>> notificationGroup(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
-        notificationService.unsubscribeActivity(activitySubscribeDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> notificationGroup(@RequestBody @Valid NotificationRequestDto notificationRequestDto) {
+        notificationService.notificationGroup(notificationRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UNSUBSCRIBED);
     }
 
     //TODO: 추후 jwt기반으로 변경할 예정
     @GetMapping("/me/{id}")
-    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> findNotificationAll(@PathVariable Long id) {
-        List<ActivitySearchDto> activities = notificationService.findOneActivityDetailById(id);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, activities);
+    public ResponseEntity<GlobalResponseHandler<List<NotificationResponseDto>>> findNotificationAll(@PathVariable Long id) {
+        List<NotificationResponseDto> notifications = notificationService.findAllNotification(id);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, notifications);
     }
 }
