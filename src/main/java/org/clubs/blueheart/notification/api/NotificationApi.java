@@ -26,19 +26,19 @@ public class NotificationApi {
     @PostMapping("/activity")
     public ResponseEntity<GlobalResponseHandler<Void>> notificationActivity(@RequestBody @Valid NotificationRequestDto notificationRequestDto) {
         notificationService.notificationActivity(notificationRequestDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.NOTIFICATION_CREATED);
     }
 
     @PostMapping("/group")
     public ResponseEntity<GlobalResponseHandler<Void>> notificationGroup(@RequestBody @Valid NotificationRequestDto notificationRequestDto) {
         notificationService.notificationGroup(notificationRequestDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UNSUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.NOTIFICATION_CREATED);
     }
 
     //TODO: 추후 jwt기반으로 변경할 예정
     @GetMapping("/me/{id}")
-    public ResponseEntity<GlobalResponseHandler<List<NotificationResponseDto>>> findNotificationAll(@PathVariable Long id) {
-        List<NotificationResponseDto> notifications = notificationService.findAllNotification(id);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, notifications);
+    public ResponseEntity<GlobalResponseHandler<List<NotificationResponseDto>>> findAllNotificationMe(@PathVariable Long id) {
+        List<NotificationResponseDto> notifications = notificationService.findAllNotificationMe(id);
+        return GlobalResponseHandler.success(ResponseStatus.NOTIFICATION_SEARCHED, notifications);
     }
 }

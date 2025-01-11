@@ -101,7 +101,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     @Override
-    public List<NotificationResponseDto> findAllNotification(Long receiverId) {
+    public List<NotificationResponseDto> findAllNotificationMe(Long receiverId) {
         if (receiverId == null) {
             throw new IllegalArgumentException("Receiver ID cannot be null");
         }

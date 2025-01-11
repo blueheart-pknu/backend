@@ -11,5 +11,5 @@ public interface NotificationRepository {
 
     void createGroupNotification(NotificationRequestDto notificationRequestDto);
 
-    List<NotificationResponseDto> findAllNotification(Long id);
+    List<NotificationResponseDto> findAllNotificationMe(Long id);
 }

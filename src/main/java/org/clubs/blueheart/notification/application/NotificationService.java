@@ -26,7 +26,7 @@ public class NotificationService {
         notificationRepository.createGroupNotification(notificationRequestDto);
     }
 
-    public List<NotificationResponseDto> findAllNotification(Long id) {
-        return notificationRepository.findAllNotification(id);
+    public List<NotificationResponseDto> findAllNotificationMe(Long id) {
+        return notificationRepository.findAllNotificationMe(id);
     }
 }

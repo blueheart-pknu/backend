@@ -30,12 +30,12 @@ public class ActivityHistoryApi {
     @PostMapping("/subscribe")
     public ResponseEntity<GlobalResponseHandler<Void>> subscribeActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
         activityHistoryService.subscribeActivity(activitySubscribeDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
     }
 
     @PostMapping("/unsubscribe")
     public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
         activityHistoryService.unsubscribeActivity(activitySubscribeDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UNSUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
     }
 }

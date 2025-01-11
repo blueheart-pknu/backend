@@ -25,32 +25,32 @@ public class GroupApi {
     @PostMapping("/create")
     public ResponseEntity<GlobalResponseHandler<Void>> createGroup(@RequestBody @Valid GroupInfoDto groupInfoDto) {
         groupService.createGroup(groupInfoDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.GROUP_CREATED);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<GlobalResponseHandler<Void>> deleteGroup(@RequestBody @Valid GroupInfoDto groupInfoDto) {
         groupService.deleteGroup(groupInfoDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UNSUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.GROUP_DELETED);
     }
 
     //TODO: jwt로 groupId 대체 예정
     @PostMapping("/add")
     public ResponseEntity<GlobalResponseHandler<Void>> addGroupUser(@RequestBody @Valid GroupUserDto groupUserDto) {
         groupService.addGroupUserById(groupUserDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.GROUP_ADD);
     }
 
     @DeleteMapping("/remove")
     public ResponseEntity<GlobalResponseHandler<Void>> removeGroupUser(@RequestBody @Valid GroupUserDto groupUserDto) {
         groupService.removeGroupUserById(groupUserDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UNSUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.GROUP_REMOVE);
     }
 
     //TODO: 추후 jwt기반으로 변경할 예정
     @GetMapping("/me/{id}")
     public ResponseEntity<GlobalResponseHandler<List<GroupUserInfoDto>>> getMyGroupInfo(@PathVariable Long id) {
         List<GroupUserInfoDto> groupUserInfo = groupService.getMyGroupInfoById(id);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, groupUserInfo);
+        return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, groupUserInfo);
     }
 }
