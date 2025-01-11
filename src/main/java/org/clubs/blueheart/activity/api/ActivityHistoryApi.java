@@ -27,6 +27,7 @@ public class ActivityHistoryApi {
         this.activityHistoryService = activityHistoryService;
     }
 
+    //TODO: 이미 내가 존재하는지 확인 필요,
     @Operation(summary = "Subscribe to an activity", description = "Subscribes the current user to an activity by providing the activity details.")
     @ApiResponses(value = {
             @ApiResponse(

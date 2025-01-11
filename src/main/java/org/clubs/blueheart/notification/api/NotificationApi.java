@@ -26,6 +26,7 @@ public class NotificationApi {
         this.notificationService = notificationService;
     }
 
+    //TODO: 자신 빼고 브로드캐스트 할 수 있게 변경
     @Operation(summary = "Send notification for activity", description = "Sends a notification to all participants of the specified activity.")
     @ApiResponses(value = {
             @ApiResponse(
@@ -51,6 +52,7 @@ public class NotificationApi {
         return GlobalResponseHandler.success(ResponseStatus.NOTIFICATION_CREATED);
     }
 
+    //TODO: 자신 빼고 브로드캐스트 할 수 있게 변경
     @Operation(summary = "Send notification for group", description = "Sends a notification to all members of the specified group.")
     @ApiResponses(value = {
             @ApiResponse(
