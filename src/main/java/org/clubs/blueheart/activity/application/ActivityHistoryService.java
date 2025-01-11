@@ -13,9 +13,11 @@ public class ActivityHistoryService {
         this.activityHistoryRepository = activityHistoryRepository;
     }
     public void subscribeActivity(ActivitySubscribeDto activitySubscribeDto) {
+        activityHistoryRepository.subscribeActivityById(activitySubscribeDto);
     }
 
     public void unsubscribeActivity(ActivitySubscribeDto activitySubscribeDto) {
+        activityHistoryRepository.unsubscribeActivityById(activitySubscribeDto);
     }
 
 

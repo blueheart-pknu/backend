@@ -1,5 +1,7 @@
 package org.clubs.blueheart.user.dao;
 
+import org.clubs.blueheart.exception.DaoException;
+import org.clubs.blueheart.exception.ExceptionStatus;
 import org.clubs.blueheart.user.domain.User;
 import org.clubs.blueheart.user.dto.UserDeleteDto;
 import org.clubs.blueheart.user.dto.UserInfoDto;
@@ -22,8 +24,10 @@ public class UserRepositoryImpl implements UserRepository {
     public void createUser(UserInfoDto userInfoDto) {
         // Validate input data (e.g., null checks, business rules)
         if (userInfoDto == null) {
-            throw new IllegalArgumentException("UserInfoDto cannot be null");
+//            throw new DaoException(ExceptionStatus.BADREQUEST)
+            throw new IllegalArgumentException("userInfoDto is null");
         }
+
 
         // Check if the user already exists using a LIMIT 1 query
         boolean userExists = userDao.existsByStudentNumberAndDeletedAtIsNull(userInfoDto.getStudentNumber());

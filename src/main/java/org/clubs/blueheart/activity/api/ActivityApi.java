@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityService;
 import org.clubs.blueheart.activity.domain.ActivityStatus;
 import org.clubs.blueheart.activity.dto.*;
-import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,7 @@ public class ActivityApi {
 
     @PutMapping("/update")
     public ResponseEntity<GlobalResponseHandler<Void>> updateActivity(@RequestBody @Valid ActivityUpdateDto activityUpdateDto) {
-        activityService.updateActivityById(activityUpdateDto);
+        activityService.updateActivity(activityUpdateDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UPDATED);
     }
 
@@ -53,13 +52,13 @@ public class ActivityApi {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> findOneActivityDetailById(@PathVariable Long id) {
-        List<ActivitySearchDto> activities = activityService.findOneActivityDetailById(id);
+    public ResponseEntity<GlobalResponseHandler<ActivityDetailDto>> findOneActivityDetailById(@PathVariable Long id) {
+        ActivityDetailDto activities = activityService.findOneActivityDetailById(id);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, activities);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<GlobalResponseHandler<Void>> deleteUser(@RequestBody @Valid ActivityDeleteDto activityDeleteDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> deleteActivity(@RequestBody @Valid ActivityDeleteDto activityDeleteDto) {
         activityService.deleteActivity(activityDeleteDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_DELETED);
     }

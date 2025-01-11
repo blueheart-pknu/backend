@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -11,12 +12,14 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import org.clubs.blueheart.user.domain.User;
+import org.clubs.blueheart.user.domain.UserRole;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "activities")  // DB의 'users' 테이블과 매핑
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Log4j2
 public class Activity {
 
@@ -56,7 +59,7 @@ public class Activity {
     private String place;
 
     @NotNull
-    @Column(name="place_url", nullable = false, length = 255)
+    @Column(name="place_url", nullable = true, length = 255)
     private String placeUrl;
 
     @NotNull
@@ -67,16 +70,48 @@ public class Activity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Builder
-    public Activity(ActivityStatus status, Integer maxNumber, String description, String place, String placeUrl) {
+    @Builder(toBuilder = true)
+    public Activity(Long id, User creatorId, String title,  ActivityStatus status, Integer maxNumber, String description, String place, String placeUrl, LocalDateTime createdAt, LocalDateTime expiredAt, LocalDateTime deletedAt) {
+        this.id = id;
+        this.creatorId = creatorId;
+        this.title = title;
         this.status = status;
         this.maxNumber = maxNumber;
         this.description = description;
         this.place = place;
         this.placeUrl = placeUrl;
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now(); // 기본값 설정
+        this.expiredAt = expiredAt;
+        this.deletedAt = deletedAt;
+    }
+
+    @Builder(toBuilder = true)
+    public Activity(Long id, User creatorId, String title, Integer maxNumber, String description, String place, String placeUrl, LocalDateTime createdAt, LocalDateTime expiredAt, LocalDateTime deletedAt) {
+        this.id = id;
+        this.creatorId = creatorId;
+        this.title = title;
+        this.status = ActivityStatus.PROGRESSING;
+        this.maxNumber = maxNumber;
+        this.description = description;
+        this.place = place;
+        this.placeUrl = placeUrl;
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now(); // 기본값 설정
+        this.expiredAt = expiredAt;
+        this.deletedAt = deletedAt;
+    }
+
+    public Activity updatedActivityFields(String title, ActivityStatus status, Integer maxNumber, String description, String place, String placeUrl, LocalDateTime expiredAt) {
+        return this.toBuilder()
+                .title(title != null ? title : this.title)
+                .status(status != null ? status : this.status)
+                .maxNumber(maxNumber != null ? maxNumber : this.maxNumber)
+                .description(description != null ? description : this.description)
+                .place(place != null ? place : this.place)
+                .placeUrl(placeUrl != null ? placeUrl : this.placeUrl)
+                .expiredAt(expiredAt != null ? expiredAt : this.expiredAt)
+                .build();
     }
 }
