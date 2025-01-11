@@ -22,6 +22,4 @@ public class UserCustomDaoImpl implements UserCustomDao {
                     validateUserRole(userRole))
             .fetch();
     }
-
-
 }

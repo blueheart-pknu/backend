@@ -19,25 +19,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Log4j2
 public class Group {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull
-    @Column(nullable = false, length = 20)
-    private String name;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updatedAt", nullable = false)
-    private OffsetDateTime updatedAt;
-
-    @Column(name = "deleted_at")
-    private OffsetDateTime deletedAt;
-
     // ManyToMany 관계 설정
     @ManyToMany
     @JoinTable(
@@ -45,7 +26,21 @@ public class Group {
             joinColumns = @JoinColumn(name = "group_id"),   // groups 테이블 FK
             inverseJoinColumns = @JoinColumn(name = "user_id") // users 테이블 FK
     )
-    private java.util.Set<User> users = new java.util.HashSet<>();
+    private final java.util.Set<User> users = new java.util.HashSet<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotNull
+    @Column(nullable = false, length = 20)
+    private String name;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private OffsetDateTime createdAt;
+    @LastModifiedDate
+    @Column(name = "updatedAt", nullable = false)
+    private OffsetDateTime updatedAt;
+    @Column(name = "deleted_at")
+    private OffsetDateTime deletedAt;
 
     @Builder
     public Group(String name) {

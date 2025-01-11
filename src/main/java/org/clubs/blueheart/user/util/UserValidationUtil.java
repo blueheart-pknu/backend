@@ -35,7 +35,7 @@ public class UserValidationUtil {
         }
 
         // QueryDSL 조건 반환
-        return user.user.role.eq(userRole);
+        return user.role.eq(userRole);
     }
 
     // Enum 값 검증 메서드

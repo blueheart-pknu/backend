@@ -1,7 +1,9 @@
 package org.clubs.blueheart.user.application;
 
 import org.clubs.blueheart.user.dao.UserRepository;
+import org.clubs.blueheart.user.dto.UserDeleteDto;
 import org.clubs.blueheart.user.dto.UserInfoDto;
+import org.clubs.blueheart.user.dto.UserUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,14 +36,14 @@ public class UserService {
     }
 
 
-//    public ResponseEntity updateUserById(UserUpdateDto userUpdateDto) {
-//        userRepository.updateUserById(userUpdateDto);
-//    }
-//
-//
-//    public ResponseEntity deleteUserById(UserDeleteDto userDeleteDto) {
-//        userRepository.deleteUserById(userDeleteDto);
-//    }
+    public void updateUserById(UserUpdateDto userUpdateDto) {
+        userRepository.updateUserById(userUpdateDto);
+    }
+
+
+    public void deleteUserById(UserDeleteDto userDeleteDto) {
+        userRepository.deleteUserById(userDeleteDto);
+    }
 
 
 }
