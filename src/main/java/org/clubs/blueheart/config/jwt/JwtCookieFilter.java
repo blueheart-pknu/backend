@@ -32,6 +32,14 @@ public class JwtCookieFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        // 인증이 필요 없는 경로는 필터 로직을 건너뜀
+        if (path.startsWith("/api/v1/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             // 1) 쿠키에서 JWT 추출
             String jwt = getJwtFromCookie(request, "FINAL_JWT");
