@@ -144,6 +144,7 @@ public class GroupRepositoryImpl implements GroupRepository {
                 .map(groupUser -> {
                     User user = groupUser.getUser();
                     return GroupUserInfoDto.builder()
+                            .id(user.getId())
                             .studentNumber(user.getStudentNumber())
                             .username(user.getUsername())
                             .role(user.getRole())

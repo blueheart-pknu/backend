@@ -1,8 +1,11 @@
 package org.clubs.blueheart.activity.application;
 
 import org.clubs.blueheart.activity.dao.ActivityHistoryRepository;
+import org.clubs.blueheart.activity.dto.ActivitySearchDto;
 import org.clubs.blueheart.activity.dto.ActivitySubscribeDto;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ActivityHistoryService {
@@ -21,7 +24,7 @@ public class ActivityHistoryService {
     }
 
 
-
-
-
+    public List<ActivitySearchDto> getMyActivityHistoryInfo(Long id) {
+        return activityHistoryRepository.getMyActivityHistoryInfoById(id);
+    }
 }

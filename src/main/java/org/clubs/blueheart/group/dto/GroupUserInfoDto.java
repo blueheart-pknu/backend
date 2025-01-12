@@ -9,6 +9,8 @@ import org.clubs.blueheart.user.domain.UserRole;
 @Builder
 public class GroupUserInfoDto {
 
+    private Long id;
+
     @NotBlank(message = "studentNumber must not be blank")
     private String studentNumber;
 

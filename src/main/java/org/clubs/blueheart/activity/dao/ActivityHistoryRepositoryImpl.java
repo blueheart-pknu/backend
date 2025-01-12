@@ -2,6 +2,8 @@ package org.clubs.blueheart.activity.dao;
 
 import org.clubs.blueheart.activity.domain.Activity;
 import org.clubs.blueheart.activity.domain.ActivityHistory;
+import org.clubs.blueheart.activity.domain.ActivityStatus;
+import org.clubs.blueheart.activity.dto.ActivitySearchDto;
 import org.clubs.blueheart.activity.dto.ActivitySubscribeDto;
 import org.clubs.blueheart.exception.ExceptionStatus;
 import org.clubs.blueheart.exception.RepositoryException;
@@ -9,6 +11,8 @@ import org.clubs.blueheart.user.domain.User;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
@@ -68,6 +72,37 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
 
         // Save the updated ActivityHistory record
         activityHistoryDao.save(updatedActivityHistory);
+    }
+
+    @Override
+    public List<ActivitySearchDto> getMyActivityHistoryInfoById(Long userId) {
+        if (userId == null) {
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+        }
+
+        // Fetch the activity history for the given user where ActivityStatus is PROGRESSING or COMPLETED
+        List<ActivityHistory> activityHistories = activityHistoryDao.findByUserIdAndActivityStatusInAndDeletedAtIsNull(
+                userId,
+                List.of(ActivityStatus.PROGRESSING, ActivityStatus.COMPLETED) // Filter by status
+        );
+
+        // Map ActivityHistory to ActivitySearchDto
+        return activityHistories.stream()
+                .map(activityHistory -> {
+                    Activity activity = activityHistory.getActivity();
+                    return ActivitySearchDto.builder()
+                            .id(activity.getId()) // Use `id` field instead of `activityId`
+                            .title(activity.getTitle())
+                            .description(activity.getDescription())
+                            .place(activity.getPlace())
+                            .isSubscribed(true)
+                            .status(activity.getStatus())
+                            .maxNumber(activity.getMaxNumber())
+                            .currentNumber(activityHistoryDao.countByActivityId(activity.getId())) // Fetch count of subscriptions
+                            .expiredAt(activity.getExpiredAt())
+                            .build();
+                })
+                .collect(Collectors.toList()); // Collect stream into a list
     }
 
 }

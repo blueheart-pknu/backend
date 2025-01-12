@@ -9,10 +9,13 @@ import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
 import org.clubs.blueheart.activity.dto.*;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
+import org.clubs.blueheart.group.dto.GroupUserInfoDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/activity-history")
@@ -89,5 +92,12 @@ public class ActivityHistoryApi {
     public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
         activityHistoryService.unsubscribeActivity(activitySubscribeDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
+    }
+
+    //TODO: jwt 변경
+    @GetMapping("/me/{id}")
+    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> getMyActivityHistoryInfo(@PathVariable Long id) {
+        List<ActivitySearchDto> activityHistoryInfoInfo = activityHistoryService.getMyActivityHistoryInfo(id);
+        return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, activityHistoryInfoInfo);
     }
 }

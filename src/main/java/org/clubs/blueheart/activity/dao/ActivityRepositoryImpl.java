@@ -38,6 +38,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                 .title(activityCreateDto.getTitle())
                 .status(ActivityStatus.PROGRESSING)
                 .description(activityCreateDto.getDescription())
+                .maxNumber(activityCreateDto.getMaxNumber())
                 .place(activityCreateDto.getPlace())
                 .placeUrl(activityCreateDto.getPlaceUrl())
                 .expiredAt(activityCreateDto.getExpiredAt())
@@ -88,7 +89,6 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                 .<ActivitySearchDto>map(activity -> ActivitySearchDto.builder()
                         .id(activity.getId())
                         .title(activity.getTitle())
-                        .description(activity.getDescription())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
                         .place(activity.getPlace())
@@ -109,7 +109,6 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                 .<ActivitySearchDto>map(activity -> ActivitySearchDto.builder()
                         .id(activity.getId())
                         .title(activity.getTitle())
-                        .description(activity.getDescription())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
                         .place(activity.getPlace())
