@@ -151,7 +151,6 @@ public class GroupApi {
                     )
             )
     })
-
     @GetMapping("/me")
     public ResponseEntity<GlobalResponseHandler<List<GroupUserInfoDto>>> getMyGroupInfo(
             @AuthenticationPrincipal JwtUserDetails userDetails
