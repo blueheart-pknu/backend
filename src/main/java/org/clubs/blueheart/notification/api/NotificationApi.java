@@ -6,12 +6,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.notification.application.NotificationService;
 import org.clubs.blueheart.notification.dto.NotificationRequestDto;
 import org.clubs.blueheart.notification.dto.NotificationResponseDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -97,9 +99,17 @@ public class NotificationApi {
                     )
             )
     })
-    @GetMapping("/me/{id}")
-    public ResponseEntity<GlobalResponseHandler<List<NotificationResponseDto>>> findAllNotificationMe(@PathVariable Long id) {
-        List<NotificationResponseDto> notifications = notificationService.findAllNotificationMe(id);
+    @GetMapping("/me")
+    public ResponseEntity<GlobalResponseHandler<List<NotificationResponseDto>>> findAllNotificationMe(
+            @AuthenticationPrincipal JwtUserDetails userDetails
+    ) {
+        // 1) userDetails에서 userId 추출
+        Long userId = userDetails.getUserId();
+
+        // 2) 서비스 로직 실행
+        List<NotificationResponseDto> notifications = notificationService.findAllNotificationMe(userId);
+
+        // 3) 응답
         return GlobalResponseHandler.success(ResponseStatus.NOTIFICATION_SEARCHED, notifications);
     }
 }

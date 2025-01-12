@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.group.application.GroupService;
 import org.clubs.blueheart.group.dto.GroupUserDto;
 import org.clubs.blueheart.group.dto.GroupInfoDto;
@@ -13,6 +14,7 @@ import org.clubs.blueheart.group.dto.GroupUserInfoDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -149,10 +151,18 @@ public class GroupApi {
                     )
             )
     })
-    //TODO: 추후 jwt기반으로 변경할 예정
-    @GetMapping("/me/{id}")
-    public ResponseEntity<GlobalResponseHandler<List<GroupUserInfoDto>>> getMyGroupInfo(@PathVariable Long id) {
-        List<GroupUserInfoDto> groupUserInfo = groupService.getMyGroupInfoById(id);
+
+    @GetMapping("/me")
+    public ResponseEntity<GlobalResponseHandler<List<GroupUserInfoDto>>> getMyGroupInfo(
+            @AuthenticationPrincipal JwtUserDetails userDetails
+    ) {
+        // 1) JWT 필터에서 검증된 userDetails를 통해 userId 추출
+        Long userId = userDetails.getUserId();
+
+        // 2) 기존 로직: userId 기반으로 DB 조회
+        List<GroupUserInfoDto> groupUserInfo = groupService.getMyGroupInfoById(userId);
+
+        // 3) 응답
         return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, groupUserInfo);
     }
 }

@@ -95,4 +95,14 @@ public class JwtProvider {
             return e.getClaims();
         }
     }
+
+    // Claims 추출
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
 }

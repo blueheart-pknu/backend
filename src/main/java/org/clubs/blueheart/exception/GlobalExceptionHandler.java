@@ -66,6 +66,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * Handle MiddlewareException
+     */
+    @ExceptionHandler(MiddlewareException.class)
+    public ResponseEntity<CustomExceptionStatus> handleMiddlewareException(MiddlewareException ex, WebRequest request) {
+        return buildErrorResponse(ex.getStatus(), request);
+    }
+
+    /**
      * Handle Generic Exceptions
      */
     @ExceptionHandler(Exception.class)
