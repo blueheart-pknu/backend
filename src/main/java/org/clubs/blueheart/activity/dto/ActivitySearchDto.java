@@ -18,9 +18,6 @@ public class ActivitySearchDto {
     @NotNull(message = "Title must not be null")
     private String title;
 
-    @NotNull(message = "Description must not be null")
-    private String description;
-
     private ActivityStatus status;
 
     private Boolean isSubscribed;

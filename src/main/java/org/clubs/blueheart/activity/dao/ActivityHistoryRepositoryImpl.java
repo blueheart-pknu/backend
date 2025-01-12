@@ -94,7 +94,6 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
                     return ActivitySearchDto.builder()
                             .id(activity.getId()) // Use `id` field instead of `activityId`
                             .title(activity.getTitle())
-                            .description(activity.getDescription())
                             .place(activity.getPlace())
                             .isSubscribed(true)
                             .status(activity.getStatus())

@@ -29,6 +29,7 @@ public class AuthApi {
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_CREATED);
     }
 
+    //TODO: 실제 존재하는 유저의 정보를 반환
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(
             @CookieValue(value = "SESSION_ID", required = false) String sessionId,
@@ -46,7 +47,7 @@ public class AuthApi {
 
         // 3. DB나 로직상 userId=123, role="USER" 라고 가정
         Long userId = 123L;
-        String role = "USER";
+        String role = "ADMIN";
         String finalJwt = authService.createLoginJwt(userId, authDto.getStudentNumber(), authDto.getUsername(), role);
 
         // 최종 JWT를 쿠키로 주거나, 바디로 주거나 선택
@@ -58,7 +59,7 @@ public class AuthApi {
 
         return ResponseEntity.ok()
                 .header("Set-Cookie", loginCookie.toString())
-                .body("Login successful. JWT issued.");
+                .body(role);
     }
 
     //TODO: jwt 토큰 삭제로 변경할 예정
