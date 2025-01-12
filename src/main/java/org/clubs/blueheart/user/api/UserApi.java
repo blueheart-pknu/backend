@@ -175,4 +175,5 @@ public class UserApi {
         userService.deleteUserById(userDeleteDto);
         return GlobalResponseHandler.success(ResponseStatus.USER_DELETED);
     }
+
 }
