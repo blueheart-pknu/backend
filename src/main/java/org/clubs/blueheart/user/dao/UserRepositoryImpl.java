@@ -1,5 +1,7 @@
 package org.clubs.blueheart.user.dao;
 
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.domain.User;
 import org.clubs.blueheart.user.dto.UserDeleteDto;
 import org.clubs.blueheart.user.dto.UserInfoDto;
@@ -20,15 +22,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void createUser(UserInfoDto userInfoDto) {
-        // Validate input data (e.g., null checks, business rules)
+        // Validate input data
         if (userInfoDto == null) {
-            throw new IllegalArgumentException("UserInfoDto cannot be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Check if the user already exists using a LIMIT 1 query
         boolean userExists = userDao.existsByStudentNumberAndDeletedAtIsNull(userInfoDto.getStudentNumber());
         if (userExists) {
-            throw new IllegalStateException("User with the same student number already exists");
+            throw new RepositoryException(ExceptionStatus.USER_ALREADY_EXISTS);
         }
 
         // Map UserInfoDto to User entity
@@ -39,13 +41,13 @@ public class UserRepositoryImpl implements UserRepository {
                 .build();
 
         // Save the User entity to the database
-        userDao.save(user); // Assuming userDao provides the save functionality
+        userDao.save(user);
     }
 
     @Override
     public List<UserInfoDto> findUserByStudentNumber(String studentNumber) {
         if (studentNumber == null) {
-            throw new IllegalArgumentException("Student number must not be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch user list and map to DTOs
@@ -57,15 +59,13 @@ public class UserRepositoryImpl implements UserRepository {
                                 .role(user.getRole())
                                 .build())
                         .toList())
-                .orElseThrow(() -> new IllegalArgumentException("Users with student number " + studentNumber + " not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
     }
 
-
-    // trim => 공백만 포함된 문자열 처리
     @Override
     public List<UserInfoDto> findUserByUsername(String username) {
         if (username == null || username.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username must not be null or empty");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch user list and map to DTOs
@@ -77,19 +77,19 @@ public class UserRepositoryImpl implements UserRepository {
                                 .role(user.getRole())
                                 .build())
                         .toList())
-                .orElseThrow(() -> new IllegalArgumentException("Users with username '" + username + "' not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
     }
 
     @Override
     public void updateUserById(UserUpdateDto userUpdateDto) {
         // Validate input data
         if (userUpdateDto == null || userUpdateDto.getId() == null) {
-            throw new IllegalArgumentException("UserUpdateDto or ID cannot be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the user
         User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userUpdateDto.getId())
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update fields using updateFields
         User updatedUser = existingUser.updatedUserFields(
@@ -106,12 +106,12 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteUserById(UserDeleteDto userDeleteDto) {
         // Validate input data
         if (userDeleteDto == null || userDeleteDto.getId() == null) {
-            throw new IllegalArgumentException("UserDeleteDto or ID cannot be null");
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the user
         User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userDeleteDto.getId())
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+                .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update the deletedAt field to mark as deleted
         User deletedUser = existingUser.toBuilder()
@@ -121,6 +121,4 @@ public class UserRepositoryImpl implements UserRepository {
         // Save the updated user
         userDao.save(deletedUser);
     }
-
-
 }

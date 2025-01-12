@@ -21,15 +21,23 @@ public enum ResponseStatus {
     ACTIVITY_UPDATED(HttpStatus.OK, "액티비티 정보가 성공적으로 갱신되었습니다"),
     ACTIVITY_DELETED(HttpStatus.OK, "액티비티를 성공적으로 삭제했습니다"),
     ACTIVITY_SEARCHED(HttpStatus.OK, "액티비티를 성공적으로 조회했습니다"),
-    ACTIVITY_SUBSCRIBED(HttpStatus.OK, "액티비티를 성공적으로 구독신청했습니다"),
-    ACTIVITY_UNSUBSCRIBED(HttpStatus.OK, "액티비티를 성공적으로 구독해지했습니다");
 
+    // ACTIVITY HISTORY RESPONSE CODE
+    ACTIVITY_HISTORY_SUBSCRIBED(HttpStatus.OK, "액티비티를 성공적으로 구독했습니다"),
+    ACTIVITY_HISTORY_UNSUBSCRIBED(HttpStatus.OK, "액티비티를 성공적으로 구독해지했습니다"),
 
     // AUTH RESPONSE CODE
 
     // GROUP RESPONSE CODE
+    GROUP_CREATED(HttpStatus.CREATED, "그룹이 성공적으로 생성되었습니다"),
+    GROUP_DELETED(HttpStatus.OK, "그룹이 성공적으로 삭제되었습니다"),
+    GROUP_ADD(HttpStatus.OK, "그룹에 성공적으로 추가되었습니다"),
+    GROUP_REMOVE(HttpStatus.OK, "그룹에서 성공적으로 삭제되었습니다"),
+    GROUP_SEARCHED(HttpStatus.OK, "그룹을 성공적으로 조회했습니다"),
 
     // NOTIFICATION RESPONSE CODE
+    NOTIFICATION_CREATED(HttpStatus.CREATED, "알림이 성공적으로 생성되었습니다"),
+    NOTIFICATION_SEARCHED(HttpStatus.OK, "알림을 성공적으로 조회했습니다");
 
 
     private final int statusCode;

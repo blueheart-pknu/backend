@@ -37,9 +37,12 @@ public class ActivityHistory {
     private LocalDateTime deletedAt;
 
 
-    @Builder
-    public ActivityHistory(Activity activity, User user) {
+    @Builder(toBuilder = true)
+    public ActivityHistory(Long id, Activity activity, User user, LocalDateTime createdAt, LocalDateTime deletedAt) {
+        this.id = id;
         this.activity = activity;
         this.user = user;
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now(); // 기본값 설정
+        this.deletedAt = deletedAt;
     }
 }

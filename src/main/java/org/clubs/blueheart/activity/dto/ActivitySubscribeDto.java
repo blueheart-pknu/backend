@@ -7,5 +7,7 @@ import lombok.Data;
 @Builder
 public class ActivitySubscribeDto {
 
-    private Long id;
+    private Long activityId;
+
+    private Long userId;
 }

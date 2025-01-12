@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import org.clubs.blueheart.user.domain.User;
@@ -15,6 +17,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Entity
 @Table(name = "notifications")  // DB의 'users' 테이블과 매핑
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Log4j2
 public class Notification {
 
@@ -40,15 +43,17 @@ public class Notification {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
-    private OffsetDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
-    @Builder
-    public Notification(User senderId, User receiverId, String content) {
+    @Builder(toBuilder = true)
+    public Notification(User senderId, User receiverId, String content, LocalDateTime createdAt, LocalDateTime deletedAt) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.content = content;
+        this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
+        this.deletedAt = deletedAt;
     }
 }
