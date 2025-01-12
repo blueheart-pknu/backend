@@ -7,15 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
-import org.clubs.blueheart.activity.domain.ActivityStatus;
 import org.clubs.blueheart.activity.dto.*;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/activity-history")
