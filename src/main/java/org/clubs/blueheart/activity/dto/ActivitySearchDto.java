@@ -25,6 +25,8 @@ public class ActivitySearchDto {
 
     private Boolean isSubscribed;
 
+    private String place;
+
     @NotBlank(message = "CurrentNumber must not be blank")
     private Integer currentNumber;
 

@@ -91,6 +91,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                         .description(activity.getDescription())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
+                        .place(activity.getPlace())
                         .currentNumber(activity.getUsers() != null ? activity.getUsers().size() : 0) // Handle null safety
                         .maxNumber(activity.getMaxNumber())
                         .expiredAt(activity.getExpiredAt())
@@ -111,6 +112,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                         .description(activity.getDescription())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
+                        .place(activity.getPlace())
                         .currentNumber(activity.getUsers() != null ? activity.getUsers().size() : 0) // Handle null safety
                         .maxNumber(activity.getMaxNumber())
                         .expiredAt(activity.getExpiredAt())
