@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-db:1521/~/test
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_H2_CONSOLE_ENABLED: "true"
+    depends_on:
+      - h2-db
+
+  h2-db:
+    build:
+      context: ./h2
+      dockerfile: Dockerfile
+    ports:
+      - "1521:1521"  # JDBC 포트
+      - "8082:8082"  # 웹 콘솔 포트
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
