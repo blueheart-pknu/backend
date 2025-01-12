@@ -16,4 +16,5 @@ public interface GroupUserDao extends JpaRepository<GroupUser, Long> {
     Optional<GroupUser> findOneByUserIdAndDeletedAtIsNull(Long userId);
 
     List<GroupUser> findAllByGroupIdAndDeletedAtIsNull(Long id);
+
 }

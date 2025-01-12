@@ -8,4 +8,5 @@ import java.util.List;
 public interface NotificationDao extends JpaRepository<Notification, Long> {
 
     List<Notification> findAllByReceiverId_IdAndDeletedAtIsNull(Long receiverId);
+
 }

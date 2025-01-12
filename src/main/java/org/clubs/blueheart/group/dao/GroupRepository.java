@@ -1,5 +1,6 @@
 package org.clubs.blueheart.group.dao;
 
+import org.clubs.blueheart.group.domain.Group;
 import org.clubs.blueheart.group.dto.GroupInfoDto;
 import org.clubs.blueheart.group.dto.GroupUserDto;
 import org.clubs.blueheart.group.dto.GroupUserInfoDto;

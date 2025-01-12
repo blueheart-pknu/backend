@@ -14,4 +14,5 @@ public interface ActivityDao extends ActivityCustomDao, JpaRepository<Activity, 
     Optional<List<Activity>> findActivityByStatus(ActivityStatus status);
 
     List<Activity> findAllByDeletedAtIsNull();
+
 }
