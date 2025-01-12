@@ -8,6 +8,7 @@ import org.clubs.blueheart.activity.dto.ActivitySubscribeDto;
 import org.clubs.blueheart.exception.ExceptionStatus;
 import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.domain.User;
+import org.clubs.blueheart.user.dto.UserInfoDto;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -103,6 +104,31 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
                             .build();
                 })
                 .collect(Collectors.toList()); // Collect stream into a list
+    }
+
+    @Override
+    public List<UserInfoDto> findSubscribedUserByActivityId(Long activityId) {
+        if (activityId == null) {
+            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+        }
+
+        // activityId와 deletedAt이 null인 ActivityHistory 레코드 조회
+        List<ActivityHistory> activityHistories = activityHistoryDao.findByActivityIdAndDeletedAtIsNull(activityId);
+
+        // 구독한 사용자가 없는 경우 예외 처리 (필요 시)
+        if (activityHistories.isEmpty()) {
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_HISTORY_NOT_SUBSCRIBED);
+        }
+
+        // ActivityHistory에서 User를 추출하고 UserInfoDto로 매핑
+        return activityHistories.stream()
+                .map(ActivityHistory::getUser)
+                .map(user -> UserInfoDto.builder()
+                        .username(user.getUsername())
+                        .studentNumber(user.getStudentNumber())
+                        .role(user.getRole())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 }

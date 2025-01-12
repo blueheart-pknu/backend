@@ -3,6 +3,7 @@ package org.clubs.blueheart.activity.application;
 import org.clubs.blueheart.activity.dao.ActivityHistoryRepository;
 import org.clubs.blueheart.activity.dto.ActivitySearchDto;
 import org.clubs.blueheart.activity.dto.ActivitySubscribeDto;
+import org.clubs.blueheart.user.dto.UserInfoDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,5 +27,9 @@ public class ActivityHistoryService {
 
     public List<ActivitySearchDto> getMyActivityHistoryInfo(Long id) {
         return activityHistoryRepository.getMyActivityHistoryInfoById(id);
+    }
+
+    public List<UserInfoDto> findSubscribedUser(Long activityId) {
+        return activityHistoryRepository.findSubscribedUserByActivityId(activityId);
     }
 }

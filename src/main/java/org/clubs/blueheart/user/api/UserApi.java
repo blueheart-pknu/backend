@@ -176,4 +176,10 @@ public class UserApi {
         return GlobalResponseHandler.success(ResponseStatus.USER_DELETED);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findAllUser() {
+        List<UserInfoDto> users = userService.findAllUser();
+        return GlobalResponseHandler.success(ResponseStatus.USER_SEARCHED, users);
+    }
+
 }

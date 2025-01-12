@@ -20,4 +20,5 @@ public interface UserRepository  {
 
     void deleteUserById(UserDeleteDto userDeleteDto);
 
+    List<UserInfoDto> findAllUser();
 }

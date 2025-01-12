@@ -14,6 +14,7 @@ import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.group.dto.GroupUserInfoDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
+import org.clubs.blueheart.user.dto.UserInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -111,6 +112,14 @@ public class ActivityHistoryApi {
                 activityHistoryService.getMyActivityHistoryInfo(userId);
 
         // 응답
-        return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, activityHistoryInfoInfo);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, activityHistoryInfoInfo);
     }
+
+    @GetMapping("/{activityId}")
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findSubscribedUser(@PathVariable @Valid Long activityId) {
+        List<UserInfoDto> users = activityHistoryService.findSubscribedUser(activityId);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, users);
+    }
+
+
 }

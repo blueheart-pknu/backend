@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -121,4 +123,24 @@ public class UserRepositoryImpl implements UserRepository {
         // Save the updated user
         userDao.save(deletedUser);
     }
+
+    @Override
+    public List<UserInfoDto> findAllUser() {
+        // 인스턴스 멤버인 userDao를 사용하여 메서드 호출
+        Optional<List<User>> optionalUsers = userDao.findAllByDeletedAtIsNull();
+
+        // Optional 처리: 사용자 리스트가 없으면 예외를 던짐
+        List<User> users = optionalUsers.orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
+
+        // User 리스트를 UserInfoDto 리스트로 매핑
+        return users.stream()
+                .map(user -> UserInfoDto.builder()
+                        .username(user.getUsername())
+                        .studentNumber(user.getStudentNumber())
+                        .role(user.getRole())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
 }
