@@ -5,14 +5,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
 import org.clubs.blueheart.activity.dto.*;
+import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.group.dto.GroupUserInfoDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -95,9 +98,19 @@ public class ActivityHistoryApi {
     }
 
     //TODO: jwt 변경
-    @GetMapping("/me/{id}")
-    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> getMyActivityHistoryInfo(@PathVariable Long id) {
-        List<ActivitySearchDto> activityHistoryInfoInfo = activityHistoryService.getMyActivityHistoryInfo(id);
+
+    @GetMapping("/me")
+    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> getMyActivityHistoryInfo(
+            @AuthenticationPrincipal JwtUserDetails userDetails
+    ) {
+        // userDetails 에서 userId 추출
+        Long userId = userDetails.getUserId();
+
+        // DB 조회
+        List<ActivitySearchDto> activityHistoryInfoInfo =
+                activityHistoryService.getMyActivityHistoryInfo(userId);
+
+        // 응답
         return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, activityHistoryInfoInfo);
     }
 }
