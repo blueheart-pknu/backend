@@ -38,6 +38,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                 .title(activityCreateDto.getTitle())
                 .status(ActivityStatus.PROGRESSING)
                 .description(activityCreateDto.getDescription())
+                .maxNumber(activityCreateDto.getMaxNumber())
                 .place(activityCreateDto.getPlace())
                 .placeUrl(activityCreateDto.getPlaceUrl())
                 .expiredAt(activityCreateDto.getExpiredAt())
@@ -88,9 +89,9 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                 .<ActivitySearchDto>map(activity -> ActivitySearchDto.builder()
                         .id(activity.getId())
                         .title(activity.getTitle())
-                        .description(activity.getDescription())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
+                        .place(activity.getPlace())
                         .currentNumber(activity.getUsers() != null ? activity.getUsers().size() : 0) // Handle null safety
                         .maxNumber(activity.getMaxNumber())
                         .expiredAt(activity.getExpiredAt())
@@ -108,9 +109,9 @@ public class ActivityRepositoryImpl implements ActivityRepository {
                 .<ActivitySearchDto>map(activity -> ActivitySearchDto.builder()
                         .id(activity.getId())
                         .title(activity.getTitle())
-                        .description(activity.getDescription())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
+                        .place(activity.getPlace())
                         .currentNumber(activity.getUsers() != null ? activity.getUsers().size() : 0) // Handle null safety
                         .maxNumber(activity.getMaxNumber())
                         .expiredAt(activity.getExpiredAt())
