@@ -1,6 +1,7 @@
 package org.clubs.blueheart.notification.dao;
 
 import org.clubs.blueheart.activity.dto.ActivitySearchDto;
+import org.clubs.blueheart.notification.domain.Notification;
 import org.clubs.blueheart.notification.dto.NotificationRequestDto;
 import org.clubs.blueheart.notification.dto.NotificationResponseDto;
 
