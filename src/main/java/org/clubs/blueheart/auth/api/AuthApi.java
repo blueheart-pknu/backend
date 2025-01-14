@@ -46,7 +46,7 @@ public class AuthApi {
         }
 
         // 3. DB나 로직상 userId=123, role="USER" 라고 가정
-        Long userId = 123L;
+        Long userId = 1L;
         String role = "ADMIN";
         String finalJwt = authService.createLoginJwt(userId, authDto.getStudentNumber(), authDto.getUsername(), role);
 

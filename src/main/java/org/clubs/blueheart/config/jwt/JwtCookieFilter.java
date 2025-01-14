@@ -2,7 +2,6 @@ package org.clubs.blueheart.config.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +33,9 @@ public class JwtCookieFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // 인증이 필요 없는 경로는 필터 로직을 건너뜀
-        //TODO: h2-console 해결
+        // /api/v1/auth/**, /h2-console/**, Swagger 관련 경로 제외
         if (path.startsWith("/api/v1/auth/")
-                || path.contains("/h2-console")
+                || path.startsWith("/h2-console/")
                 || path.startsWith("/swagger")
                 || path.startsWith("/v3/api-docs")
                 || path.startsWith("/swagger-ui")) {
@@ -80,15 +78,5 @@ public class JwtCookieFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    private String getJwtFromCookie(HttpServletRequest request, String cookieName) {
-        if (request.getCookies() == null) return null;
-        for (Cookie cookie : request.getCookies()) {
-            if (cookieName.equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
     }
 }

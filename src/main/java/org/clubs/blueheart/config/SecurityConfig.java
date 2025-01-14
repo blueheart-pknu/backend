@@ -17,30 +17,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-                // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
-                http.sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
-
         http
-                // CSRF 비활성화 (H2 콘솔과 Swagger를 위해)
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**")
+                // 세션 비활성화 (JWT 사용)
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
+                // CSRF 비활성화 (모든 경로)
+                .csrf(csrf -> csrf.disable())
                 // H2 콘솔을 위한 헤더 설정
-                .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
+                .headers(headers ->
+                        headers.frameOptions(frameOptions -> frameOptions.sameOrigin())
                 )
                 // 권한 설정
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/swagger-resources/**").permitAll()
-
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/webjars/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // JWT 필터 추가

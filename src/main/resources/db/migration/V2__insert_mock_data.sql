@@ -30,23 +30,23 @@ VALUES
     ('Activity 1', 'Description 1', 'Place 1', 'http://place1.com', 'PROGRESSING', 10, 1, NOW(), DATEADD('DAY', 7, NOW()), NULL),
     ('Activity 2', 'Description 2', 'Place 2', 'http://place2.com', 'PROGRESSING', 20, 2, NOW(), DATEADD('DAY', 7, NOW()), NULL),
     ('Activity 3', 'Description 3', 'Place 3', 'http://place3.com', 'COMPLETED', 15, 3, NOW(), DATEADD('DAY', 14, NOW()), NULL),
-    ('Activity 4', 'Description 4', 'Place 4', 'http://place4.com', 'CANCELLED', 25, 4, NOW(), DATEADD('DAY', 10, NOW()), NULL),
+    ('Activity 4', 'Description 4', 'Place 4', 'http://place4.com', 'DONE', 25, 4, NOW(), DATEADD('DAY', 10, NOW()), NULL),
     ('Activity 5', 'Description 5', 'Place 5', 'http://place5.com', 'PROGRESSING', 30, 5, NOW(), DATEADD('DAY', 5, NOW()), NULL),
     ('Activity 6', 'Description 6', 'Place 6', 'http://place6.com', 'PROGRESSING', 12, 6, NOW(), DATEADD('DAY', 8, NOW()), NULL),
     ('Activity 7', 'Description 7', 'Place 7', 'http://place7.com', 'COMPLETED', 18, 7, NOW(), DATEADD('DAY', 12, NOW()), NULL),
-    ('Activity 8', 'Description 8', 'Place 8', 'http://place8.com', 'CANCELLED', 22, 8, NOW(), DATEADD('DAY', 9, NOW()), NULL),
+    ('Activity 8', 'Description 8', 'Place 8', 'http://place8.com', 'DONE', 22, 8, NOW(), DATEADD('DAY', 9, NOW()), NULL),
     ('Activity 9', 'Description 9', 'Place 9', 'http://place9.com', 'PROGRESSING', 16, 9, NOW(), DATEADD('DAY', 6, NOW()), NULL),
     ('Activity 10', 'Description 10', 'Place 10', 'http://place10.com', 'PROGRESSING', 14, 10, NOW(), DATEADD('DAY', 7, NOW()), NULL),
     ('Activity 11', 'Description 11', 'Place 11', 'http://place11.com', 'COMPLETED', 19, 11, NOW(), DATEADD('DAY', 13, NOW()), NULL),
-    ('Activity 12', 'Description 12', 'Place 12', 'http://place12.com', 'CANCELLED', 21, 12, NOW(), DATEADD('DAY', 11, NOW()), NULL),
+    ('Activity 12', 'Description 12', 'Place 12', 'http://place12.com', 'DONE', 21, 12, NOW(), DATEADD('DAY', 11, NOW()), NULL),
     ('Activity 13', 'Description 13', 'Place 13', 'http://place13.com', 'PROGRESSING', 17, 13, NOW(), DATEADD('DAY', 5, NOW()), NULL),
     ('Activity 14', 'Description 14', 'Place 14', 'http://place14.com', 'PROGRESSING', 23, 14, NOW(), DATEADD('DAY', 8, NOW()), NULL),
     ('Activity 15', 'Description 15', 'Place 15', 'http://place15.com', 'COMPLETED', 20, 15, NOW(), DATEADD('DAY', 14, NOW()), NULL),
-    ('Activity 16', 'Description 16', 'Place 16', 'http://place16.com', 'CANCELLED', 24, 16, NOW(), DATEADD('DAY', 10, NOW()), NULL),
+    ('Activity 16', 'Description 16', 'Place 16', 'http://place16.com', 'DONE', 24, 16, NOW(), DATEADD('DAY', 10, NOW()), NULL),
     ('Activity 17', 'Description 17', 'Place 17', 'http://place17.com', 'PROGRESSING', 26, 17, NOW(), DATEADD('DAY', 7, NOW()), NULL),
     ('Activity 18', 'Description 18', 'Place 18', 'http://place18.com', 'PROGRESSING', 28, 18, NOW(), DATEADD('DAY', 9, NOW()), NULL),
     ('Activity 19', 'Description 19', 'Place 19', 'http://place19.com', 'COMPLETED', 29, 19, NOW(), DATEADD('DAY', 13, NOW()), NULL),
-    ('Activity 20', 'Description 20', 'Place 20', 'http://place20.com', 'CANCELLED', 30, 20, NOW(), DATEADD('DAY', 11, NOW()), NULL);
+    ('Activity 20', 'Description 20', 'Place 20', 'http://place20.com', 'DONE', 30, 20, NOW(), DATEADD('DAY', 11, NOW()), NULL);
 
 -- Insert Activity Histories
 INSERT INTO activity_histories (activity_id, user_id, created_at, deleted_at)
