@@ -35,7 +35,12 @@ public class JwtCookieFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // 인증이 필요 없는 경로는 필터 로직을 건너뜀
-        if (path.startsWith("/api/v1/auth/")) {
+        //TODO: h2-console 해결
+        if (path.startsWith("/api/v1/auth/")
+                || path.contains("/h2-console")
+                || path.startsWith("/swagger")
+                || path.startsWith("/v3/api-docs")
+                || path.startsWith("/swagger-ui")) {
             filterChain.doFilter(request, response);
             return;
         }

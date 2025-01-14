@@ -4,13 +4,49 @@ VALUES
     ('user1', '20230001', 'USER', NOW(), NULL),
     ('user2', '20230002', 'USER', NOW(), NULL),
     ('user3', '20230003', 'USER', NOW(), NULL),
-    ('admin', '20230000', 'ADMIN', NOW(), NULL);
+    ('admin', '20230000', 'ADMIN', NOW(), NULL),
+    ('user4', '20230004', 'USER', NOW(), NULL),
+    ('user5', '20230005', 'USER', NOW(), NULL),
+    ('user6', '20230006', 'USER', NOW(), NULL),
+    ('user7', '20230007', 'USER', NOW(), NULL),
+    ('user8', '20230008', 'USER', NOW(), NULL),
+    ('user9', '20230009', 'USER', NOW(), NULL),
+    ('user10', '20230010', 'USER', NOW(), NULL),
+    ('user11', '20230011', 'USER', NOW(), NULL),
+    ('user12', '20230012', 'USER', NOW(), NULL),
+    ('user13', '20230013', 'USER', NOW(), NULL),
+    ('user14', '20230014', 'USER', NOW(), NULL),
+    ('user15', '20230015', 'USER', NOW(), NULL),
+    ('user16', '20230016', 'USER', NOW(), NULL),
+    ('user17', '20230017', 'USER', NOW(), NULL),
+    ('user18', '20230018', 'USER', NOW(), NULL),
+    ('user19', '20230019', 'USER', NOW(), NULL),
+    ('user20', '20230020', 'USER', NOW(), NULL),
+    ('admin2', '20230021', 'ADMIN', NOW(), NULL);
 
 -- Insert Activities
 INSERT INTO activities (title, description, place, place_url, status, max_number, creator_id, created_at, expired_at, deleted_at)
 VALUES
     ('Activity 1', 'Description 1', 'Place 1', 'http://place1.com', 'PROGRESSING', 10, 1, NOW(), DATEADD('DAY', 7, NOW()), NULL),
-    ('Activity 2', 'Description 2', 'Place 2', 'http://place2.com', 'PROGRESSING', 20, 2, NOW(), DATEADD('DAY', 7, NOW()), NULL);
+    ('Activity 2', 'Description 2', 'Place 2', 'http://place2.com', 'PROGRESSING', 20, 2, NOW(), DATEADD('DAY', 7, NOW()), NULL),
+    ('Activity 3', 'Description 3', 'Place 3', 'http://place3.com', 'COMPLETED', 15, 3, NOW(), DATEADD('DAY', 14, NOW()), NULL),
+    ('Activity 4', 'Description 4', 'Place 4', 'http://place4.com', 'CANCELLED', 25, 4, NOW(), DATEADD('DAY', 10, NOW()), NULL),
+    ('Activity 5', 'Description 5', 'Place 5', 'http://place5.com', 'PROGRESSING', 30, 5, NOW(), DATEADD('DAY', 5, NOW()), NULL),
+    ('Activity 6', 'Description 6', 'Place 6', 'http://place6.com', 'PROGRESSING', 12, 6, NOW(), DATEADD('DAY', 8, NOW()), NULL),
+    ('Activity 7', 'Description 7', 'Place 7', 'http://place7.com', 'COMPLETED', 18, 7, NOW(), DATEADD('DAY', 12, NOW()), NULL),
+    ('Activity 8', 'Description 8', 'Place 8', 'http://place8.com', 'CANCELLED', 22, 8, NOW(), DATEADD('DAY', 9, NOW()), NULL),
+    ('Activity 9', 'Description 9', 'Place 9', 'http://place9.com', 'PROGRESSING', 16, 9, NOW(), DATEADD('DAY', 6, NOW()), NULL),
+    ('Activity 10', 'Description 10', 'Place 10', 'http://place10.com', 'PROGRESSING', 14, 10, NOW(), DATEADD('DAY', 7, NOW()), NULL),
+    ('Activity 11', 'Description 11', 'Place 11', 'http://place11.com', 'COMPLETED', 19, 11, NOW(), DATEADD('DAY', 13, NOW()), NULL),
+    ('Activity 12', 'Description 12', 'Place 12', 'http://place12.com', 'CANCELLED', 21, 12, NOW(), DATEADD('DAY', 11, NOW()), NULL),
+    ('Activity 13', 'Description 13', 'Place 13', 'http://place13.com', 'PROGRESSING', 17, 13, NOW(), DATEADD('DAY', 5, NOW()), NULL),
+    ('Activity 14', 'Description 14', 'Place 14', 'http://place14.com', 'PROGRESSING', 23, 14, NOW(), DATEADD('DAY', 8, NOW()), NULL),
+    ('Activity 15', 'Description 15', 'Place 15', 'http://place15.com', 'COMPLETED', 20, 15, NOW(), DATEADD('DAY', 14, NOW()), NULL),
+    ('Activity 16', 'Description 16', 'Place 16', 'http://place16.com', 'CANCELLED', 24, 16, NOW(), DATEADD('DAY', 10, NOW()), NULL),
+    ('Activity 17', 'Description 17', 'Place 17', 'http://place17.com', 'PROGRESSING', 26, 17, NOW(), DATEADD('DAY', 7, NOW()), NULL),
+    ('Activity 18', 'Description 18', 'Place 18', 'http://place18.com', 'PROGRESSING', 28, 18, NOW(), DATEADD('DAY', 9, NOW()), NULL),
+    ('Activity 19', 'Description 19', 'Place 19', 'http://place19.com', 'COMPLETED', 29, 19, NOW(), DATEADD('DAY', 13, NOW()), NULL),
+    ('Activity 20', 'Description 20', 'Place 20', 'http://place20.com', 'CANCELLED', 30, 20, NOW(), DATEADD('DAY', 11, NOW()), NULL);
 
 -- Insert Activity Histories
 INSERT INTO activity_histories (activity_id, user_id, created_at, deleted_at)
@@ -19,24 +55,104 @@ VALUES
     (1, 2, DATEADD('DAY', -4, NOW()), NULL),
     (2, 3, DATEADD('DAY', -3, NOW()), NULL),
     (2, 1, DATEADD('DAY', -2, NOW()), DATEADD('DAY', -1, NOW())),
-    (1, 3, DATEADD('DAY', -1, NOW()), NULL);
+    (1, 3, DATEADD('DAY', -1, NOW()), NULL),
+    (3, 4, DATEADD('DAY', -6, NOW()), NULL),
+    (4, 5, DATEADD('DAY', -2, NOW()), NULL),
+    (5, 6, DATEADD('DAY', -7, NOW()), NULL),
+    (6, 7, DATEADD('DAY', -3, NOW()), NULL),
+    (7, 8, DATEADD('DAY', -4, NOW()), NULL),
+    (8, 9, DATEADD('DAY', -5, NOW()), NULL),
+    (9, 10, DATEADD('DAY', -6, NOW()), NULL),
+    (10, 11, DATEADD('DAY', -1, NOW()), NULL),
+    (11, 12, DATEADD('DAY', -2, NOW()), NULL),
+    (12, 13, DATEADD('DAY', -3, NOW()), NULL),
+    (13, 14, DATEADD('DAY', -4, NOW()), NULL),
+    (14, 15, DATEADD('DAY', -5, NOW()), NULL),
+    (15, 16, DATEADD('DAY', -6, NOW()), NULL),
+    (16, 17, DATEADD('DAY', -7, NOW()), NULL),
+    (17, 18, DATEADD('DAY', -8, NOW()), NULL),
+    (18, 19, DATEADD('DAY', -9, NOW()), NULL),
+    (19, 20, DATEADD('DAY', -10, NOW()), NULL),
+    (20, 1, DATEADD('DAY', -11, NOW()), NULL);
 
 -- Insert Notifications
 INSERT INTO notifications (sender_id, receiver_id, content, created_at, deleted_at)
 VALUES
     (1, 2, 'Notification 1', NOW(), NULL),
     (2, 3, 'Notification 2', NOW(), NULL),
-    (3, 1, 'Notification 3', NOW(), NULL);
+    (3, 1, 'Notification 3', NOW(), NULL),
+    (4, 5, 'Notification 4', NOW(), NULL),
+    (5, 6, 'Notification 5', NOW(), NULL),
+    (6, 7, 'Notification 6', NOW(), NULL),
+    (7, 8, 'Notification 7', NOW(), NULL),
+    (8, 9, 'Notification 8', NOW(), NULL),
+    (9, 10, 'Notification 9', NOW(), NULL),
+    (10, 11, 'Notification 10', NOW(), NULL),
+    (11, 12, 'Notification 11', NOW(), NULL),
+    (12, 13, 'Notification 12', NOW(), NULL),
+    (13, 14, 'Notification 13', NOW(), NULL),
+    (14, 15, 'Notification 14', NOW(), NULL),
+    (15, 16, 'Notification 15', NOW(), NULL),
+    (16, 17, 'Notification 16', NOW(), NULL),
+    (17, 18, 'Notification 17', NOW(), NULL),
+    (18, 19, 'Notification 18', NOW(), NULL),
+    (19, 20, 'Notification 19', NOW(), NULL),
+    (20, 1, 'Notification 20', NOW(), NULL);
 
 -- Insert Groups
 INSERT INTO groups (name, created_at, updated_at, deleted_at)
 VALUES
     ('Group 1', NOW(), NOW(), NULL),
-    ('Group 2', NOW(), NOW(), NULL);
+    ('Group 2', NOW(), NOW(), NULL),
+    ('Group 3', NOW(), NOW(), NULL),
+    ('Group 4', NOW(), NOW(), NULL),
+    ('Group 5', NOW(), NOW(), NULL),
+    ('Group 6', NOW(), NOW(), NULL),
+    ('Group 7', NOW(), NOW(), NULL),
+    ('Group 8', NOW(), NOW(), NULL),
+    ('Group 9', NOW(), NOW(), NULL),
+    ('Group 10', NOW(), NOW(), NULL),
+    ('Group 11', NOW(), NOW(), NULL),
+    ('Group 12', NOW(), NOW(), NULL),
+    ('Group 13', NOW(), NOW(), NULL),
+    ('Group 14', NOW(), NOW(), NULL),
+    ('Group 15', NOW(), NOW(), NULL),
+    ('Group 16', NOW(), NOW(), NULL),
+    ('Group 17', NOW(), NOW(), NULL),
+    ('Group 18', NOW(), NOW(), NULL),
+    ('Group 19', NOW(), NOW(), NULL),
+    ('Group 20', NOW(), NOW(), NULL);
 
 -- Insert Group Users
 INSERT INTO group_users (group_id, user_id, created_at, deleted_at)
 VALUES
     (1, 1, NOW(), NULL),
     (1, 2, NOW(), NULL),
-    (2, 3, NOW(), NULL);
+    (2, 3, NOW(), NULL),
+    (2, 4, NOW(), NULL),
+    (3, 5, NOW(), NULL),
+    (3, 6, NOW(), NULL),
+    (4, 7, NOW(), NULL),
+    (4, 8, NOW(), NULL),
+    (5, 9, NOW(), NULL),
+    (5, 10, NOW(), NULL),
+    (6, 11, NOW(), NULL),
+    (6, 12, NOW(), NULL),
+    (7, 13, NOW(), NULL),
+    (7, 14, NOW(), NULL),
+    (8, 15, NOW(), NULL),
+    (8, 16, NOW(), NULL),
+    (9, 17, NOW(), NULL),
+    (9, 18, NOW(), NULL),
+    (10, 19, NOW(), NULL),
+    (10, 20, NOW(), NULL),
+    (11, 1, NOW(), NULL),
+    (12, 2, NOW(), NULL),
+    (13, 3, NOW(), NULL),
+    (14, 4, NOW(), NULL),
+    (15, 5, NOW(), NULL),
+    (16, 6, NOW(), NULL),
+    (17, 7, NOW(), NULL),
+    (18, 8, NOW(), NULL),
+    (19, 9, NOW(), NULL),
+    (20, 10, NOW(), NULL);
