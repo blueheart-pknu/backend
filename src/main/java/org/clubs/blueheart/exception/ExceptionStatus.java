@@ -149,33 +149,33 @@ public enum ExceptionStatus {
     }
 
     // 메서드들
-    public ApiException asApiException() {
-        return new ApiException(this);
-    }
-
-    public ApplicationException asApplicationException() {
-        return new ApplicationException(this);
-    }
-
-    public DaoException asDaoException() {
-        return new DaoException(this);
-    }
-
-    public DtoException asDtoException() {
-        return new DtoException(this);
-    }
-
-    public DomainException asDomainException() {
-        return new DomainException(this);
-    }
-
-    public RepositoryException asRepositoryException() {
-        return new RepositoryException(this);
-    }
-
-    public UtilException asUtilException() {
-        return new UtilException(this);
-    }
+//    public ApiException asApiException() {
+//        return new ApiException(this);
+//    }
+//
+//    public ApplicationException asApplicationException() {
+//        return new ApplicationException(this);
+//    }
+//
+//    public DaoException asDaoException() {
+//        return new DaoException(this);
+//    }
+//
+//    public DtoException asDtoException() {
+//        return new DtoException(this);
+//    }
+//
+//    public DomainException asDomainException() {
+//        return new DomainException(this);
+//    }
+//
+//    public RepositoryException asRepositoryException() {
+//        return new RepositoryException(this);
+//    }
+//
+//    public UtilException asUtilException() {
+//        return new UtilException(this);
+//    }
 
     public MiddlewareException asMiddlewareException() {
         return new MiddlewareException(this);

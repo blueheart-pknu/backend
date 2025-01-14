@@ -31,7 +31,8 @@ public class AuthService {
         this.jwtGenerator = jwtGenerator;
     }
 
-    public void loginUserByStudentNumberAndUsername(AuthDto authDto) {
+    public AuthJwtDto loginUserByStudentNumberAndUsername(AuthDto authDto) {
+        return authRepository.findUserByStudentNumberAndUsername(authDto);
     }
 
     public void logoutUser(AuthDto authDto) {
@@ -114,10 +115,6 @@ public class AuthService {
         long finalExpire = 24L * 60 * 60 * 1000;
 
         return jwtGenerator.createToken(payload, finalExpire);
-    }
-
-    public AuthJwtDto checkUserInfo(String studentNumber, String username) {
-        return authRepository.findUserByStudentNumberAndUsername(studentNumber, username);
     }
 
 

@@ -37,7 +37,7 @@ public class AuthApi {
         //TODO: Filter Layer로 변경
         authService.isSessionValid(sessionId);
 
-        AuthJwtDto authJwtDto = authService.checkUserInfo(authDto.getStudentNumber(), authDto.getUsername());
+        AuthJwtDto authJwtDto = authService.loginUserByStudentNumberAndUsername(authDto);
 
         String finalJwt = authService.createLoginJwt(authJwtDto.getId(), authJwtDto.getStudentNumber(), authJwtDto.getUsername(), authJwtDto.getRole());
 

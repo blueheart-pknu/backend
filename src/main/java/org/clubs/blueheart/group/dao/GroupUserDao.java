@@ -9,11 +9,7 @@ import java.util.Optional;
 public interface GroupUserDao extends JpaRepository<GroupUser, Long>, GroupUserCustomDao {
     boolean existsByUserId(Long userId);
 
-    boolean existsByGroupIdAndUserId(Long groupId, Long userId);
-
     Optional<GroupUser> findByGroupIdAndUserIdAndDeletedAtIsNull(Long groupId, Long userId);
-
-//    Optional<GroupUser> findOneByUserIdAndDeletedAtIsNull(Long userId);
 
     List<GroupUser> findAllByGroupIdAndDeletedAtIsNull(Long id);
 
