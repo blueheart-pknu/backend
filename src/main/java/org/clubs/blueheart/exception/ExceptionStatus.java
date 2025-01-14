@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ExceptionStatus {
 
+    // AUTH ERROR CODE
+    AUTH_BAD_SESSION_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청 방법입니다."),
+    AUTH_SESSION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 세션으로 접근했습니다!"),
+
     // USER ERROR CODE
     USER_NOT_FOUND_ADMIN(HttpStatus.NOT_FOUND, "어드민이 존재하지 않습니다"),
     USER_NOT_FOUND_STAFF(HttpStatus.NOT_FOUND, "스태프가 존재하지 않습니다"),

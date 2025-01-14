@@ -2,12 +2,10 @@ package org.clubs.blueheart.auth.api;
 
 import jakarta.validation.Valid;
 import org.clubs.blueheart.auth.application.AuthService;
-import org.clubs.blueheart.auth.dto.AuthDto;
-import org.clubs.blueheart.auth.dto.AuthInviteAllDto;
-import org.clubs.blueheart.auth.dto.AuthInviteOneDto;
-import org.clubs.blueheart.auth.dto.AuthVerifyDto;
+import org.clubs.blueheart.auth.dto.*;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
+import org.clubs.blueheart.user.domain.UserRole;
 import org.clubs.blueheart.user.dto.UserInfoDto;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -31,24 +29,17 @@ public class AuthApi {
 
     //TODO: 실제 존재하는 유저의 정보를 반환
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(
+    public ResponseEntity<UserRole> loginUser(
             @CookieValue(value = "SESSION_ID", required = false) String sessionId,
             @RequestBody AuthDto authDto
     ) {
-        // 1. 세션 체크
-        if (!authService.isSessionValid(sessionId)) {
-            return ResponseEntity.status(401).body("Session invalid or expired");
-        }
 
-        // 2. 학번, 이름 검증
-        if (!authService.checkUserInfo(authDto.getStudentNumber(), authDto.getUsername())) {
-            return ResponseEntity.badRequest().body("Invalid student number or username");
-        }
+        //TODO: Filter Layer로 변경
+        authService.isSessionValid(sessionId);
 
-        // 3. DB나 로직상 userId=123, role="USER" 라고 가정
-        Long userId = 1L;
-        String role = "ADMIN";
-        String finalJwt = authService.createLoginJwt(userId, authDto.getStudentNumber(), authDto.getUsername(), role);
+        AuthJwtDto authJwtDto = authService.checkUserInfo(authDto.getStudentNumber(), authDto.getUsername());
+
+        String finalJwt = authService.createLoginJwt(authJwtDto.getId(), authJwtDto.getStudentNumber(), authJwtDto.getUsername(), authJwtDto.getRole());
 
         // 최종 JWT를 쿠키로 주거나, 바디로 주거나 선택
         ResponseCookie loginCookie = ResponseCookie.from("FINAL_JWT", finalJwt)
@@ -59,7 +50,7 @@ public class AuthApi {
 
         return ResponseEntity.ok()
                 .header("Set-Cookie", loginCookie.toString())
-                .body(role);
+                .body(authJwtDto.getRole());
     }
 
     //TODO: jwt 토큰 삭제로 변경할 예정
