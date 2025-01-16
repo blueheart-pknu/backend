@@ -1,10 +1,8 @@
 package org.clubs.blueheart.notification.application;
 
-import org.clubs.blueheart.activity.dto.ActivitySearchDto;
-import org.clubs.blueheart.activity.dto.ActivitySubscribeDto;
-import org.clubs.blueheart.notification.dao.NotificationRepository;
-import org.clubs.blueheart.notification.dto.NotificationRequestDto;
-import org.clubs.blueheart.notification.dto.NotificationResponseDto;
+import org.clubs.blueheart.notification.repository.NotificationRepository;
+import org.clubs.blueheart.notification.dto.request.NotificationRequestDto;
+import org.clubs.blueheart.notification.dto.response.NotificationResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

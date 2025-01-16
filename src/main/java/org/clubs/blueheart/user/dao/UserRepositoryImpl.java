@@ -3,9 +3,10 @@ package org.clubs.blueheart.user.dao;
 import org.clubs.blueheart.exception.ExceptionStatus;
 import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.domain.User;
-import org.clubs.blueheart.user.dto.UserDeleteDto;
-import org.clubs.blueheart.user.dto.UserInfoDto;
-import org.clubs.blueheart.user.dto.UserUpdateDto;
+import org.clubs.blueheart.user.dto.request.UserDeleteRequestDto;
+import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
+import org.clubs.blueheart.user.dto.request.UserUpdateRequestDto;
+import org.clubs.blueheart.user.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -23,23 +24,23 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void createUser(UserInfoDto userInfoDto) {
+    public void createUser(UserInfoRequestDto userInfoRequestDto) {
         // Validate input data
-        if (userInfoDto == null) {
+        if (userInfoRequestDto == null) {
             throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Check if the user already exists using a LIMIT 1 query
-        boolean userExists = userDao.existsByStudentNumberAndDeletedAtIsNull(userInfoDto.getStudentNumber());
+        boolean userExists = userDao.existsByStudentNumberAndDeletedAtIsNull(userInfoRequestDto.getStudentNumber());
         if (userExists) {
             throw new RepositoryException(ExceptionStatus.USER_ALREADY_EXISTS);
         }
 
         // Map UserInfoDto to User entity
         User user = User.builder()
-                .username(userInfoDto.getUsername())
-                .studentNumber(userInfoDto.getStudentNumber())
-                .role(userInfoDto.getRole())
+                .username(userInfoRequestDto.getUsername())
+                .studentNumber(userInfoRequestDto.getStudentNumber())
+                .role(userInfoRequestDto.getRole())
                 .build();
 
         // Save the User entity to the database
@@ -47,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserInfoDto> findUserByStudentNumber(String studentNumber) {
+    public List<UserInfoResponseDto> findUserByStudentNumber(String studentNumber) {
         if (studentNumber == null) {
             throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
@@ -55,7 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
         // Fetch user list and map to DTOs
         return userDao.findUsersByStudentNumberStartsWithAndDeletedAtIsNull(studentNumber)
                 .map(users -> users.stream()
-                        .map(user -> UserInfoDto.builder()
+                        .map(user -> UserInfoResponseDto.builder()
                                 .username(user.getUsername())
                                 .studentNumber(user.getStudentNumber())
                                 .role(user.getRole())
@@ -65,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserInfoDto> findUserByUsername(String username) {
+    public List<UserInfoResponseDto> findUserByUsername(String username) {
         if (username == null || username.trim().isEmpty()) {
             throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
@@ -73,7 +74,7 @@ public class UserRepositoryImpl implements UserRepository {
         // Fetch user list and map to DTOs
         return userDao.findUsersByUsernameContainsAndDeletedAtIsNull(username)
                 .map(users -> users.stream()
-                        .map(user -> UserInfoDto.builder()
+                        .map(user -> UserInfoResponseDto.builder()
                                 .username(user.getUsername())
                                 .studentNumber(user.getStudentNumber())
                                 .role(user.getRole())
@@ -83,21 +84,21 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void updateUserById(UserUpdateDto userUpdateDto) {
+    public void updateUserById(UserUpdateRequestDto userUpdateRequestDto) {
         // Validate input data
-        if (userUpdateDto == null || userUpdateDto.getId() == null) {
+        if (userUpdateRequestDto == null || userUpdateRequestDto.getId() == null) {
             throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the user
-        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userUpdateDto.getId())
+        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userUpdateRequestDto.getId())
                 .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update fields using updateFields
         User updatedUser = existingUser.updatedUserFields(
-                userUpdateDto.getUsername().orElse(null),
-                userUpdateDto.getStudentNumber().orElse(null),
-                userUpdateDto.getRole().orElse(null)
+                userUpdateRequestDto.getUsername().orElse(null),
+                userUpdateRequestDto.getStudentNumber().orElse(null),
+                userUpdateRequestDto.getRole().orElse(null)
         );
 
         // Save the updated user
@@ -105,14 +106,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void deleteUserById(UserDeleteDto userDeleteDto) {
+    public void deleteUserById(UserDeleteRequestDto userDeleteRequestDto) {
         // Validate input data
-        if (userDeleteDto == null || userDeleteDto.getId() == null) {
+        if (userDeleteRequestDto == null || userDeleteRequestDto.getId() == null) {
             throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
         }
 
         // Fetch the user
-        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userDeleteDto.getId())
+        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userDeleteRequestDto.getId())
                 .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update the deletedAt field to mark as deleted
@@ -125,7 +126,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserInfoDto> findAllUser() {
+    public List<UserInfoResponseDto> findAllUser() {
         // 인스턴스 멤버인 userDao를 사용하여 메서드 호출
         Optional<List<User>> optionalUsers = userDao.findAllByDeletedAtIsNull();
 
@@ -134,7 +135,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         // User 리스트를 UserInfoDto 리스트로 매핑
         return users.stream()
-                .map(user -> UserInfoDto.builder()
+                .map(user -> UserInfoResponseDto.builder()
                         .username(user.getUsername())
                         .studentNumber(user.getStudentNumber())
                         .role(user.getRole())

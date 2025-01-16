@@ -2,12 +2,16 @@ package org.clubs.blueheart.auth.application;
 
 import io.jsonwebtoken.Claims;
 import org.clubs.blueheart.auth.dao.AuthRepository;
-import org.clubs.blueheart.auth.dto.*;
+import org.clubs.blueheart.auth.dto.request.AuthInviteAllRequestDto;
+import org.clubs.blueheart.auth.dto.request.AuthInviteOneRequestDto;
+import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
+import org.clubs.blueheart.auth.dto.request.AuthVerifyRequestDto;
+import org.clubs.blueheart.auth.vo.AuthJwtVo;
 import org.clubs.blueheart.config.jwt.JwtGenerator;
 import org.clubs.blueheart.exception.ApplicationException;
 import org.clubs.blueheart.exception.ExceptionStatus;
 import org.clubs.blueheart.user.domain.UserRole;
-import org.clubs.blueheart.user.dto.UserInfoDto;
+import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -31,23 +35,23 @@ public class AuthService {
         this.jwtGenerator = jwtGenerator;
     }
 
-    public AuthJwtDto loginUserByStudentNumberAndUsername(AuthDto authDto) {
-        return authRepository.findUserByStudentNumberAndUsername(authDto);
+    public AuthJwtVo loginUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto) {
+        return authRepository.findUserByStudentNumberAndUsername(authLoginRequestDto);
     }
 
-    public void logoutUser(AuthDto authDto) {
+    public void logoutUser(AuthLoginRequestDto authLoginRequestDto) {
     }
 
-    public void registerUser(UserInfoDto userInfoDto) {
+    public void registerUser(UserInfoRequestDto userInfoRequestDto) {
     }
 
     /**
      * (a) /invite/all 용
      * 초대 JWT에는 creatorUserId, createdAt, expiredAt 담기
      */
-    public String inviteAllUser(AuthInviteAllDto authInviteAllDto) {
+    public String inviteAllUser(AuthInviteAllRequestDto authInviteAllRequestDto) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("creatorId", authInviteAllDto.getCreatorId());
+        payload.put("creatorId", authInviteAllRequestDto.getCreatorId());
         payload.put("createdAt", System.currentTimeMillis());
 
         // 예: 초대 링크 12시간 유효
@@ -60,7 +64,7 @@ public class AuthService {
      * (b) /invite 용
      * 초대 JWT에는 creatorUserId, targetUserName, targetStudentNumber, createdAt, expiredAt 담기
      */
-    public String inviteUserByStudentNumber(AuthInviteOneDto authInviteOneDto) {
+    public String inviteUserByStudentNumber(AuthInviteOneRequestDto authInviteOneDto) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("creatorUserId", authInviteOneDto.getCreatorId());
         payload.put("targetUserName", authInviteOneDto.getTargetUsername());
@@ -73,8 +77,8 @@ public class AuthService {
         return jwtGenerator.createToken(payload, inviteExpireMillis);
     }
 
-    public String verifyInviteCode(AuthVerifyDto authVerifyDto) {
-        Claims claims = jwtGenerator.parseToken(authVerifyDto.getCode());
+    public String verifyInviteCode(AuthVerifyRequestDto authVerifyRequestDto) {
+        Claims claims = jwtGenerator.parseToken(authVerifyRequestDto.getCode());
         // 유효하면 세션 생성
         String sessionId = UUID.randomUUID().toString();
         long sessionExpireTime = System.currentTimeMillis() + SESSION_EXPIRE_MILLIS;
