@@ -46,5 +46,8 @@ public class UserService {
     }
 
 
+    public List<UserInfoDto> findAllUser() {
+        return userRepository.findAllUser();
+    }
 }
 

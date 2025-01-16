@@ -14,9 +14,9 @@ public interface ActivityHistoryDao extends ActivityCustomDao, JpaRepository<Act
 
     List<ActivityHistory> findAllByActivity_IdAndDeletedAtIsNull(Long receiverId);
 
-    Optional<Boolean> existsByUserIdAndActivityIdAndDeletedAtIsNull(Long userId, Long id);
-
     List<ActivityHistory> findByUserIdAndActivityStatusInAndDeletedAtIsNull(Long userId, List<ActivityStatus> progressing);
 
     Integer countByActivityId(Long id);
+
+    List<ActivityHistory> findByActivityIdAndDeletedAtIsNull(Long activityId);
 }

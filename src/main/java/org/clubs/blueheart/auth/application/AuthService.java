@@ -2,16 +2,12 @@ package org.clubs.blueheart.auth.application;
 
 import io.jsonwebtoken.Claims;
 import org.clubs.blueheart.auth.dao.AuthRepository;
-import org.clubs.blueheart.auth.dto.AuthDto;
-import org.clubs.blueheart.auth.dto.AuthInviteAllDto;
-import org.clubs.blueheart.auth.dto.AuthInviteOneDto;
-import org.clubs.blueheart.auth.dto.AuthVerifyDto;
+import org.clubs.blueheart.auth.dto.*;
 import org.clubs.blueheart.config.jwt.JwtGenerator;
 import org.clubs.blueheart.exception.ApplicationException;
-import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.user.domain.UserRole;
 import org.clubs.blueheart.user.dto.UserInfoDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -35,7 +31,8 @@ public class AuthService {
         this.jwtGenerator = jwtGenerator;
     }
 
-    public void loginUserByStudentNumberAndUsername(AuthDto authDto) {
+    public AuthJwtDto loginUserByStudentNumberAndUsername(AuthDto authDto) {
+        return authRepository.findUserByStudentNumberAndUsername(authDto);
     }
 
     public void logoutUser(AuthDto authDto) {
@@ -91,14 +88,14 @@ public class AuthService {
     }
 
 
-    public boolean isSessionValid(String sessionId) {
-        if (sessionId == null) return false;
+    public Boolean isSessionValid(String sessionId) {
+        if (sessionId == null) throw new ApplicationException(ExceptionStatus.AUTH_SESSION_UNAUTHORIZED);
         Long expireTime = sessionStore.get(sessionId);
-        if (expireTime == null) return false;
+        if (expireTime == null) throw new ApplicationException(ExceptionStatus.AUTH_SESSION_UNAUTHORIZED);
         // 만료됐으면 제거
         if (System.currentTimeMillis() > expireTime) {
             sessionStore.remove(sessionId);
-            return false;
+            throw new ApplicationException(ExceptionStatus.AUTH_SESSION_UNAUTHORIZED);
         }
         return true;
     }
@@ -107,7 +104,7 @@ public class AuthService {
      * 최종 로그인 후 발급하는 JWT (id, role, studentNumber, username 등)
      * 여기서는 간단히 HS256 JWT 하나를 만들어 반환
      */
-    public String createLoginJwt(Long userId, String studentNumber, String username, String role) {
+    public String createLoginJwt(Long userId, String studentNumber, String username, UserRole role) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("userId", userId);
         payload.put("studentNumber", studentNumber);
@@ -118,13 +115,6 @@ public class AuthService {
         long finalExpire = 24L * 60 * 60 * 1000;
 
         return jwtGenerator.createToken(payload, finalExpire);
-    }
-
-    // 예시: 로그인 시도 -> 학번 / 이름 검증
-    // 여기서는 “맞다고 치고” 바로 userId=123L, role="USER" 등으로 가정
-    public boolean checkUserInfo(String studentNumber, String username) {
-        // 실무에선 DB 조회나 다른 로직이 필요
-        return (studentNumber != null && username != null && !studentNumber.isEmpty() && !username.isEmpty());
     }
 
 

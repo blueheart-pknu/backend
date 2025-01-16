@@ -1,8 +1,15 @@
 package org.clubs.blueheart.exception;
 
+import org.clubs.blueheart.activity.domain.Activity;
+import org.clubs.blueheart.activity.domain.ActivityHistory;
+import org.clubs.blueheart.auth.api.AuthApi;
+import org.clubs.blueheart.group.api.GroupApi;
+import org.clubs.blueheart.notification.domain.Notification;
+import org.clubs.blueheart.user.api.UserApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;

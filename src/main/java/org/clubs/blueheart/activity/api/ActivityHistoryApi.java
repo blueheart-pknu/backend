@@ -5,15 +5,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
 import org.clubs.blueheart.activity.dto.*;
 import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
-import org.clubs.blueheart.group.dto.GroupUserInfoDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
+import org.clubs.blueheart.user.dto.UserInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -97,8 +96,25 @@ public class ActivityHistoryApi {
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
     }
 
-    //TODO: jwt 변경
-
+    @Operation(summary = "Get My Activity History", description = "Retrieves the current user's activity subscription history.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved activity history",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GlobalResponseHandler.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - JWT token is missing or invalid",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CustomExceptionStatus.class)
+                    )
+            )
+    })
     @GetMapping("/me")
     public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> getMyActivityHistoryInfo(
             @AuthenticationPrincipal JwtUserDetails userDetails
@@ -111,6 +127,42 @@ public class ActivityHistoryApi {
                 activityHistoryService.getMyActivityHistoryInfo(userId);
 
         // 응답
-        return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, activityHistoryInfoInfo);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, activityHistoryInfoInfo);
     }
+
+    // Find Subscribed Users by Activity ID API
+    @Operation(summary = "Find Subscribed Users", description = "Retrieves a list of users subscribed to a specific activity.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved subscribed users",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GlobalResponseHandler.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid activity ID provided",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CustomExceptionStatus.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Activity not found or no subscribers",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CustomExceptionStatus.class)
+                    )
+            )
+    })
+    @GetMapping("/{activityId}")
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findSubscribedUser(@PathVariable @Valid Long activityId) {
+        List<UserInfoDto> users = activityHistoryService.findSubscribedUser(activityId);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, users);
+    }
+
+
 }

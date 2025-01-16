@@ -7,8 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDao extends UserCustomDao, JpaRepository<User, Long> {
+
     Optional<List<User>> findUsersByUsernameContainsAndDeletedAtIsNull(String userName);  // JPA Query Method
     Optional<List<User>> findUsersByStudentNumberStartsWithAndDeletedAtIsNull(String studentNumber); // JPA Query Method
     Optional<User> findUserByIdAndDeletedAtIsNull(Long id);
     Boolean existsByStudentNumberAndDeletedAtIsNull(String studentNumber);
+
+    Optional<List<User>> findAllByDeletedAtIsNull();
+
+    Optional<User> findOneUserByStudentNumberAndUsername(String studentNumber, String username);
+
 }

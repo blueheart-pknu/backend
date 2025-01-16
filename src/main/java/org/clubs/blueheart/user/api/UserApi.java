@@ -176,4 +176,24 @@ public class UserApi {
         return GlobalResponseHandler.success(ResponseStatus.USER_DELETED);
     }
 
+    @Operation(
+            summary = "모든 사용자 조회",
+            description = "시스템에 등록된 모든 사용자의 정보를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "성공적으로 사용자 목록을 조회했습니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GlobalResponseHandler.class)
+                    )
+            ),
+    })
+    @GetMapping("/all")
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findAllUser() {
+        List<UserInfoDto> users = userService.findAllUser();
+        return GlobalResponseHandler.success(ResponseStatus.USER_SEARCHED, users);
+    }
+
 }

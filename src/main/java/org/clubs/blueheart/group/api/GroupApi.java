@@ -151,13 +151,14 @@ public class GroupApi {
                     )
             )
     })
-
     @GetMapping("/me")
     public ResponseEntity<GlobalResponseHandler<List<GroupUserInfoDto>>> getMyGroupInfo(
             @AuthenticationPrincipal JwtUserDetails userDetails
     ) {
         // 1) JWT 필터에서 검증된 userDetails를 통해 userId 추출
         Long userId = userDetails.getUserId();
+
+        System.out.println(userId);
 
         // 2) 기존 로직: userId 기반으로 DB 조회
         List<GroupUserInfoDto> groupUserInfo = groupService.getMyGroupInfoById(userId);

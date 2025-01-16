@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class ActivityDetailDto extends ActivitySearchDto {
 
+    private String description;
+
     private String place;
 
     private String placeUrl;
