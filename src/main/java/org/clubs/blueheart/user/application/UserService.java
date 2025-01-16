@@ -1,9 +1,10 @@
 package org.clubs.blueheart.user.application;
 
 import org.clubs.blueheart.user.dao.UserRepository;
-import org.clubs.blueheart.user.dto.UserDeleteDto;
-import org.clubs.blueheart.user.dto.UserInfoDto;
-import org.clubs.blueheart.user.dto.UserUpdateDto;
+import org.clubs.blueheart.user.dto.request.UserDeleteRequestDto;
+import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
+import org.clubs.blueheart.user.dto.request.UserUpdateRequestDto;
+import org.clubs.blueheart.user.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,13 +23,13 @@ public class UserService {
 
 
     //TODO: query count 성능 개선: https://jojoldu.tistory.com/516
-    public void createUser(UserInfoDto userInfoDto) {
+    public void createUser(UserInfoRequestDto userInfoRequestDto) {
         // 비즈니스 로직 추가 가능 (예: 이메일 유효성 검사)
-        userRepository.createUser(userInfoDto);
+        userRepository.createUser(userInfoRequestDto);
     }
 
 
-    public List<UserInfoDto> findUserByKeyword(String keyword) {
+    public List<UserInfoResponseDto> findUserByKeyword(String keyword) {
         if (isInteger(keyword)) {
             return userRepository.findUserByStudentNumber(keyword);
         }
@@ -36,17 +37,17 @@ public class UserService {
     }
 
 
-    public void updateUserById(UserUpdateDto userUpdateDto) {
-        userRepository.updateUserById(userUpdateDto);
+    public void updateUserById(UserUpdateRequestDto userUpdateRequestDto) {
+        userRepository.updateUserById(userUpdateRequestDto);
     }
 
 
-    public void deleteUserById(UserDeleteDto userDeleteDto) {
-        userRepository.deleteUserById(userDeleteDto);
+    public void deleteUserById(UserDeleteRequestDto userDeleteRequestDto) {
+        userRepository.deleteUserById(userDeleteRequestDto);
     }
 
 
-    public List<UserInfoDto> findAllUser() {
+    public List<UserInfoResponseDto> findAllUser() {
         return userRepository.findAllUser();
     }
 }

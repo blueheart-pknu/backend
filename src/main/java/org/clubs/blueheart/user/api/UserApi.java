@@ -10,9 +10,10 @@ import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.clubs.blueheart.user.application.UserService;
-import org.clubs.blueheart.user.dto.UserDeleteDto;
-import org.clubs.blueheart.user.dto.UserInfoDto;
-import org.clubs.blueheart.user.dto.UserUpdateDto;
+import org.clubs.blueheart.user.dto.request.UserDeleteRequestDto;
+import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
+import org.clubs.blueheart.user.dto.request.UserUpdateRequestDto;
+import org.clubs.blueheart.user.dto.response.UserInfoResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,8 +73,8 @@ public class UserApi {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<GlobalResponseHandler<Void>> createUser(@RequestBody @Valid UserInfoDto userInfoDto) {
-        userService.createUser(userInfoDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> createUser(@RequestBody @Valid UserInfoRequestDto userInfoRequestDto) {
+        userService.createUser(userInfoRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.USER_CREATED);
     }
 
@@ -105,8 +106,8 @@ public class UserApi {
             )
     })
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findUserByKeyword(@PathVariable String keyword) {
-        List<UserInfoDto> users = userService.findUserByKeyword(keyword);
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoResponseDto>>> findUserByKeyword(@PathVariable String keyword) {
+        List<UserInfoResponseDto> users = userService.findUserByKeyword(keyword);
         return GlobalResponseHandler.success(ResponseStatus.USER_SEARCHED, users);
     }
 
@@ -138,8 +139,8 @@ public class UserApi {
             )
     })
     @PutMapping("/update")
-    public ResponseEntity<GlobalResponseHandler<Void>> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto) {
-        userService.updateUserById(userUpdateDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> updateUser(@RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
+        userService.updateUserById(userUpdateRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.USER_UPDATED);
     }
 
@@ -171,8 +172,8 @@ public class UserApi {
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<GlobalResponseHandler<Void>> deleteUser(@RequestBody @Valid UserDeleteDto userDeleteDto) {
-        userService.deleteUserById(userDeleteDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> deleteUser(@RequestBody @Valid UserDeleteRequestDto userDeleteRequestDto) {
+        userService.deleteUserById(userDeleteRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.USER_DELETED);
     }
 
@@ -191,8 +192,8 @@ public class UserApi {
             ),
     })
     @GetMapping("/all")
-    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findAllUser() {
-        List<UserInfoDto> users = userService.findAllUser();
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoResponseDto>>> findAllUser() {
+        List<UserInfoResponseDto> users = userService.findAllUser();
         return GlobalResponseHandler.success(ResponseStatus.USER_SEARCHED, users);
     }
 

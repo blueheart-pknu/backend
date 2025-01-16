@@ -1,8 +1,12 @@
 package org.clubs.blueheart.activity.application;
 
-import org.clubs.blueheart.activity.dto.*;
+import org.clubs.blueheart.activity.dto.request.ActivityCreateRequestDto;
+import org.clubs.blueheart.activity.dto.request.ActivityDeleteRequestDto;
+import org.clubs.blueheart.activity.dto.request.ActivityUpdateRequestDto;
+import org.clubs.blueheart.activity.dto.response.ActivityDetailResponseDto;
+import org.clubs.blueheart.activity.dto.response.ActivitySearchResponseDto;
 import org.springframework.transaction.annotation.Transactional;
-import org.clubs.blueheart.activity.dao.ActivityRepository;
+import org.clubs.blueheart.activity.repository.ActivityRepository;
 import org.clubs.blueheart.activity.domain.ActivityStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,31 +23,31 @@ public class ActivityService {
         this.activityRepository = activityRepository;
     }
 
-    public void createActivity(ActivityCreateDto activityCreateDto) {
-        activityRepository.createActivity(activityCreateDto);
+    public void createActivity(ActivityCreateRequestDto activityCreateRequestDto) {
+        activityRepository.createActivity(activityCreateRequestDto);
     }
 
-    public void updateActivity(ActivityUpdateDto activityUpdateDto) {
-        activityRepository.updateActivityById(activityUpdateDto);
+    public void updateActivity(ActivityUpdateRequestDto activityUpdateRequestDto) {
+        activityRepository.updateActivityById(activityUpdateRequestDto);
     }
 
     @Transactional(readOnly = true)
-    public List<ActivitySearchDto> findActivityByStatus(ActivityStatus status) {
+    public List<ActivitySearchResponseDto> findActivityByStatus(ActivityStatus status) {
         return activityRepository.findActivityByStatus(status);
     }
 
     @Transactional(readOnly = true)
-    public List<ActivitySearchDto> findAllActivity() {
+    public List<ActivitySearchResponseDto> findAllActivity() {
         return activityRepository.findAllActivity();
     }
 
     @Transactional(readOnly = true)
-    public ActivityDetailDto findOneActivityDetailById(Long id) {
+    public ActivityDetailResponseDto findOneActivityDetailById(Long id) {
         return activityRepository.findOneActivityDetailById(id);
     }
 
-    public void deleteActivity(ActivityDeleteDto activityDeleteDto) {
-        activityRepository.deleteActivity(activityDeleteDto);
+    public void deleteActivity(ActivityDeleteRequestDto activityDeleteRequestDto) {
+        activityRepository.deleteActivity(activityDeleteRequestDto);
     }
 
 }

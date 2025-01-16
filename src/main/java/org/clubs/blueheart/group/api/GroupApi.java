@@ -8,9 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.group.application.GroupService;
-import org.clubs.blueheart.group.dto.GroupUserDto;
-import org.clubs.blueheart.group.dto.GroupInfoDto;
-import org.clubs.blueheart.group.dto.GroupUserInfoDto;
+import org.clubs.blueheart.group.dto.request.GroupUserRequestDto;
+import org.clubs.blueheart.group.dto.request.GroupInfoRequestDto;
+import org.clubs.blueheart.group.dto.response.GroupUserInfoResponseDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +49,8 @@ public class GroupApi {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<GlobalResponseHandler<Void>> createGroup(@RequestBody @Valid GroupInfoDto groupInfoDto) {
-        groupService.createGroup(groupInfoDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> createGroup(@RequestBody @Valid GroupInfoRequestDto groupInfoRequestDto) {
+        groupService.createGroup(groupInfoRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_CREATED);
     }
 
@@ -75,8 +75,8 @@ public class GroupApi {
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<GlobalResponseHandler<Void>> deleteGroup(@RequestBody @Valid GroupInfoDto groupInfoDto) {
-        groupService.deleteGroup(groupInfoDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> deleteGroup(@RequestBody @Valid GroupInfoRequestDto groupInfoRequestDto) {
+        groupService.deleteGroup(groupInfoRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_DELETED);
     }
 
@@ -101,8 +101,8 @@ public class GroupApi {
     })
     //TODO: jwt로 groupId 대체 예정
     @PostMapping("/add")
-    public ResponseEntity<GlobalResponseHandler<Void>> addGroupUser(@RequestBody @Valid GroupUserDto groupUserDto) {
-        groupService.addGroupUserById(groupUserDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> addGroupUser(@RequestBody @Valid GroupUserRequestDto groupUserRequestDto) {
+        groupService.addGroupUserById(groupUserRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_ADD);
     }
 
@@ -126,8 +126,8 @@ public class GroupApi {
             )
     })
     @DeleteMapping("/remove")
-    public ResponseEntity<GlobalResponseHandler<Void>> removeGroupUser(@RequestBody @Valid GroupUserDto groupUserDto) {
-        groupService.removeGroupUserById(groupUserDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> removeGroupUser(@RequestBody @Valid GroupUserRequestDto groupUserRequestDto) {
+        groupService.removeGroupUserById(groupUserRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_REMOVE);
     }
 
@@ -152,7 +152,7 @@ public class GroupApi {
             )
     })
     @GetMapping("/me")
-    public ResponseEntity<GlobalResponseHandler<List<GroupUserInfoDto>>> getMyGroupInfo(
+    public ResponseEntity<GlobalResponseHandler<List<GroupUserInfoResponseDto>>> getMyGroupInfo(
             @AuthenticationPrincipal JwtUserDetails userDetails
     ) {
         // 1) JWT 필터에서 검증된 userDetails를 통해 userId 추출
@@ -161,7 +161,7 @@ public class GroupApi {
         System.out.println(userId);
 
         // 2) 기존 로직: userId 기반으로 DB 조회
-        List<GroupUserInfoDto> groupUserInfo = groupService.getMyGroupInfoById(userId);
+        List<GroupUserInfoResponseDto> groupUserInfo = groupService.getMyGroupInfoById(userId);
 
         // 3) 응답
         return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, groupUserInfo);

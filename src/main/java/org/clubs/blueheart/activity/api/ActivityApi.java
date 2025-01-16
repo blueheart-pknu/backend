@@ -8,7 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityService;
 import org.clubs.blueheart.activity.domain.ActivityStatus;
-import org.clubs.blueheart.activity.dto.*;
+import org.clubs.blueheart.activity.dto.request.ActivityCreateRequestDto;
+import org.clubs.blueheart.activity.dto.request.ActivityDeleteRequestDto;
+import org.clubs.blueheart.activity.dto.request.ActivityUpdateRequestDto;
+import org.clubs.blueheart.activity.dto.response.ActivityDetailResponseDto;
+import org.clubs.blueheart.activity.dto.response.ActivitySearchResponseDto;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
@@ -48,8 +52,8 @@ public class ActivityApi {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<GlobalResponseHandler<Void>> createActivity(@RequestBody @Valid ActivityCreateDto activityCreateDto) {
-        activityService.createActivity(activityCreateDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> createActivity(@RequestBody @Valid ActivityCreateRequestDto activityCreateRequestDto) {
+        activityService.createActivity(activityCreateRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_CREATED);
     }
 
@@ -81,8 +85,8 @@ public class ActivityApi {
             )
     })
     @PutMapping("/update")
-    public ResponseEntity<GlobalResponseHandler<Void>> updateActivity(@RequestBody @Valid ActivityUpdateDto activityUpdateDto) {
-        activityService.updateActivity(activityUpdateDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> updateActivity(@RequestBody @Valid ActivityUpdateRequestDto activityUpdateRequestDto) {
+        activityService.updateActivity(activityUpdateRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UPDATED);
     }
 
@@ -106,8 +110,8 @@ public class ActivityApi {
             )
     })
     @GetMapping("/{status}")
-    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> findActivityByStatus(@PathVariable ActivityStatus status) {
-        List<ActivitySearchDto> activities = activityService.findActivityByStatus(status);
+    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchResponseDto>>> findActivityByStatus(@PathVariable ActivityStatus status) {
+        List<ActivitySearchResponseDto> activities = activityService.findActivityByStatus(status);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, activities);
     }
 
@@ -124,8 +128,8 @@ public class ActivityApi {
     })
     //TODO: 페이지네이션 구현 알아보기
     @GetMapping("/all")
-    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> findAllActivity() {
-        List<ActivitySearchDto> activities = activityService.findAllActivity();
+    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchResponseDto>>> findAllActivity() {
+        List<ActivitySearchResponseDto> activities = activityService.findAllActivity();
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, activities);
     }
     @Operation(summary = "액티비티 상세 조회", description = "특정 ID를 가진 액티비티의 세부 정보를 조회합니다.")
@@ -148,8 +152,8 @@ public class ActivityApi {
             )
     })
     @GetMapping("/detail/{id}")
-    public ResponseEntity<GlobalResponseHandler<ActivityDetailDto>> findOneActivityDetailById(@PathVariable Long id) {
-        ActivityDetailDto activities = activityService.findOneActivityDetailById(id);
+    public ResponseEntity<GlobalResponseHandler<ActivityDetailResponseDto>> findOneActivityDetailById(@PathVariable Long id) {
+        ActivityDetailResponseDto activities = activityService.findOneActivityDetailById(id);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, activities);
     }
 
@@ -181,8 +185,8 @@ public class ActivityApi {
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<GlobalResponseHandler<Void>> deleteActivity(@RequestBody @Valid ActivityDeleteDto activityDeleteDto) {
-        activityService.deleteActivity(activityDeleteDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> deleteActivity(@RequestBody @Valid ActivityDeleteRequestDto activityDeleteRequestDto) {
+        activityService.deleteActivity(activityDeleteRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_DELETED);
     }
 }

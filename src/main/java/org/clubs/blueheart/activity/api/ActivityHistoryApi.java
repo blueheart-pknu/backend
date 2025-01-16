@@ -7,12 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
-import org.clubs.blueheart.activity.dto.*;
+import org.clubs.blueheart.activity.dto.request.ActivitySubscribeRequestDto;
+import org.clubs.blueheart.activity.dto.response.ActivitySearchResponseDto;
 import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
-import org.clubs.blueheart.user.dto.UserInfoDto;
+import org.clubs.blueheart.user.dto.response.UserInfoResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -58,8 +59,8 @@ public class ActivityHistoryApi {
             )
     })
     @PostMapping("/subscribe")
-    public ResponseEntity<GlobalResponseHandler<Void>> subscribeActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
-        activityHistoryService.subscribeActivity(activitySubscribeDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> subscribeActivity(@RequestBody @Valid ActivitySubscribeRequestDto activitySubscribeRequestDto) {
+        activityHistoryService.subscribeActivity(activitySubscribeRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
     }
 
@@ -91,8 +92,8 @@ public class ActivityHistoryApi {
             )
     })
     @PostMapping("/unsubscribe")
-    public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Valid ActivitySubscribeDto activitySubscribeDto) {
-        activityHistoryService.unsubscribeActivity(activitySubscribeDto);
+    public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Valid ActivitySubscribeRequestDto activitySubscribeRequestDto) {
+        activityHistoryService.unsubscribeActivity(activitySubscribeRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
     }
 
@@ -116,14 +117,14 @@ public class ActivityHistoryApi {
             )
     })
     @GetMapping("/me")
-    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchDto>>> getMyActivityHistoryInfo(
+    public ResponseEntity<GlobalResponseHandler<List<ActivitySearchResponseDto>>> getMyActivityHistoryInfo(
             @AuthenticationPrincipal JwtUserDetails userDetails
     ) {
         // userDetails 에서 userId 추출
         Long userId = userDetails.getUserId();
 
         // DB 조회
-        List<ActivitySearchDto> activityHistoryInfoInfo =
+        List<ActivitySearchResponseDto> activityHistoryInfoInfo =
                 activityHistoryService.getMyActivityHistoryInfo(userId);
 
         // 응답
@@ -159,8 +160,8 @@ public class ActivityHistoryApi {
             )
     })
     @GetMapping("/{activityId}")
-    public ResponseEntity<GlobalResponseHandler<List<UserInfoDto>>> findSubscribedUser(@PathVariable @Valid Long activityId) {
-        List<UserInfoDto> users = activityHistoryService.findSubscribedUser(activityId);
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoResponseDto>>> findSubscribedUser(@PathVariable @Valid Long activityId) {
+        List<UserInfoResponseDto> users = activityHistoryService.findSubscribedUser(activityId);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, users);
     }
 

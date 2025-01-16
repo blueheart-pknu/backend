@@ -1,7 +1,7 @@
 package org.clubs.blueheart.auth.dao;
 
-import org.clubs.blueheart.auth.dto.AuthDto;
-import org.clubs.blueheart.auth.dto.AuthJwtDto;
+import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
+import org.clubs.blueheart.auth.vo.AuthJwtVo;
 import org.clubs.blueheart.exception.ExceptionStatus;
 import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.dao.UserDao;
@@ -19,19 +19,19 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public AuthJwtDto findUserByStudentNumberAndUsername(AuthDto authDto) {
+    public AuthJwtVo findUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto) {
 
-        if (authDto == null) {
+        if (authLoginRequestDto == null) {
             throw new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER);
         }
 
         // 실제로 User 엔티티(또는 null)가 반환
-        User user = userDao.findOneUserByStudentNumberAndUsername(authDto.getStudentNumber(), authDto.getUsername())
+        User user = userDao.findOneUserByStudentNumberAndUsername(authLoginRequestDto.getStudentNumber(), authLoginRequestDto.getUsername())
                 .orElseThrow(() -> new RepositoryException(ExceptionStatus.AUTH_BAD_SESSION_REQUEST));
 
 
         // 엔티티 -> AuthJwtDto 로 매핑
-        return AuthJwtDto.builder()
+        return AuthJwtVo.builder()
                 .id(user.getId())
                 .studentNumber(user.getStudentNumber())
                 .username(user.getUsername())

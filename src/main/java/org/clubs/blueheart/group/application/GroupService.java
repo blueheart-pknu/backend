@@ -1,11 +1,10 @@
 package org.clubs.blueheart.group.application;
 
 
-import org.clubs.blueheart.group.dao.GroupRepository;
-import org.clubs.blueheart.group.dao.GroupUserDao;
-import org.clubs.blueheart.group.dto.GroupInfoDto;
-import org.clubs.blueheart.group.dto.GroupUserDto;
-import org.clubs.blueheart.group.dto.GroupUserInfoDto;
+import org.clubs.blueheart.group.repository.GroupRepository;
+import org.clubs.blueheart.group.dto.request.GroupInfoRequestDto;
+import org.clubs.blueheart.group.dto.request.GroupUserRequestDto;
+import org.clubs.blueheart.group.dto.response.GroupUserInfoResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,23 +18,23 @@ public class GroupService {
         this.groupRepository = groupRepository;
     }
 
-    public void createGroup(GroupInfoDto groupInfoDto) {
-        groupRepository.createGroup(groupInfoDto);
+    public void createGroup(GroupInfoRequestDto groupInfoRequestDto) {
+        groupRepository.createGroup(groupInfoRequestDto);
     }
 
-    public void deleteGroup(GroupInfoDto groupInfoDto) {
-        groupRepository.deleteGroup(groupInfoDto);
+    public void deleteGroup(GroupInfoRequestDto groupInfoRequestDto) {
+        groupRepository.deleteGroup(groupInfoRequestDto);
     }
 
-    public void addGroupUserById(GroupUserDto groupUserDto) {
-        groupRepository.addGroupUserById(groupUserDto);
+    public void addGroupUserById(GroupUserRequestDto groupUserRequestDto) {
+        groupRepository.addGroupUserById(groupUserRequestDto);
     }
 
-    public void removeGroupUserById(GroupUserDto groupUserDto) {
-        groupRepository.removeGroupUserById(groupUserDto);
+    public void removeGroupUserById(GroupUserRequestDto groupUserRequestDto) {
+        groupRepository.removeGroupUserById(groupUserRequestDto);
     }
 
-    public List<GroupUserInfoDto> getMyGroupInfoById(Long id) {
+    public List<GroupUserInfoResponseDto> getMyGroupInfoById(Long id) {
         return groupRepository.getMyGroupInfoById(id);
     }
 }
