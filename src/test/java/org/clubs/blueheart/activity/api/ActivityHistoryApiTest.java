@@ -2,11 +2,14 @@ package org.clubs.blueheart.activity.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
+import org.clubs.blueheart.activity.application.ActivityService;
 import org.clubs.blueheart.activity.domain.ActivityStatus;
 import org.clubs.blueheart.activity.dto.request.ActivitySubscribeRequestDto;
 import org.clubs.blueheart.activity.dto.response.ActivitySearchResponseDto;
 import org.clubs.blueheart.user.dto.response.UserInfoResponseDto;
 import org.clubs.blueheart.config.jwt.JwtGenerator;
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.clubs.blueheart.user.domain.UserRole;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +17,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -30,13 +35,10 @@ import java.util.Map;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// 전체 컨텍스트 로딩 & 보안 필터 적용
 @SpringBootTest
-@org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+@AutoConfigureMockMvc
 class ActivityHistoryApiTest {
 
     @Autowired
@@ -48,7 +50,7 @@ class ActivityHistoryApiTest {
     @Autowired
     private JwtGenerator jwtGenerator;  // 실제 Bean 주입
 
-    @MockBean
+    @MockitoBean
     private ActivityHistoryService activityHistoryService;
 
     private String token;
@@ -75,8 +77,11 @@ class ActivityHistoryApiTest {
         return jwtGenerator.createToken(payload, finalExpire);
     }
 
+    /**
+     * 1. 액티비티 구독 성공 테스트
+     */
     @Test
-    @DisplayName("빌더로 생성한 ActivitySubscribeRequestDto로 액티비티 구독 테스트 (인증 사용)")
+    @DisplayName("빌더로 생성한 ActivitySubscribeRequestDto로 액티비티 구독 성공 테스트 (인증 사용)")
     void subscribeActivity_ShouldReturn200() throws Exception {
         // Given
         ActivitySubscribeRequestDto subscribeRequestDto = ActivitySubscribeRequestDto.builder()
@@ -106,8 +111,74 @@ class ActivityHistoryApiTest {
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
 
+    /**
+     * 1-1. 액티비티 구독 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
     @Test
-    @DisplayName("빌더로 생성한 ActivitySubscribeRequestDto로 액티비티 구독 해지 테스트 (인증 사용)")
+    @DisplayName("액티비티 구독 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void subscribeActivity_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: activityId가 null인 경우
+        ActivitySubscribeRequestDto subscribeRequestDto = ActivitySubscribeRequestDto.builder()
+                .activityId(null)  // 유효하지 않은 activityId
+                .userId(1L)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(subscribeRequestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/activity-history/subscribe")
+                .header("Authorization", "Bearer " + token)  // 토큰 첨부
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        // 예상 응답 메시지: "activityId: ActivityId must not be null"
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_REQUEST_INVALID_PARAMS.getStatusCode()))
+                .andExpect(jsonPath("$.message").value("activityId: ActivityId must not be null"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 1-2. 액티비티 구독 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("액티비티 구독 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void subscribeActivity_WithInvalidToken_ShouldReturn401() throws Exception {
+        // Given
+        ActivitySubscribeRequestDto subscribeRequestDto = ActivitySubscribeRequestDto.builder()
+                .activityId(1L)
+                .userId(1L)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(subscribeRequestDto);
+
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/activity-history/subscribe")
+                .header("Authorization", "Bearer invalid_token")  // 유효하지 않은 토큰
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 2. 액티비티 구독 해지 성공 테스트
+     */
+    @Test
+    @DisplayName("빌더로 생성한 ActivitySubscribeRequestDto로 액티비티 구독 해지 성공 테스트 (인증 사용)")
     void unsubscribeActivity_ShouldReturn200() throws Exception {
         // Given
         ActivitySubscribeRequestDto unsubscribeRequestDto = ActivitySubscribeRequestDto.builder()
@@ -137,6 +208,72 @@ class ActivityHistoryApiTest {
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
 
+    /**
+     * 2-1. 액티비티 구독 해지 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
+    @Test
+    @DisplayName("액티비티 구독 해지 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void unsubscribeActivity_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: activityId가 null인 경우
+        ActivitySubscribeRequestDto unsubscribeRequestDto = ActivitySubscribeRequestDto.builder()
+                .activityId(null)  // 유효하지 않은 activityId
+                .userId(1L)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(unsubscribeRequestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/activity-history/unsubscribe")
+                .header("Authorization", "Bearer " + token)  // 토큰 첨부
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        // 예상 응답 메시지: "activityId: ActivityId must not be null"
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_REQUEST_INVALID_PARAMS.getStatusCode()))
+                .andExpect(jsonPath("$.message").value("activityId: ActivityId must not be null"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 2-2. 액티비티 구독 해지 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("액티비티 구독 해지 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void unsubscribeActivity_WithInvalidToken_ShouldReturn401() throws Exception {
+        // Given
+        ActivitySubscribeRequestDto unsubscribeRequestDto = ActivitySubscribeRequestDto.builder()
+                .activityId(1L)
+                .userId(1L)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(unsubscribeRequestDto);
+
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/activity-history/unsubscribe")
+                .header("Authorization", "Bearer invalid_token")  // 유효하지 않은 토큰
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 3. 내 활동 이력 조회 성공 테스트
+     */
     @Test
     @DisplayName("내 활동 이력을 조회합니다 (인증 사용)")
     void getMyActivityHistoryInfo_ShouldReturn200() throws Exception {
@@ -187,6 +324,30 @@ class ActivityHistoryApiTest {
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
 
+    /**
+     * 3-1. 내 활동 이력 조회 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("내 활동 이력 조회 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void getMyActivityHistoryInfo_WithInvalidToken_ShouldReturn401() throws Exception {
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/activity-history/me")
+                .header("Authorization", "Bearer invalid_token"));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 4. 특정 활동에 구독한 사용자 조회 성공 테스트
+     */
     @Test
     @DisplayName("특정 활동에 구독한 사용자를 조회합니다 (인증 사용)")
     void findSubscribedUser_ShouldReturn200() throws Exception {
@@ -228,4 +389,57 @@ class ActivityHistoryApiTest {
 
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
+
+    /**
+     * 4-1. 특정 활동에 구독한 사용자 조회 실패 테스트: 존재하지 않는 활동 ID (404 Not Found)
+     */
+    @Test
+    @DisplayName("특정 활동에 구독한 사용자 조회 실패 테스트: 존재하지 않는 활동 ID (404 Not Found)")
+    void findSubscribedUser_WithNonExistentActivityId_ShouldReturn404() throws Exception {
+        // Given: 존재하지 않는 활동 ID
+        Long nonExistentActivityId = 999L;
+
+        Mockito.when(activityHistoryService.findSubscribedUser(nonExistentActivityId))
+                .thenThrow(new RepositoryException(ExceptionStatus.ACTIVITY_NOT_FOUND));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/activity-history/" + nonExistentActivityId)
+                .header("Authorization", "Bearer " + token));
+
+        // Then
+        // 예상 응답 메시지: "액티비티를 찾을 수 없습니다!"
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.ACTIVITY_NOT_FOUND.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.ACTIVITY_NOT_FOUND.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 4-2. 특정 활동에 구독한 사용자 조회 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("특정 활동에 구독한 사용자 조회 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void findSubscribedUser_WithInvalidToken_ShouldReturn401() throws Exception {
+        // Given: 활동 ID
+        Long activityId = 1L;
+
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/activity-history/" + activityId)
+                .header("Authorization", "Bearer invalid_token"));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
 }

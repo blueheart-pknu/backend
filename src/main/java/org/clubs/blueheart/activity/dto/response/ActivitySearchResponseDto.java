@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class ActivitySearchResponseDto {
 
-    @NotNull(message = "ActivityId must not be blank")
+    @NotNull(message = "ActivityId must not be null")
     @Min(value = 1, message = "ActivityId는 1이상이어야합니다.")
     private Long activityId;
 
@@ -41,7 +41,7 @@ public class ActivitySearchResponseDto {
     @Max(999)
     private Integer maxNumber;
 
-    @NotNull(message = "expiredAt must not be blank")
+    @NotNull(message = "expiredAt must not be null")
     @Future(message = "만료시각은 현재보다 뒤여야 합니다.")
     private LocalDateTime expiredAt;
 }

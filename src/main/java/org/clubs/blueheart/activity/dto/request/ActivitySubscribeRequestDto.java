@@ -9,11 +9,11 @@ import lombok.Data;
 @Builder
 public class ActivitySubscribeRequestDto {
 
-    @NotNull(message = "ActivityId must not be blank")
+    @NotNull(message = "ActivityId must not be null")
     @Min(value = 1, message = "액티비티ID는 1이상이어야합니다.")
     private Long activityId;
 
-    @NotNull(message = "UserId must not be blank")
+    @NotNull(message = "UserId must not be null")
     @Min(value = 1, message = "사용자ID는 1이상이어야합니다.")
     private Long userId;
 }

@@ -26,9 +26,9 @@ public class SecurityConfig {
                 )
                 // CSRF 비활성화 (모든 경로)
                 .csrf(csrf -> csrf.disable())
-                .exceptionHandling()
-                    .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .and()
+                .exceptionHandling((exceptionConfig) ->
+                        exceptionConfig.authenticationEntryPoint(customAuthenticationEntryPoint)
+                )
                 // H2 콘솔을 위한 헤더 설정
                 .headers(headers ->
                         headers.frameOptions(frameOptions -> frameOptions.sameOrigin())
