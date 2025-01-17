@@ -28,12 +28,12 @@ public class AuthApi {
     @PostMapping("/register")
     public ResponseEntity<GlobalResponseHandler<Void>> registerUser(@RequestBody @Valid UserInfoRequestDto userInfoRequestDto) {
         authService.registerUser(userInfoRequestDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_CREATED);
+        return GlobalResponseHandler.success(ResponseStatus.AUTH_USER_CREATED);
     }
 
     //TODO: 실제 존재하는 유저의 정보를 반환
     @PostMapping("/login")
-    public ResponseEntity<UserRole> loginUser(
+    public ResponseEntity<GlobalResponseHandler<UserRole>> loginUser(
             @CookieValue(value = "SESSION_ID", required = false) String sessionId,
             @RequestBody AuthLoginRequestDto authLoginRequestDto
     ) {
@@ -52,29 +52,31 @@ public class AuthApi {
                 .path("/")
                 .build();
 
-        return ResponseEntity.ok()
-                .header("Set-Cookie", loginCookie.toString())
-                .body(authJwtVO.getRole());
+        return GlobalResponseHandler.successWithCookie(
+                ResponseStatus.AUTH_LOGGED_IN,
+                authJwtVO.getRole(),
+                loginCookie // toString() 제거
+        );
     }
 
     //TODO: jwt 토큰 삭제로 변경할 예정
     @PostMapping("/logout")
     public ResponseEntity<GlobalResponseHandler<Void>> logoutUser(@RequestBody @Valid AuthLoginRequestDto authLoginRequestDto) {
         authService.logoutUser(authLoginRequestDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_CREATED);
+        return GlobalResponseHandler.success(ResponseStatus.AUTH_LOGGED_OUT);
     }
 
     //TODO: DTO로 변경
     @PostMapping("/invite/all")
     public ResponseEntity<GlobalResponseHandler<String>> inviteAllUser(@RequestBody @Valid AuthInviteAllRequestDto authInviteAllRequestDto) {
         String inviteAllUrl = authService.inviteAllUser(authInviteAllRequestDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UPDATED, inviteAllUrl);
+        return GlobalResponseHandler.success(ResponseStatus.AUTH_INVITE_LINK_CREATED, inviteAllUrl);
     }
 
     @PostMapping("/invite")
     public ResponseEntity<GlobalResponseHandler<String>> inviteUserByStudentNumber(@RequestBody @Valid AuthInviteOneRequestDto authInviteOneDto) {
         String inviteUrl = authService.inviteUserByStudentNumber(authInviteOneDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UPDATED, inviteUrl);
+        return GlobalResponseHandler.success(ResponseStatus.AUTH_INVITE_LINK_CREATED, inviteUrl);
     }
 
     @PostMapping("/verify")
@@ -90,6 +92,6 @@ public class AuthApi {
 
 
         // 3) GlobalResponseHandler 로 쿠키+응답 생성
-        return GlobalResponseHandler.successWithCookie(ResponseStatus.ACTIVITY_UPDATED, cookie);
+        return GlobalResponseHandler.successWithCookie(ResponseStatus.AUTH_VERIFIED, cookie);
     }
 }

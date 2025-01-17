@@ -27,6 +27,13 @@ public enum ResponseStatus {
     ACTIVITY_HISTORY_UNSUBSCRIBED(HttpStatus.OK, "액티비티를 성공적으로 구독해지했습니다"),
 
     // AUTH RESPONSE CODE
+    AUTH_USER_CREATED(HttpStatus.CREATED, "유저가 생성되었습니다"),
+    AUTH_LOGGED_IN(HttpStatus.OK, "성공적으로 로그인되었습니다"),
+    AUTH_LOGGED_OUT(HttpStatus.OK, "성공적으로 로그아웃되었습니다"),
+
+    AUTH_INVITE_LINK_CREATED(HttpStatus.CREATED, "초대 링크가 성공적으로 생성되었습니다"),
+    AUTH_VERIFIED(HttpStatus.OK, "성공적으로 인증되었습니다"),
+
 
     // GROUP RESPONSE CODE
     GROUP_CREATED(HttpStatus.CREATED, "그룹이 성공적으로 생성되었습니다"),

@@ -18,7 +18,6 @@ public class UserInfoRequestDto {
     @Pattern(regexp = "^[0-9]+$")
     private String studentNumber;
 
-    @NotBlank(message = "role must not be blank")
-    @Pattern(regexp = "^[A-Z]+$")
+    @NotNull(message = "role must not be blank")
     private UserRole role;
 }

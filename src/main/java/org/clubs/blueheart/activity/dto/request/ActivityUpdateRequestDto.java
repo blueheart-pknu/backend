@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ActivityUpdateRequestDto {
 
-    @NotBlank(message = "ActivityId must not be blank")
+    @NotNull(message = "ActivityId must not be blank")
     @Min(value = 1, message = "ActivityId는 1이상이어야합니다.")
     private Long activityId;
 
@@ -19,12 +19,12 @@ public class ActivityUpdateRequestDto {
     @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$")
     private String title;
 
-    @NotBlank(message = "Status must not be blank")
-    @Pattern(regexp = "^[A-Z]*$")
+    @NotNull(message = "Status must not be blank")
     private ActivityStatus status;
 
-    @NotBlank(message = "MaxNumber must not be blank")
-    @Size(min = 1, max = 999, message = "최대값은 999이하입니다")
+    @NotNull(message = "MaxNumber must not be blank")
+    @Min(1)
+    @Max(999)
     private Integer maxNumber;
 
     @NotBlank(message = "Description must not be blank")
@@ -42,7 +42,7 @@ public class ActivityUpdateRequestDto {
     @Size(min = 1, max = 255, message = "내용은 255자 이하입니다")
     private String placeUrl;
 
-    @NotBlank(message = "expiredAt must not be blank")
+    @NotNull(message = "expiredAt must not be blank")
     @Future(message = "만료시각은 현재보다 뒤여야 합니다.")
     private LocalDateTime expiredAt;
 }
