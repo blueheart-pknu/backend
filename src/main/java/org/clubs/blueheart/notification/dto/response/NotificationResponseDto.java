@@ -1,9 +1,6 @@
 package org.clubs.blueheart.notification.dto.response;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,6 +18,6 @@ public class NotificationResponseDto {
     @Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ]+$")
     private String senderUsername;
 
-    @NotBlank(message = "expiredAt must not be blank")
+    @NotNull(message = "expiredAt must not be blank")
     private LocalDateTime createdAt;
 }

@@ -94,7 +94,7 @@ public class ActivityHistoryApi {
     @PostMapping("/unsubscribe")
     public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Valid ActivitySubscribeRequestDto activitySubscribeRequestDto) {
         activityHistoryService.unsubscribeActivity(activitySubscribeRequestDto);
-        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
+        return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_UNSUBSCRIBED);
     }
 
     @Operation(summary = "Get My Activity History", description = "Retrieves the current user's activity subscription history.")
