@@ -13,8 +13,8 @@ public enum ExceptionStatus {
     // AUTH ERROR CODE
     AUTH_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "잘못된 인자로 요청했습니다"),
     AUTH_BAD_SESSION_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 세션으로 인한 요청 방법입니다."),
-    AUTH_COOKIE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 쿠키로 접근했습니다!"),
-    AUTH_SESSION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 세션으로 접근했습니다!"),
+    AUTH_COOKIE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 쿠키로 접근했습니다"),
+    AUTH_SESSION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 세션으로 접근했습니다"),
 
     // USER ERROR CODE
     USER_NOT_FOUND_ADMIN(HttpStatus.NOT_FOUND, "어드민이 존재하지 않습니다"),
@@ -63,6 +63,7 @@ public enum ExceptionStatus {
 
     // GENERAL ERROR CODE
     GENERAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "서버에 잘못된 요청입니다."),
+    GENERAL_REQUEST_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "서버에 잘못된 요청입니다."),
 
     GENERAL_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 알 수 없는 오류가 발생했습니다"),
     GENERAL_SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "서버가 작동하지 않고 있습니다."),

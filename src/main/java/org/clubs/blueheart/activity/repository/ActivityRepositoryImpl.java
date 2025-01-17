@@ -32,7 +32,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public void createActivity(ActivityCreateRequestDto activityCreateRequestDto) {
         if (activityCreateRequestDto == null) {
-            throw new IllegalArgumentException("ActivityCreateDto is null");
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         User creator = userDao.findById(activityCreateRequestDto.getCreatorId())

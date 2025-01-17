@@ -1,5 +1,6 @@
 package org.clubs.blueheart.config.jwt;
 
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,9 +70,10 @@ public class JwtCookieFilter extends OncePerRequestFilter {
                                     userDetails.getAuthorities()
                             );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    throw new MiddlewareException(ExceptionStatus.GENERAL_INTERNAL_SERVER_ERROR);
                 }
+
+            } catch (MalformedJwtException e) {
+                throw new MiddlewareException(ExceptionStatus.GENERAL_INTERNAL_SERVER_ERROR);
             } catch (JwtException e) {
                 throw new MiddlewareException(ExceptionStatus.GENERAL_INTERNAL_SERVER_ERROR);
             }
