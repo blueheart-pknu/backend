@@ -1,8 +1,8 @@
 package org.clubs.blueheart.auth.dao;
 
 import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
-import org.clubs.blueheart.auth.vo.AuthJwtVo;
+import org.clubs.blueheart.auth.dto.response.AuthJwtResponseDto;
 
 public interface AuthRepository {
-    AuthJwtVo findUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto);
+    AuthJwtResponseDto findUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto);
 }

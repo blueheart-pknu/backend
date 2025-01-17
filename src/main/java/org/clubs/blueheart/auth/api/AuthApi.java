@@ -6,7 +6,7 @@ import org.clubs.blueheart.auth.dto.request.AuthInviteAllRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthInviteOneRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthVerifyRequestDto;
-import org.clubs.blueheart.auth.vo.AuthJwtVo;
+import org.clubs.blueheart.auth.dto.response.AuthJwtResponseDto;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.clubs.blueheart.user.domain.UserRole;
@@ -41,9 +41,9 @@ public class AuthApi {
         //TODO: Filter Layer로 변경
         authService.isSessionValid(sessionId);
 
-        AuthJwtVo authJwtVO = authService.loginUserByStudentNumberAndUsername(authLoginRequestDto);
+        AuthJwtResponseDto authJwtResponseDto = authService.loginUserByStudentNumberAndUsername(authLoginRequestDto);
 
-        String finalJwt = authService.createLoginJwt(authJwtVO.getId(), authJwtVO.getStudentNumber(), authJwtVO.getUsername(), authJwtVO.getRole());
+        String finalJwt = authService.createLoginJwt(authJwtResponseDto.getId(), authJwtResponseDto.getStudentNumber(), authJwtResponseDto.getUsername(), authJwtResponseDto.getRole());
 
         // 최종 JWT를 쿠키로 주거나, 바디로 주거나 선택
         ResponseCookie loginCookie = ResponseCookie.from("FINAL_JWT", finalJwt)
@@ -54,7 +54,7 @@ public class AuthApi {
 
         return GlobalResponseHandler.successWithCookie(
                 ResponseStatus.AUTH_LOGGED_IN,
-                authJwtVO.getRole(),
+                authJwtResponseDto.getRole(),
                 loginCookie // toString() 제거
         );
     }

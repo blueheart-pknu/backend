@@ -6,8 +6,7 @@ import org.clubs.blueheart.auth.dto.request.AuthInviteAllRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthInviteOneRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthVerifyRequestDto;
-import org.clubs.blueheart.auth.vo.AuthJwtVo;
-import org.clubs.blueheart.response.GlobalResponseHandler;
+import org.clubs.blueheart.auth.dto.response.AuthJwtResponseDto;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.clubs.blueheart.user.domain.UserRole;
 import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -103,7 +101,7 @@ public class AuthApiTest {
         // isSessionValid가 boolean을 반환한다고 가정
         Mockito.when(authService.isSessionValid(anyString())).thenReturn(true);
 
-        AuthJwtVo mockAuthJwtVo = AuthJwtVo.builder()
+        AuthJwtResponseDto mockAuthJwtResponseDto = AuthJwtResponseDto.builder()
                 .id(1L)
                 .studentNumber("201234567")
                 .username("홍길동")
@@ -111,7 +109,7 @@ public class AuthApiTest {
                 .build();
 
         Mockito.when(authService.loginUserByStudentNumberAndUsername(any(AuthLoginRequestDto.class)))
-                .thenReturn(mockAuthJwtVo);
+                .thenReturn(mockAuthJwtResponseDto);
 
         Mockito.when(authService.createLoginJwt(anyLong(), anyString(), anyString(), any(UserRole.class)))
                 .thenReturn("mocked-jwt-token");

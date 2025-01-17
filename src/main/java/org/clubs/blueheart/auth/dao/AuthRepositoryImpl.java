@@ -1,7 +1,7 @@
 package org.clubs.blueheart.auth.dao;
 
 import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
-import org.clubs.blueheart.auth.vo.AuthJwtVo;
+import org.clubs.blueheart.auth.dto.response.AuthJwtResponseDto;
 import org.clubs.blueheart.exception.ExceptionStatus;
 import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.dao.UserDao;
@@ -19,7 +19,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public AuthJwtVo findUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto) {
+    public AuthJwtResponseDto findUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto) {
 
         if (authLoginRequestDto == null) {
             throw new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER);
@@ -31,7 +31,7 @@ public class AuthRepositoryImpl implements AuthRepository {
 
 
         // 엔티티 -> AuthJwtDto 로 매핑
-        return AuthJwtVo.builder()
+        return AuthJwtResponseDto.builder()
                 .id(user.getId())
                 .studentNumber(user.getStudentNumber())
                 .username(user.getUsername())
