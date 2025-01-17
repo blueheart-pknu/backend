@@ -86,12 +86,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void updateUserById(UserUpdateRequestDto userUpdateRequestDto) {
         // Validate input data
-        if (userUpdateRequestDto == null || userUpdateRequestDto.getId() == null) {
+        if (userUpdateRequestDto == null || userUpdateRequestDto.getUserId() == null) {
             throw new RepositoryException(ExceptionStatus.USER_INVALID_PARAMS);
         }
 
         // Fetch the user
-        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userUpdateRequestDto.getId())
+        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userUpdateRequestDto.getUserId())
                 .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update fields using updateFields
@@ -108,12 +108,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteUserById(UserDeleteRequestDto userDeleteRequestDto) {
         // Validate input data
-        if (userDeleteRequestDto == null || userDeleteRequestDto.getId() == null) {
+        if (userDeleteRequestDto == null || userDeleteRequestDto.getUserId() == null) {
             throw new RepositoryException(ExceptionStatus.USER_INVALID_PARAMS);
         }
 
         // Fetch the user
-        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userDeleteRequestDto.getId())
+        User existingUser = userDao.findUserByIdAndDeletedAtIsNull(userDeleteRequestDto.getUserId())
                 .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update the deletedAt field to mark as deleted

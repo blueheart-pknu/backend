@@ -184,9 +184,9 @@ public enum ExceptionStatus {
 //    public UtilException asUtilException() {
 //        return new UtilException(this);
 //    }
-
-    public MiddlewareException asMiddlewareException() {
-        return new MiddlewareException(this);
-    }
+//
+//    public MiddlewareException asMiddlewareException() {
+//        return new MiddlewareException(this);
+//    }
 }
 
