@@ -54,7 +54,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public void updateActivityById(ActivityUpdateRequestDto activityUpdateRequestDto) {
         if (activityUpdateRequestDto == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Fetch the user
@@ -82,7 +82,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public List<ActivitySearchResponseDto> findActivityByStatus(ActivityStatus status) {
         if (status == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Fetch activities by status
@@ -127,7 +127,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public ActivityDetailResponseDto findOneActivityDetailById(Long id) {
         if (id == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Fetch the activity by ID
@@ -153,7 +153,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     @Override
     public void deleteActivity(ActivityDeleteRequestDto activityDeleteRequestDto) {
         if (activityDeleteRequestDto == null || activityDeleteRequestDto.getId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Fetch the activity

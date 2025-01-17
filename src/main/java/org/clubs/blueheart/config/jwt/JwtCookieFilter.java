@@ -51,7 +51,7 @@ public class JwtCookieFilter extends OncePerRequestFilter {
                     Claims claims = jwtProvider.getClaims(jwt);
                     Long userId = claims.get("userId", Long.class);
                     if (userId == null) {
-                        throw new MiddlewareException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+                        throw new MiddlewareException(ExceptionStatus.GENERAL_BAD_REQUEST);
                     }
 
                     String username = claims.get("username", String.class);

@@ -36,7 +36,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public void createActivityNotification(NotificationRequestDto notificationRequestDto) {
         if (notificationRequestDto == null || notificationRequestDto.getSenderId() == null || notificationRequestDto.getReceiverId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.NOTIFICATION_INVALID_PARAMS);
         }
 
         // Fetch sender User entity
@@ -71,7 +71,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public void createGroupNotification(NotificationRequestDto notificationRequestDto) {
         if (notificationRequestDto == null || notificationRequestDto.getSenderId() == null || notificationRequestDto.getReceiverId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.NOTIFICATION_INVALID_PARAMS);
         }
 
         // Fetch sender User entity
@@ -106,7 +106,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public List<NotificationResponseDto> findAllNotificationMe(Long receiverId) {
         if (receiverId == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.NOTIFICATION_INVALID_PARAMS);
         }
 
         List<Notification> notifications = notificationDao.findAllByReceiverId_IdAndDeletedAtIsNull(receiverId);

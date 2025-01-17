@@ -27,7 +27,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void createUser(UserInfoRequestDto userInfoRequestDto) {
         // Validate input data
         if (userInfoRequestDto == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.USER_INVALID_PARAMS);
         }
 
         // Check if the user already exists using a LIMIT 1 query
@@ -50,7 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<UserInfoResponseDto> findUserByStudentNumber(String studentNumber) {
         if (studentNumber == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.USER_INVALID_PARAMS);
         }
 
         // Fetch user list and map to DTOs
@@ -68,7 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<UserInfoResponseDto> findUserByUsername(String username) {
         if (username == null || username.trim().isEmpty()) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.USER_INVALID_PARAMS);
         }
 
         // Fetch user list and map to DTOs
@@ -87,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void updateUserById(UserUpdateRequestDto userUpdateRequestDto) {
         // Validate input data
         if (userUpdateRequestDto == null || userUpdateRequestDto.getId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.USER_INVALID_PARAMS);
         }
 
         // Fetch the user
@@ -109,7 +109,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteUserById(UserDeleteRequestDto userDeleteRequestDto) {
         // Validate input data
         if (userDeleteRequestDto == null || userDeleteRequestDto.getId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.USER_INVALID_PARAMS);
         }
 
         // Fetch the user
