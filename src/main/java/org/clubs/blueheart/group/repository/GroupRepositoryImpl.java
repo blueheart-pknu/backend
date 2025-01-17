@@ -41,7 +41,7 @@ public class GroupRepositoryImpl implements GroupRepository {
         }
 
         Group group = Group.builder()
-                .name(groupInfoRequestDto.getName())
+                .name(groupInfoRequestDto.getUsername())
                 .build();
 
         groupDao.save(group);
@@ -128,7 +128,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     }
 
     @Override
-    public List<GroupUserInfoResponseDto> getMyGroupInfoById(Long userId) {
+    public List<GroupUserInfoResponseDto> getMyGroupInfoByUserId(Long userId) {
         if (userId == null) {
             throw new RepositoryException(ExceptionStatus.AUTH_INVALID_PARAMS);
         }
@@ -146,7 +146,7 @@ public class GroupRepositoryImpl implements GroupRepository {
                 .map(groupUser -> {
                     User user = groupUser.getUser();
                     return GroupUserInfoResponseDto.builder()
-                            .id(user.getId())
+                            .userId(user.getId())
                             .studentNumber(user.getStudentNumber())
                             .username(user.getUsername())
                             .role(user.getRole())

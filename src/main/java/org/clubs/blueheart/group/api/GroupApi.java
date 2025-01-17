@@ -161,7 +161,7 @@ public class GroupApi {
         System.out.println(userId);
 
         // 2) 기존 로직: userId 기반으로 DB 조회
-        List<GroupUserInfoResponseDto> groupUserInfo = groupService.getMyGroupInfoById(userId);
+        List<GroupUserInfoResponseDto> groupUserInfo = groupService.getMyGroupInfoByUserId(userId);
 
         // 3) 응답
         return GlobalResponseHandler.success(ResponseStatus.GROUP_SEARCHED, groupUserInfo);
