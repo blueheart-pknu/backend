@@ -96,9 +96,9 @@ public class UserRepositoryImpl implements UserRepository {
 
         // Update fields using updateFields
         User updatedUser = existingUser.updatedUserFields(
-                userUpdateRequestDto.getUsername().orElse(null),
-                userUpdateRequestDto.getStudentNumber().orElse(null),
-                userUpdateRequestDto.getRole().orElse(null)
+                userUpdateRequestDto.getUsername(),
+                userUpdateRequestDto.getStudentNumber(),
+                userUpdateRequestDto.getRole()
         );
 
         // Save the updated user
