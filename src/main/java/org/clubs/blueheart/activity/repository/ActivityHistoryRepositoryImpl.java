@@ -93,7 +93,7 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
                 .map(activityHistory -> {
                     Activity activity = activityHistory.getActivity();
                     return ActivitySearchResponseDto.builder()
-                            .id(activity.getId()) // Use `id` field instead of `activityId`
+                            .activityId(activity.getId()) // Use `id` field instead of `activityId`
                             .title(activity.getTitle())
                             .place(activity.getPlace())
                             .isSubscribed(true)

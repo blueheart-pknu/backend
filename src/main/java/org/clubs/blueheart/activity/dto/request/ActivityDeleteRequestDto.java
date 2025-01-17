@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class ActivityDeleteRequestDto {
 
-    @NotBlank(message = "ID must not be blank")
-    @Min(value = 1, message = "ID는 1이상이어야합니다.")
-    private Long id;
+    @NotBlank(message = "ActivityId must not be blank")
+    @Min(value = 1, message = "ActivityId는 1이상이어야합니다.")
+    private Long activityId;
 }

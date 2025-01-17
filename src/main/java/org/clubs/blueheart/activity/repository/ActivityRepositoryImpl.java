@@ -58,12 +58,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
         }
 
         // Fetch the user
-        Activity existingActivity = activityDao.findActivityByIdAndDeletedAtIsNull(activityUpdateRequestDto.getId())
+        Activity existingActivity = activityDao.findActivityByIdAndDeletedAtIsNull(activityUpdateRequestDto.getActivityId())
                 .orElseThrow(() -> new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
 
         // Update fields using updateFields
         Activity updatedActivity = existingActivity.toBuilder()
-                .id(activityUpdateRequestDto.getId() != null ? activityUpdateRequestDto.getId() : existingActivity.getId())
+                .id(activityUpdateRequestDto.getActivityId() != null ? activityUpdateRequestDto.getActivityId() : existingActivity.getId())
                 .title(activityUpdateRequestDto.getTitle() != null ? activityUpdateRequestDto.getTitle() : existingActivity.getTitle())
                 .status(activityUpdateRequestDto.getStatus() != null ? activityUpdateRequestDto.getStatus() : existingActivity.getStatus())
                 .maxNumber(activityUpdateRequestDto.getMaxNumber() != null ? activityUpdateRequestDto.getMaxNumber() : existingActivity.getMaxNumber())
@@ -92,7 +92,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
         // Map Activity entities to ActivitySearchDto
         return activityInfo.stream()
                 .<ActivitySearchResponseDto>map(activity -> ActivitySearchResponseDto.builder()
-                        .id(activity.getId())
+                        .activityId(activity.getId())
                         .title(activity.getTitle())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
@@ -112,7 +112,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
         // Map to ActivitySearchDto
         return activities.stream()
                 .<ActivitySearchResponseDto>map(activity -> ActivitySearchResponseDto.builder()
-                        .id(activity.getId())
+                        .activityId(activity.getId())
                         .title(activity.getTitle())
                         .status(activity.getStatus())
                         .isSubscribed(false) // Set this field based on business logic
@@ -137,7 +137,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
         // Map to ActivitySearchDto (assuming details can be extended)
         // Map to ActivityDetailDto
         return ActivityDetailResponseDto.builder()
-                .id(activity.getId())
+                .activityId(activity.getId())
                 .title(activity.getTitle())
                 .description(activity.getDescription())
                 .status(activity.getStatus())
@@ -152,12 +152,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
 
     @Override
     public void deleteActivity(ActivityDeleteRequestDto activityDeleteRequestDto) {
-        if (activityDeleteRequestDto == null || activityDeleteRequestDto.getId() == null) {
+        if (activityDeleteRequestDto == null || activityDeleteRequestDto.getActivityId() == null) {
             throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Fetch the activity
-        Activity existingActivity = activityDao.findActivityByIdAndDeletedAtIsNull(activityDeleteRequestDto.getId())
+        Activity existingActivity = activityDao.findActivityByIdAndDeletedAtIsNull(activityDeleteRequestDto.getActivityId())
                 .orElseThrow(() -> new RepositoryException(ExceptionStatus.ACTIVITY_NOT_FOUND));
 
         // Mark as deleted using the builder

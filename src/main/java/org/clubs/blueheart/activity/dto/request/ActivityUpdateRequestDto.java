@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public class ActivityUpdateRequestDto {
 
-    @NotBlank(message = "Creator ID must not be blank")
-    @Min(value = 1, message = "사용자ID는 1이상이어야합니다.")
-    private Long creatorId;
+    @NotBlank(message = "ActivityId must not be blank")
+    @Min(value = 1, message = "ActivityId는 1이상이어야합니다.")
+    private Long activityId;
 
     @NotBlank(message = "Title must not be blank")
     @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$")
