@@ -11,37 +11,38 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class ActivitySearchResponseDto {
 
-    @NotNull(message = "ActivityId must not be null")
-    @Min(value = 1, message = "ActivityId는 1이상이어야합니다.")
+    @NotNull(message = "Activity ID must not be null")
+    @Min(value = 1, message = "Activity ID must be at least 1")
     private Long activityId;
 
     @NotBlank(message = "Title must not be blank")
-    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$")
+    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$",
+            message = "Title can only contain letters, numbers, and symbols")
     private String title;
 
-    @NotBlank(message = "Status must not be blank")
-    @Pattern(regexp = "^[A-Z]*$")
+    @NotNull(message = "Status must not be null")
     private ActivityStatus status;
 
-    @NotBlank(message = "IsSubscribed must not be blank")
+    @NotNull(message = "IsSubscribed must not be null")
     private Boolean isSubscribed;
 
     @NotBlank(message = "Place must not be blank")
-    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$", message="한글, 영어, 기호, 유니코드만 사용할 수 있습니다")
-    @Size(min = 1, max = 100, message = "내용은 100자 이하입니다")
+    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$",
+            message = "Place can only contain letters, numbers, and symbols")
+    @Size(min = 1, max = 100, message = "Place cannot exceed 100 characters")
     private String place;
 
-    @NotBlank(message = "CurrentNumber must not be blank")
-    @Min(1)
-    @Max(999)
+    @NotNull(message = "Current number must not be null")
+    @Min(value = 1, message = "Current number must be at least 1")
+    @Max(value = 999, message = "Current number cannot exceed 999")
     private Integer currentNumber;
 
-    @NotBlank(message = "MaxNumber must not be blank")
-    @Min(1)
-    @Max(999)
+    @NotNull(message = "Max number must not be null")
+    @Min(value = 1, message = "Max number must be at least 1")
+    @Max(value = 999, message = "Max number cannot exceed 999")
     private Integer maxNumber;
 
-    @NotNull(message = "expiredAt must not be null")
-    @Future(message = "만료시각은 현재보다 뒤여야 합니다.")
+    @NotNull(message = "Expiration time must not be null")
+    @Future(message = "Expiration time must be in the future")
     private LocalDateTime expiredAt;
 }

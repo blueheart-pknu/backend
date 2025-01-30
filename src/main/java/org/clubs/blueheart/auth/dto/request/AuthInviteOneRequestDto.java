@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.clubs.blueheart.config.ValidationGroups;
 
 @Data
 @SuperBuilder
@@ -14,11 +15,15 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthInviteOneRequestDto extends AuthInviteAllRequestDto {
 
-    @NotBlank(message = "TargetUsername must not be blank")
-    @Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ]+$")
+    @NotBlank(message = "TargetUsername must not be blank",
+            groups = ValidationGroups.NotBlankGroup.class)
+    @Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ]+$",
+            groups = ValidationGroups.PatternGroup.class)
     private String targetUsername;
 
-    @NotBlank(message = "TargetStudentNumber must not be blank")
-    @Pattern(regexp = "^[0-9]+$")
+    @NotBlank(message = "TargetStudentNumber must not be blank",
+            groups = ValidationGroups.NotBlankGroup.class)
+    @Pattern(regexp = "^[0-9]+$",
+    groups = ValidationGroups.PatternGroup.class)
     private String targetStudentNumber;
 }

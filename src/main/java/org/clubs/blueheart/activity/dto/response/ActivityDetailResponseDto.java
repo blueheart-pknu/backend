@@ -13,18 +13,21 @@ import lombok.experimental.SuperBuilder;
 public class ActivityDetailResponseDto extends ActivitySearchResponseDto {
 
     @NotBlank(message = "Description must not be blank")
-    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$", message="한글, 영어, 기호, 유니코드만 사용할 수 있습니다")
-    @Size(min = 1, max = 255, message = "내용은 255자 이하입니다")
+    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$",
+            message = "Description can only contain letters, numbers, and symbols")
+    @Size(min = 1, max = 255, message = "Description cannot exceed 255 characters")
     private String description;
 
     @NotBlank(message = "Place must not be blank")
-    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$", message="한글, 영어, 기호, 유니코드만 사용할 수 있습니다")
-    @Size(min = 1, max = 100, message = "내용은 100자 이하입니다")
+    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$",
+            message = "Place can only contain letters, numbers, and symbols")
+    @Size(min = 1, max = 100, message = "Place cannot exceed 100 characters")
     private String place;
 
-    @NotBlank(message = "PlaceUrl must not be blank")
-    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$", message="한글, 영어, 기호, 유니코드만 사용할 수 있습니다")
-    @Size(min = 1, max = 255, message = "내용은 255자 이하입니다")
+    @NotBlank(message = "Place URL must not be blank")
+    @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣ㅏ-ㅣ\\uAC00-\\uD7A3\\u0020-\\u007E]*$",
+            message = "Place URL can only contain letters, numbers, and symbols")
+    @Size(min = 1, max = 255, message = "Place URL cannot exceed 255 characters")
     private String placeUrl;
 
 }
