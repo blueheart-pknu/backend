@@ -23,7 +23,7 @@ public class CustomExceptionStatus {
 
     public CustomExceptionStatus(ExceptionStatus status, String message) {
         this.statusCode = status.getStatusCode();
-        this.message = status.getMessage() + "\n해제 날짜 : " + message;
+        this.message = message;
         this.error = status.getError();
     }
 }

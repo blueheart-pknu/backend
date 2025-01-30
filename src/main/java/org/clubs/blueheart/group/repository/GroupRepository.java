@@ -15,5 +15,5 @@ public interface GroupRepository {
 
     void removeGroupUserById(GroupUserRequestDto groupUserRequestDto);
 
-    List<GroupUserInfoResponseDto> getMyGroupInfoById(Long id);
+    List<GroupUserInfoResponseDto> getMyGroupInfoByUserId(Long id);
 }

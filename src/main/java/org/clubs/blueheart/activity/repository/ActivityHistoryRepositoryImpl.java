@@ -30,7 +30,7 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
     public void subscribeActivityById(ActivitySubscribeRequestDto activitySubscribeRequestDto) {
 
         if (activitySubscribeRequestDto == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Check if the user is already subscribed to the activity
@@ -58,7 +58,7 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
     public void unsubscribeActivityById(ActivitySubscribeRequestDto activitySubscribeRequestDto) {
 
         if (activitySubscribeRequestDto == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Fetch the existing ActivityHistory record
@@ -79,7 +79,7 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
     @Override
     public List<ActivitySearchResponseDto> getMyActivityHistoryInfoById(Long userId) {
         if (userId == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // Fetch the activity history for the given user where ActivityStatus is PROGRESSING or COMPLETED
@@ -93,7 +93,7 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
                 .map(activityHistory -> {
                     Activity activity = activityHistory.getActivity();
                     return ActivitySearchResponseDto.builder()
-                            .id(activity.getId()) // Use `id` field instead of `activityId`
+                            .activityId(activity.getId()) // Use `id` field instead of `activityId`
                             .title(activity.getTitle())
                             .place(activity.getPlace())
                             .isSubscribed(true)
@@ -109,7 +109,7 @@ public class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository{
     @Override
     public List<UserInfoResponseDto> findSubscribedUserByActivityId(Long activityId) {
         if (activityId == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.ACTIVITY_INVALID_PARAMS);
         }
 
         // activityId와 deletedAt이 null인 ActivityHistory 레코드 조회

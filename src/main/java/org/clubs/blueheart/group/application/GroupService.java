@@ -34,7 +34,7 @@ public class GroupService {
         groupRepository.removeGroupUserById(groupUserRequestDto);
     }
 
-    public List<GroupUserInfoResponseDto> getMyGroupInfoById(Long id) {
-        return groupRepository.getMyGroupInfoById(id);
+    public List<GroupUserInfoResponseDto> getMyGroupInfoByUserId(Long id) {
+        return groupRepository.getMyGroupInfoByUserId(id);
     }
 }

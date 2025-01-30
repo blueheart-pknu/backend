@@ -11,8 +11,12 @@ import org.springframework.http.HttpStatus;
 public enum ExceptionStatus {
 
     // AUTH ERROR CODE
-    AUTH_BAD_SESSION_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청 방법입니다."),
-    AUTH_SESSION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 세션으로 접근했습니다!"),
+    AUTH_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "잘못된 인자로 요청했습니다"),
+    AUTH_BAD_SESSION_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 세션으로 인한 요청 방법입니다."),
+    AUTH_COOKIE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 쿠키로 접근했습니다"),
+    AUTH_SESSION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "잘못된 세션으로 접근했습니다"),
+    AUTH_INVALID_INVITE_CODE(HttpStatus.BAD_REQUEST, "잘못된 초대 코드로 요청했습니다"),
+
 
     // USER ERROR CODE
     USER_NOT_FOUND_ADMIN(HttpStatus.NOT_FOUND, "어드민이 존재하지 않습니다"),
@@ -20,7 +24,7 @@ public enum ExceptionStatus {
     USER_NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다"),
 
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 유저입니다"),
-    USER_INVALID_USER_INPUT(HttpStatus.BAD_REQUEST, "잘못된 사용자 입력입니다"),
+    USER_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "잘못된 사용자 입력입니다"),
     USER_UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "사용자 인증이 유효하지 않습니다"),
 
     USER_INVALID_SEARCH_KEYWORD(HttpStatus.BAD_REQUEST, "검색 키워드가 유효하지 않습니다"),
@@ -30,7 +34,7 @@ public enum ExceptionStatus {
     // ACTIVITY ERROR CODE
     ACTIVITY_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 액티비티입니다"),
     ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "액티비티를 찾을 수 없습니다"),
-    ACTIVITY_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 액티비티 요청입니다"),
+    ACTIVITY_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "유효하지 않은 액티비티 요청입니다"),
     ACTIVITY_UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "액티비티 접근 권한이 없습니다"),
     ACTIVITY_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "액티비티 업데이트 실패"),
     ACTIVITY_DELETE_FAILED(HttpStatus.BAD_REQUEST, "액티비티 삭제 실패"),
@@ -56,12 +60,19 @@ public enum ExceptionStatus {
     // NOTIFICATION ERROR CODE
     NOTIFICATION_SEND_FAILED(HttpStatus.BAD_REQUEST, "알림 전송 실패"),
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "알림을 찾을 수 없습니다"),
-    NOTIFICATION_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 알림 요청입니다"),
+    NOTIFICATION_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "유효하지 않은 알림 요청입니다"),
     NOTIFICATION_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "알림의 대상 사용자를 찾을 수 없습니다"),
 
     // GENERAL ERROR CODE
+    GENERAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "서버에 잘못된 요청입니다."),
+    GENERAL_REQUEST_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "서버에 잘못된 요청입니다."),
+
     GENERAL_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 알 수 없는 오류가 발생했습니다"),
-    GENERAL_INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "잘못된 인자롤 통한 요청입니다.");
+    GENERAL_SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "서버가 작동하지 않고 있습니다."),
+    GENERAL_GATEWAY_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT, "서버에서 타임아웃이 발생했습니다");
+
+
+
 
     //    NOT_FOUND_LENT_HISTORY(HttpStatus.NOT_FOUND, "대여한 사물함이 존재하지 않습니다."),
 //    NOT_FOUND_CLUB(HttpStatus.NOT_FOUND, "동아리가 존재하지 않습니다."),
@@ -176,9 +187,9 @@ public enum ExceptionStatus {
 //    public UtilException asUtilException() {
 //        return new UtilException(this);
 //    }
-
-    public MiddlewareException asMiddlewareException() {
-        return new MiddlewareException(this);
-    }
+//
+//    public MiddlewareException asMiddlewareException() {
+//        return new MiddlewareException(this);
+//    }
 }
 

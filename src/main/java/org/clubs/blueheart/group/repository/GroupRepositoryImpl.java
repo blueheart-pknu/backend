@@ -32,7 +32,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     @Override
     public void createGroup(GroupInfoRequestDto groupInfoRequestDto) {
         if (groupInfoRequestDto == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED);
         }
 
         boolean groupExists = groupUserDao.existsByUserId(groupInfoRequestDto.getUserId());
@@ -41,7 +41,7 @@ public class GroupRepositoryImpl implements GroupRepository {
         }
 
         Group group = Group.builder()
-                .name(groupInfoRequestDto.getName())
+                .name(groupInfoRequestDto.getUsername())
                 .build();
 
         groupDao.save(group);
@@ -60,7 +60,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     @Override
     public void deleteGroup(GroupInfoRequestDto groupInfoRequestDto) {
         if (groupInfoRequestDto == null || groupInfoRequestDto.getUserId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.AUTH_INVALID_PARAMS);
         }
 
         GroupUser groupUser = groupUserDao.findOneByUserIdAndDeletedAtIsNull(groupInfoRequestDto.getUserId())
@@ -87,7 +87,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     @Override
     public void addGroupUserById(GroupUserRequestDto groupUserRequestDto) {
         if (groupUserRequestDto == null || groupUserRequestDto.getUserId() == null || groupUserRequestDto.getGroupId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.AUTH_INVALID_PARAMS);
         }
 
         boolean groupExists = groupUserDao.existsByUserId(groupUserRequestDto.getUserId());
@@ -112,7 +112,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     @Override
     public void removeGroupUserById(GroupUserRequestDto groupUserRequestDto) {
         if (groupUserRequestDto == null || groupUserRequestDto.getUserId() == null || groupUserRequestDto.getGroupId() == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.AUTH_INVALID_PARAMS);
         }
 
         GroupUser groupUser = groupUserDao.findByGroupIdAndUserIdAndDeletedAtIsNull(
@@ -128,9 +128,9 @@ public class GroupRepositoryImpl implements GroupRepository {
     }
 
     @Override
-    public List<GroupUserInfoResponseDto> getMyGroupInfoById(Long userId) {
+    public List<GroupUserInfoResponseDto> getMyGroupInfoByUserId(Long userId) {
         if (userId == null) {
-            throw new RepositoryException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+            throw new RepositoryException(ExceptionStatus.AUTH_INVALID_PARAMS);
         }
 
         GroupUser existGroupUserInfo = groupUserDao.findOneByUserIdAndDeletedAtIsNull(userId)
@@ -146,7 +146,7 @@ public class GroupRepositoryImpl implements GroupRepository {
                 .map(groupUser -> {
                     User user = groupUser.getUser();
                     return GroupUserInfoResponseDto.builder()
-                            .id(user.getId())
+                            .userId(user.getId())
                             .studentNumber(user.getStudentNumber())
                             .username(user.getUsername())
                             .role(user.getRole())

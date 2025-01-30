@@ -6,7 +6,7 @@ import org.clubs.blueheart.auth.dto.request.AuthInviteAllRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthInviteOneRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthVerifyRequestDto;
-import org.clubs.blueheart.auth.vo.AuthJwtVo;
+import org.clubs.blueheart.auth.dto.response.AuthJwtResponseDto;
 import org.clubs.blueheart.config.jwt.JwtGenerator;
 import org.clubs.blueheart.exception.ApplicationException;
 import org.clubs.blueheart.exception.ExceptionStatus;
@@ -35,7 +35,7 @@ public class AuthService {
         this.jwtGenerator = jwtGenerator;
     }
 
-    public AuthJwtVo loginUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto) {
+    public AuthJwtResponseDto loginUserByStudentNumberAndUsername(AuthLoginRequestDto authLoginRequestDto) {
         return authRepository.findUserByStudentNumberAndUsername(authLoginRequestDto);
     }
 

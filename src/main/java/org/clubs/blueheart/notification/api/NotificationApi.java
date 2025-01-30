@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
+import org.clubs.blueheart.config.ValidationSequenceConfig;
 import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.notification.application.NotificationService;
 import org.clubs.blueheart.notification.dto.request.NotificationRequestDto;
@@ -14,6 +14,7 @@ import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class NotificationApi {
             )
     })
     @PostMapping("/activity")
-    public ResponseEntity<GlobalResponseHandler<Void>> notificationActivity(@RequestBody @Valid NotificationRequestDto notificationRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> notificationActivity(@RequestBody @Validated(ValidationSequenceConfig.class) NotificationRequestDto notificationRequestDto) {
         notificationService.notificationActivity(notificationRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.NOTIFICATION_CREATED);
     }
@@ -75,7 +76,7 @@ public class NotificationApi {
             )
     })
     @PostMapping("/group")
-    public ResponseEntity<GlobalResponseHandler<Void>> notificationGroup(@RequestBody @Valid NotificationRequestDto notificationRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> notificationGroup(@RequestBody @Validated(ValidationSequenceConfig.class) NotificationRequestDto notificationRequestDto) {
         notificationService.notificationGroup(notificationRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.NOTIFICATION_CREATED);
     }

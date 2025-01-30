@@ -1,5 +1,6 @@
 package org.clubs.blueheart.config.jwt;
 
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +35,9 @@ public class JwtCookieFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // /api/v1/auth/**, /h2-console/**, Swagger 관련 경로 제외
-        if (path.startsWith("/api/v1/auth/")
+        if (path.startsWith("/api/v1/auth/register")
+                || path.startsWith("/api/v1/auth/login")
+                || path.startsWith("/api/v1/auth/verify")
                 || path.startsWith("/h2-console/")
                 || path.startsWith("/swagger")
                 || path.startsWith("/v3/api-docs")
@@ -51,7 +54,7 @@ public class JwtCookieFilter extends OncePerRequestFilter {
                     Claims claims = jwtProvider.getClaims(jwt);
                     Long userId = claims.get("userId", Long.class);
                     if (userId == null) {
-                        throw new MiddlewareException(ExceptionStatus.GENERAL_INVALID_ARGUMENT);
+                        throw new MiddlewareException(ExceptionStatus.GENERAL_BAD_REQUEST);
                     }
 
                     String username = claims.get("username", String.class);
@@ -69,9 +72,10 @@ public class JwtCookieFilter extends OncePerRequestFilter {
                                     userDetails.getAuthorities()
                             );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    throw new MiddlewareException(ExceptionStatus.GENERAL_INTERNAL_SERVER_ERROR);
                 }
+
+            } catch (MalformedJwtException e) {
+                throw new MiddlewareException(ExceptionStatus.GENERAL_INTERNAL_SERVER_ERROR);
             } catch (JwtException e) {
                 throw new MiddlewareException(ExceptionStatus.GENERAL_INTERNAL_SERVER_ERROR);
             }

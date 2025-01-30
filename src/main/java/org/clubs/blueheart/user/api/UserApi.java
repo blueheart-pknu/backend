@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
+import org.clubs.blueheart.config.ValidationSequenceConfig;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
@@ -15,6 +15,7 @@ import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
 import org.clubs.blueheart.user.dto.request.UserUpdateRequestDto;
 import org.clubs.blueheart.user.dto.response.UserInfoResponseDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public class UserApi {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<GlobalResponseHandler<Void>> createUser(@RequestBody @Valid UserInfoRequestDto userInfoRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> createUser(@RequestBody @Validated(ValidationSequenceConfig.class) UserInfoRequestDto userInfoRequestDto) {
         userService.createUser(userInfoRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.USER_CREATED);
     }
@@ -139,7 +140,7 @@ public class UserApi {
             )
     })
     @PutMapping("/update")
-    public ResponseEntity<GlobalResponseHandler<Void>> updateUser(@RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> updateUser(@RequestBody @Validated(ValidationSequenceConfig.class) UserUpdateRequestDto userUpdateRequestDto) {
         userService.updateUserById(userUpdateRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.USER_UPDATED);
     }
@@ -172,7 +173,7 @@ public class UserApi {
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<GlobalResponseHandler<Void>> deleteUser(@RequestBody @Valid UserDeleteRequestDto userDeleteRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> deleteUser(@RequestBody @Validated(ValidationSequenceConfig.class) UserDeleteRequestDto userDeleteRequestDto) {
         userService.deleteUserById(userDeleteRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.USER_DELETED);
     }
