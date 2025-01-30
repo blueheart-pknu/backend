@@ -1,15 +1,17 @@
 package org.clubs.blueheart.user.dto.request;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import org.clubs.blueheart.config.ValidationGroups;
 
 @Data
 @Builder
 public class UserDeleteRequestDto {
-    @NotNull(message = "UserID must not be blank")
-    @Min(value = 1, message = "사용자ID는 1이상이어야합니다.")
+    @NotNull(message = "User ID must not be null",
+            groups = ValidationGroups.NotNullGroup.class)
+    @Min(value = 1, message = "User ID must be at least 1",
+            groups = ValidationGroups.SizeGroup.class)
     private Long userId;
 }
