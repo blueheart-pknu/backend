@@ -1,11 +1,11 @@
-name: "Java Build (Spring 3.4.1, Java 17, Caching Enabled)"
+name: "Java API Tests (Spring 3.4.1, Java 17, Caching Enabled)"
 
 on:
   push:
     branches: ["*"]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,6 +36,11 @@ jobs:
       - name: Set Gradle wrapper permissions
         run: chmod +x gradlew
 
-      # 5. Build project (excluding tests)
-      - name: Build with Gradle (No Tests)
-        run: ./gradlew clean build --exclude-task test
+      # 5. Run only API tests
+      - name: Run API tests
+        run: |
+          ./gradlew test --tests "org.clubs.blueheart.activity.api.*" \
+                         --tests "org.clubs.blueheart.auth.api.*" \
+                         --tests "org.clubs.blueheart.group.api.*" \
+                         --tests "org.clubs.blueheart.notification.api.*" \
+                         --tests "org.clubs.blueheart.user.api.*"
