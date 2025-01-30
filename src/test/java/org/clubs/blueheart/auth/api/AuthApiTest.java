@@ -133,7 +133,7 @@ public class AuthApiTest {
         MvcResult mvcResult = resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
-                .andExpect(jsonPath("$.message").value("studentNumber: studentNumber must not be blank; studentNumber: studentNumber must contain only numbers"))
+                .andExpect(jsonPath("$.message").value("studentNumber: Student number must not be blank"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 

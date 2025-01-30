@@ -135,7 +135,7 @@ class NotificationApiTest {
         MvcResult mvcResult = resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
-                .andExpect(jsonPath("$.message").value("content: 내용은 255자 이하입니다; content: Content must not be blank"))
+                .andExpect(jsonPath("$.message").value("content: Content must not be blank"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
@@ -236,7 +236,7 @@ class NotificationApiTest {
         MvcResult mvcResult = resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
-                .andExpect(jsonPath("$.message").value("receiverId: ReceiverID must not be null"))
+                .andExpect(jsonPath("$.message").value("receiverId: Receiver ID must not be null"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 

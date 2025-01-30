@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
 import org.clubs.blueheart.activity.dto.request.ActivitySubscribeRequestDto;
 import org.clubs.blueheart.activity.dto.response.ActivitySearchResponseDto;
+import org.clubs.blueheart.config.ValidationSequenceConfig;
 import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
@@ -16,6 +17,7 @@ import org.clubs.blueheart.response.ResponseStatus;
 import org.clubs.blueheart.user.dto.response.UserInfoResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +61,7 @@ public class ActivityHistoryApi {
             )
     })
     @PostMapping("/subscribe")
-    public ResponseEntity<GlobalResponseHandler<Void>> subscribeActivity(@RequestBody @Valid ActivitySubscribeRequestDto activitySubscribeRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> subscribeActivity(@RequestBody @Validated(ValidationSequenceConfig.class) ActivitySubscribeRequestDto activitySubscribeRequestDto) {
         activityHistoryService.subscribeActivity(activitySubscribeRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_SUBSCRIBED);
     }
@@ -92,7 +94,7 @@ public class ActivityHistoryApi {
             )
     })
     @PostMapping("/unsubscribe")
-    public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Valid ActivitySubscribeRequestDto activitySubscribeRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> unsubscribeActivity(@RequestBody @Validated(ValidationSequenceConfig.class) ActivitySubscribeRequestDto activitySubscribeRequestDto) {
         activityHistoryService.unsubscribeActivity(activitySubscribeRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_HISTORY_UNSUBSCRIBED);
     }
@@ -160,7 +162,7 @@ public class ActivityHistoryApi {
             )
     })
     @GetMapping("/{activityId}")
-    public ResponseEntity<GlobalResponseHandler<List<UserInfoResponseDto>>> findSubscribedUser(@PathVariable @Valid Long activityId) {
+    public ResponseEntity<GlobalResponseHandler<List<UserInfoResponseDto>>> findSubscribedUser(@PathVariable @Validated(ValidationSequenceConfig.class) Long activityId) {
         List<UserInfoResponseDto> users = activityHistoryService.findSubscribedUser(activityId);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_SEARCHED, users);
     }

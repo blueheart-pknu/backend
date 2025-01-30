@@ -7,12 +7,14 @@ import org.clubs.blueheart.auth.dto.request.AuthInviteOneRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthLoginRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthVerifyRequestDto;
 import org.clubs.blueheart.auth.dto.response.AuthJwtResponseDto;
+import org.clubs.blueheart.config.ValidationSequenceConfig;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.clubs.blueheart.user.domain.UserRole;
 import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +28,7 @@ public class AuthApi {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<GlobalResponseHandler<Void>> registerUser(@RequestBody @Valid UserInfoRequestDto userInfoRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> registerUser(@RequestBody @Validated(ValidationSequenceConfig.class) UserInfoRequestDto userInfoRequestDto) {
         authService.registerUser(userInfoRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.AUTH_USER_CREATED);
     }
@@ -61,26 +63,26 @@ public class AuthApi {
 
     //TODO: jwt 토큰 삭제로 변경할 예정
     @PostMapping("/logout")
-    public ResponseEntity<GlobalResponseHandler<Void>> logoutUser(@RequestBody @Valid AuthLoginRequestDto authLoginRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> logoutUser(@RequestBody @Validated(ValidationSequenceConfig.class) AuthLoginRequestDto authLoginRequestDto) {
         authService.logoutUser(authLoginRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.AUTH_LOGGED_OUT);
     }
 
     //TODO: DTO로 변경
     @PostMapping("/invite/all")
-    public ResponseEntity<GlobalResponseHandler<String>> inviteAllUser(@RequestBody @Valid AuthInviteAllRequestDto authInviteAllRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<String>> inviteAllUser(@RequestBody @Validated(ValidationSequenceConfig.class) AuthInviteAllRequestDto authInviteAllRequestDto) {
         String inviteAllUrl = authService.inviteAllUser(authInviteAllRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.AUTH_INVITE_LINK_CREATED, inviteAllUrl);
     }
 
     @PostMapping("/invite")
-    public ResponseEntity<GlobalResponseHandler<String>> inviteUserByStudentNumber(@RequestBody @Valid AuthInviteOneRequestDto authInviteOneDto) {
+    public ResponseEntity<GlobalResponseHandler<String>> inviteUserByStudentNumber(@RequestBody @Validated(ValidationSequenceConfig.class) AuthInviteOneRequestDto authInviteOneDto) {
         String inviteUrl = authService.inviteUserByStudentNumber(authInviteOneDto);
         return GlobalResponseHandler.success(ResponseStatus.AUTH_INVITE_LINK_CREATED, inviteUrl);
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<GlobalResponseHandler<Void>> verifyInviteCode(@RequestBody @Valid AuthVerifyRequestDto authVerifyRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> verifyInviteCode(@RequestBody @Validated(ValidationSequenceConfig.class) AuthVerifyRequestDto authVerifyRequestDto) {
 
         String sessionId = authService.verifyInviteCode(authVerifyRequestDto);
 

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.clubs.blueheart.config.ValidationSequenceConfig;
 import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.group.application.GroupService;
 import org.clubs.blueheart.group.dto.request.GroupUserRequestDto;
@@ -15,6 +16,7 @@ import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,7 +51,7 @@ public class GroupApi {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<GlobalResponseHandler<Void>> createGroup(@RequestBody @Valid GroupInfoRequestDto groupInfoRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> createGroup(@RequestBody @Validated(ValidationSequenceConfig.class) GroupInfoRequestDto groupInfoRequestDto) {
         groupService.createGroup(groupInfoRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_CREATED);
     }
@@ -75,7 +77,7 @@ public class GroupApi {
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<GlobalResponseHandler<Void>> deleteGroup(@RequestBody @Valid GroupInfoRequestDto groupInfoRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> deleteGroup(@RequestBody @Validated(ValidationSequenceConfig.class) GroupInfoRequestDto groupInfoRequestDto) {
         groupService.deleteGroup(groupInfoRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_DELETED);
     }
@@ -101,7 +103,7 @@ public class GroupApi {
     })
     //TODO: jwt로 groupId 대체 예정
     @PostMapping("/add")
-    public ResponseEntity<GlobalResponseHandler<Void>> addGroupUser(@RequestBody @Valid GroupUserRequestDto groupUserRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> addGroupUser(@RequestBody @Validated(ValidationSequenceConfig.class) GroupUserRequestDto groupUserRequestDto) {
         groupService.addGroupUserById(groupUserRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_ADD);
     }
@@ -126,7 +128,7 @@ public class GroupApi {
             )
     })
     @DeleteMapping("/remove")
-    public ResponseEntity<GlobalResponseHandler<Void>> removeGroupUser(@RequestBody @Valid GroupUserRequestDto groupUserRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> removeGroupUser(@RequestBody @Validated(ValidationSequenceConfig.class) GroupUserRequestDto groupUserRequestDto) {
         groupService.removeGroupUserById(groupUserRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.GROUP_REMOVE);
     }

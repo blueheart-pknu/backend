@@ -133,7 +133,7 @@ class GroupApiTest {
         MvcResult mvcResult = resultActions
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("userId: UserID must not be null"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("userId: User ID must not be null"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
@@ -268,7 +268,7 @@ class GroupApiTest {
         MvcResult mvcResult = resultActions
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("groupId: GroupId must not be null"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("groupId: Group ID must not be null"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
@@ -333,7 +333,7 @@ class GroupApiTest {
         MvcResult mvcResult = resultActions
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("groupId: GroupId must not be null"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("groupId: Group ID must not be null"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 

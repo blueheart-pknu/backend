@@ -138,7 +138,7 @@ class UserApiTest {
         MvcResult mvcResult = resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
-                .andExpect(jsonPath("$.message").value("studentNumber: must match \"^[0-9]+$\"; studentNumber: studentNumber must not be blank"))
+                .andExpect(jsonPath("$.message").value("studentNumber: Student number must not be blank"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 

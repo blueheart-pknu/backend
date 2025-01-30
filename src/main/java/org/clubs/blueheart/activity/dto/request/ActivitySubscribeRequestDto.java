@@ -10,7 +10,7 @@ import org.clubs.blueheart.config.ValidationGroups;
 @Builder
 public class ActivitySubscribeRequestDto {
 
-    @NotNull(message = "ActivityId must not be blank",
+    @NotNull(message = "ActivityId must not be null",
             groups = ValidationGroups.NotNullGroup.class)
     @Min(value = 1, message = "ActivityId must be at least 1",
             groups = ValidationGroups.SizeGroup.class)

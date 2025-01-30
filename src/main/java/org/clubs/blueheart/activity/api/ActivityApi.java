@@ -13,10 +13,12 @@ import org.clubs.blueheart.activity.dto.request.ActivityDeleteRequestDto;
 import org.clubs.blueheart.activity.dto.request.ActivityUpdateRequestDto;
 import org.clubs.blueheart.activity.dto.response.ActivityDetailResponseDto;
 import org.clubs.blueheart.activity.dto.response.ActivitySearchResponseDto;
+import org.clubs.blueheart.config.ValidationSequenceConfig;
 import org.clubs.blueheart.exception.CustomExceptionStatus;
 import org.clubs.blueheart.response.GlobalResponseHandler;
 import org.clubs.blueheart.response.ResponseStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class ActivityApi {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<GlobalResponseHandler<Void>> createActivity(@RequestBody @Valid ActivityCreateRequestDto activityCreateRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> createActivity(@RequestBody @Validated(ValidationSequenceConfig.class) ActivityCreateRequestDto activityCreateRequestDto) {
         activityService.createActivity(activityCreateRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_CREATED);
     }
@@ -85,7 +87,7 @@ public class ActivityApi {
             )
     })
     @PutMapping("/update")
-    public ResponseEntity<GlobalResponseHandler<Void>> updateActivity(@RequestBody @Valid ActivityUpdateRequestDto activityUpdateRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> updateActivity(@RequestBody @Validated(ValidationSequenceConfig.class) ActivityUpdateRequestDto activityUpdateRequestDto) {
         activityService.updateActivity(activityUpdateRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_UPDATED);
     }
@@ -185,7 +187,7 @@ public class ActivityApi {
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<GlobalResponseHandler<Void>> deleteActivity(@RequestBody @Valid ActivityDeleteRequestDto activityDeleteRequestDto) {
+    public ResponseEntity<GlobalResponseHandler<Void>> deleteActivity(@RequestBody @Validated(ValidationSequenceConfig.class) ActivityDeleteRequestDto activityDeleteRequestDto) {
         activityService.deleteActivity(activityDeleteRequestDto);
         return GlobalResponseHandler.success(ResponseStatus.ACTIVITY_DELETED);
     }

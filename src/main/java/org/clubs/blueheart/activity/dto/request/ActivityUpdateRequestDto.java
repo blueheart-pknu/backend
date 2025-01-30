@@ -32,8 +32,9 @@ public class ActivityUpdateRequestDto {
     @NotNull(message = "Max number must not be null",
             groups = ValidationGroups.NotNullGroup.class)
 
-    @Size(min = 1, max = 999,
-            message = "MaxNumber cannot exceed 999",
+    @Min(value = 1, message = "Max number must be at least 1",
+            groups = ValidationGroups.SizeGroup.class)
+    @Max(value = 999, message = "Max number cannot exceed 999",
             groups = ValidationGroups.SizeGroup.class)
     private Integer maxNumber;
 
