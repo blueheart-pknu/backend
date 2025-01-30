@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import org.clubs.blueheart.config.ValidationSequenceConfig;
 import org.clubs.blueheart.config.jwt.JwtUserDetails;
 import org.clubs.blueheart.notification.application.NotificationService;

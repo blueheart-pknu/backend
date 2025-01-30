@@ -1,6 +1,5 @@
 package org.clubs.blueheart.auth.api;
 
-import jakarta.validation.Valid;
 import org.clubs.blueheart.auth.application.AuthService;
 import org.clubs.blueheart.auth.dto.request.AuthInviteAllRequestDto;
 import org.clubs.blueheart.auth.dto.request.AuthInviteOneRequestDto;

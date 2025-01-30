@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import org.clubs.blueheart.activity.application.ActivityHistoryService;
 import org.clubs.blueheart.activity.dto.request.ActivitySubscribeRequestDto;
 import org.clubs.blueheart.activity.dto.response.ActivitySearchResponseDto;
