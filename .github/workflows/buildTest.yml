@@ -1,4 +1,4 @@
-name: "Java CI with Gradle (Spring 3.4.1, Java 17)"
+name: "Java Build (Spring 3.4.1, Java 17, Caching Enabled)"
 
 on:
   push:
@@ -9,19 +9,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out your repository
-      - name: Checkout
+      # 1. Check out the repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Set up JDK 17
+      # 2. Set up JDK 17 with Gradle caching
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle  # Enables dependency caching for Gradle
 
-      - name: Setup Gradles's permission
+      # 3. Restore Gradle cache (dependencies & wrapper)
+      - name: Restore Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # 4. Grant execute permission for Gradle wrapper
+      - name: Set Gradle wrapper permissions
         run: chmod +x gradlew
 
-      - name: Build with Gradle
+      # 5. Build project (excluding tests)
+      - name: Build with Gradle (No Tests)
         run: ./gradlew clean build --exclude-task test

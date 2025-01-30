@@ -1,0 +1,55 @@
+name: "Java API Tests (Spring 3.4.1, Java 17, Caching Enabled)"
+
+on:
+  push:
+    branches: ["*"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Set up JDK 17 with Gradle caching
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle  # Enables dependency caching for Gradle
+
+      # 3. Restore Gradle cache (dependencies & wrapper)
+      - name: Restore Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # 4. Load environment variables
+      - name: Create .env for tests
+        run: |
+          touch .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "DB_URL=${{ secrets.DB_URL }}" >> .env
+          echo "ACCESS_TOKEN_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_EXPIRE_TIME }}" >> .env
+          echo "REFRESH_TOKEN_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_EXPIRE_TIME }}" >> .env
+
+      # 5. Grant execute permission for Gradle wrapper
+      - name: Set Gradle wrapper permissions
+        run: chmod +x gradlew
+
+      # 6. Run only API tests
+      - name: Run API tests
+        run: |
+          ./gradlew test --tests "org.clubs.blueheart.activity.api.*" \
+                         --tests "org.clubs.blueheart.auth.api.*" \
+                         --tests "org.clubs.blueheart.group.api.*" \
+                         --tests "org.clubs.blueheart.notification.api.*" \
+                         --tests "org.clubs.blueheart.user.api.*"
