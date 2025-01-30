@@ -35,13 +35,13 @@ public class SecurityConfig {
                 )
                 // 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/register").permitAll()  // 사용자 등록
+                        .requestMatchers("/api/v1/auth/login").permitAll()     // 로그인
+                        .requestMatchers("/api/v1/auth/verify").permitAll()    // 초대 코드 검증
+
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/swagger-resources/**").permitAll()
-                        .requestMatchers("/swagger-ui.html").permitAll()
-                        .requestMatchers("/webjars/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 // JWT 필터 추가

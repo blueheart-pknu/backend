@@ -11,11 +11,11 @@ import org.clubs.blueheart.user.domain.UserRole;
 @Builder
 public class UserInfoRequestDto {
     @NotBlank(message = "Username must not be blank")
-    @Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ]+$")
+    @Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ]+$", message = "Username must only contain letters")
     private String username;
 
     @NotBlank(message = "studentNumber must not be blank")
-    @Pattern(regexp = "^[0-9]+$")
+    @Pattern(regexp = "^[0-9]+$", message = "studentNumber must contain only numbers")
     private String studentNumber;
 
     @NotNull(message = "role must not be blank")

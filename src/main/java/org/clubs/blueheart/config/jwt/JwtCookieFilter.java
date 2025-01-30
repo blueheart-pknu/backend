@@ -35,7 +35,9 @@ public class JwtCookieFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // /api/v1/auth/**, /h2-console/**, Swagger 관련 경로 제외
-        if (path.startsWith("/api/v1/auth/")
+        if (path.startsWith("/api/v1/auth/register")
+                || path.startsWith("/api/v1/auth/login")
+                || path.startsWith("/api/v1/auth/verify")
                 || path.startsWith("/h2-console/")
                 || path.startsWith("/swagger")
                 || path.startsWith("/v3/api-docs")
