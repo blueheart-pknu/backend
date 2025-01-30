@@ -33,9 +33,16 @@ jobs:
             gradle-${{ runner.os }}-
 
       # 4. Load environment variables
-      - name: Set up environment variables
+      - name: Create .env for tests
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+          cat <<EOF > .env
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          DB_URL=${{ secrets.DB_URL }}
+          ACCESS_TOKEN_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_EXPIRE_TIME }}
+          REFRESH_TOKEN_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_EXPIRE_TIME }}}
+          
+          EOF
+          
 
       # 5. Grant execute permission for Gradle wrapper
       - name: Set Gradle wrapper permissions
