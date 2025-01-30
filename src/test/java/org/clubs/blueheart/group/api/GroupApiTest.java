@@ -31,8 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
-
 /**
  * GroupApi 컨트롤러에 대한 통합 테스트 클래스
  */

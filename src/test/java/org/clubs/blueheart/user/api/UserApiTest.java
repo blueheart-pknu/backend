@@ -2,6 +2,8 @@ package org.clubs.blueheart.user.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.clubs.blueheart.config.jwt.JwtGenerator;
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.user.application.UserService;
 import org.clubs.blueheart.user.dto.request.UserDeleteRequestDto;
 import org.clubs.blueheart.user.dto.request.UserInfoRequestDto;
@@ -112,6 +114,71 @@ class UserApiTest {
     }
 
     /**
+     * 1-1. 사용자 생성 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
+    @Test
+    @DisplayName("사용자 생성 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void createUser_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: studentNumber가 빈 문자열인 경우
+        UserInfoRequestDto requestDto = UserInfoRequestDto.builder()
+                .studentNumber("")  // 유효하지 않은 studentNumber
+                .username("홍길동")
+                .role(UserRole.USER)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/user/create")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
+                .andExpect(jsonPath("$.message").value("studentNumber: must match \"^[0-9]+$\"; studentNumber: studentNumber must not be blank"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 1-2. 사용자 생성 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("사용자 생성 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void createUser_WithInvalidToken_ShouldReturn401() throws Exception {
+        // Given
+        UserInfoRequestDto requestDto = UserInfoRequestDto.builder()
+                .studentNumber("201234567")
+                .username("홍길동")
+                .role(UserRole.USER)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/user/create")
+                .header("Authorization", "Bearer invalid_token")  // 유효하지 않은 토큰
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+
+    /**
      * 2. 사용자 검색 테스트
      */
     @Test
@@ -159,6 +226,34 @@ class UserApiTest {
     }
 
     /**
+     * 2-1. 사용자 검색 실패 테스트: 존재하지 않는 사용자 (404 Not Found)
+     */
+    @Test
+    @DisplayName("사용자 검색 실패 테스트: 존재하지 않는 사용자 (404 Not Found)")
+    void findUserByKeyword_NotFound_ShouldReturn404() throws Exception {
+        // Given
+        String keyword = "없는사용자";
+
+        Mockito.when(userService.findUserByKeyword(ArgumentMatchers.anyString()))
+                .thenThrow(new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/user/search/" + keyword)
+                .header("Authorization", "Bearer " + token));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.USER_NOT_FOUND_USER.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.USER_NOT_FOUND_USER.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+
+    /**
      * 3. 사용자 정보 업데이트 테스트
      */
     @Test
@@ -196,6 +291,43 @@ class UserApiTest {
     }
 
     /**
+     * 3-1. 사용자 정보 업데이트 실패 테스트: 존재하지 않는 사용자 (404 Not Found)
+     */
+    @Test
+    @DisplayName("사용자 정보 업데이트 실패 테스트: 존재하지 않는 사용자 (404 Not Found)")
+    void updateUser_WithNonExistentUser_ShouldReturn404() throws Exception {
+        // Given
+        UserUpdateRequestDto updateRequestDto = UserUpdateRequestDto.builder()
+                .userId(999L)  // 존재하지 않는 사용자 ID
+                .username("김철수")
+                .studentNumber("201234567")
+                .role(UserRole.ADMIN)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(updateRequestDto);
+
+        Mockito.doThrow(new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER))
+                .when(userService).updateUserById(Mockito.any(UserUpdateRequestDto.class));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(put("/api/v1/user/update")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.USER_NOT_FOUND_USER.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.USER_NOT_FOUND_USER.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+
+    /**
      * 4. 사용자 삭제 테스트
      */
     @Test
@@ -228,6 +360,40 @@ class UserApiTest {
 
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
+
+    /**
+     * 4-1. 사용자 삭제 실패 테스트: 존재하지 않는 사용자 (404 Not Found)
+     */
+    @Test
+    @DisplayName("사용자 삭제 실패 테스트: 존재하지 않는 사용자 (404 Not Found)")
+    void deleteUser_WithNonExistentUser_ShouldReturn404() throws Exception {
+        // Given
+        UserDeleteRequestDto requestDto = UserDeleteRequestDto.builder()
+                .userId(999L)  // 존재하지 않는 사용자 ID
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        Mockito.doThrow(new RepositoryException(ExceptionStatus.USER_NOT_FOUND_USER))
+                .when(userService).deleteUserById(Mockito.any(UserDeleteRequestDto.class));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/user/delete")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.USER_NOT_FOUND_USER.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.USER_NOT_FOUND_USER.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
 
     /**
      * 5. 모든 사용자 조회 테스트
@@ -272,4 +438,26 @@ class UserApiTest {
 
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
+
+    /**
+     * 5-1. 모든 사용자 조회 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("모든 사용자 조회 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void findAllUser_WithInvalidToken_ShouldReturn401() throws Exception {
+        // When
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/user/all")
+                .header("Authorization", "Bearer invalid_token"));  // 유효하지 않은 토큰
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
 }
