@@ -15,15 +15,17 @@ import org.clubs.blueheart.config.ValidationGroups;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthInviteOneRequestDto extends AuthInviteAllRequestDto {
 
-    @NotBlank(message = "TargetUsername must not be blank",
+    @NotBlank(message = "Target username must not be blank",
             groups = ValidationGroups.NotBlankGroup.class)
     @Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ]+$",
+            message = "Target username can only contain letters",
             groups = ValidationGroups.PatternGroup.class)
     private String targetUsername;
 
-    @NotBlank(message = "TargetStudentNumber must not be blank",
+    @NotBlank(message = "Target student number must not be blank",
             groups = ValidationGroups.NotBlankGroup.class)
     @Pattern(regexp = "^[0-9]+$",
-    groups = ValidationGroups.PatternGroup.class)
+            message = "Target student number must only contain numbers",
+            groups = ValidationGroups.PatternGroup.class)
     private String targetStudentNumber;
 }
