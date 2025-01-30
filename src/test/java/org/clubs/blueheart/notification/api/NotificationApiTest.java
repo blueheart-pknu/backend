@@ -2,6 +2,8 @@ package org.clubs.blueheart.notification.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.clubs.blueheart.config.jwt.JwtGenerator;
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.notification.application.NotificationService;
 import org.clubs.blueheart.notification.dto.request.NotificationRequestDto;
 import org.clubs.blueheart.notification.dto.response.NotificationResponseDto;
@@ -110,6 +112,71 @@ class NotificationApiTest {
     }
 
     /**
+     * 1-1. 액티비티 알림 전송 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
+    @Test
+    @DisplayName("액티비티 알림 전송 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void notificationActivity_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: content가 빈 문자열인 경우
+        NotificationRequestDto requestDto = NotificationRequestDto.builder()
+                .senderId(1L)
+                .receiverId(2L)
+                .content("")  // 유효하지 않은 content
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/notification/activity")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
+                .andExpect(jsonPath("$.message").value("content: 내용은 255자 이하입니다; content: Content must not be blank"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 1-2. 액티비티 알림 전송 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("액티비티 알림 전송 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void notificationActivity_WithInvalidToken_ShouldReturn401() throws Exception {
+        // Given
+        NotificationRequestDto requestDto = NotificationRequestDto.builder()
+                .senderId(1L)
+                .receiverId(2L)
+                .content("Hello World")
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/notification/activity")
+                .header("Authorization", "Bearer invalid_token")  // 유효하지 않은 토큰
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+
+    /**
      * 2. 그룹에 대한 알림 전송 테스트
      */
     @Test
@@ -146,6 +213,71 @@ class NotificationApiTest {
     }
 
     /**
+     * 2-1. 그룹 알림 전송 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
+    @Test
+    @DisplayName("그룹 알림 전송 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void notificationGroup_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: receiverId가 null인 경우
+        NotificationRequestDto requestDto = NotificationRequestDto.builder()
+                .senderId(1L)
+                .receiverId(null)  // 유효하지 않은 receiverId
+                .content("Hello Group")
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/notification/group")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
+                .andExpect(jsonPath("$.message").value("receiverId: ReceiverID must not be null"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 2-2. 그룹 알림 전송 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("그룹 알림 전송 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void notificationGroup_WithInvalidToken_ShouldReturn401() throws Exception {
+        // Given
+        NotificationRequestDto requestDto = NotificationRequestDto.builder()
+                .senderId(1L)
+                .receiverId(2L)
+                .content("Hello Group")
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/notification/group")
+                .header("Authorization", "Bearer invalid_token")  // 유효하지 않은 토큰
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+
+    /**
      * 3. 현재 사용자에 대한 모든 알림 조회 테스트
      */
     @Test
@@ -178,13 +310,60 @@ class NotificationApiTest {
                 .andExpect(jsonPath("$.statusCode").value(ResponseStatus.NOTIFICATION_SEARCHED.getStatusCode()))
                 .andExpect(jsonPath("$.message").value(ResponseStatus.NOTIFICATION_SEARCHED.getMessage()))
                 .andExpect(jsonPath("$.data.length()").value(mockNotifications.size()))
-                .andExpect(jsonPath("$.data[0].senderUsername").value(1L))
+                .andExpect(jsonPath("$.data[0].senderUsername").value("User 1"))
                 .andExpect(jsonPath("$.data[0].content").value("Your group has been updated."))
-                .andExpect(jsonPath("$.data[1].senderUsername").value(2L))
+                .andExpect(jsonPath("$.data[1].senderUsername").value("User 2"))
                 .andExpect(jsonPath("$.data[1].content").value("New activity available."))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
+
+    /**
+     * 3-1. 현재 사용자의 모든 알림 조회 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("현재 사용자의 모든 알림 조회 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void findAllNotificationMe_WithInvalidToken_ShouldReturn401() throws Exception {
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/notification/me")
+                .header("Authorization", "Bearer invalid_token"));  // 유효하지 않은 토큰
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 3-2. 현재 사용자의 모든 알림 조회 실패 테스트: 알림 없음 (404 Not Found)
+     */
+    @Test
+    @DisplayName("현재 사용자의 모든 알림 조회 실패 테스트: 알림 없음 (404 Not Found)")
+    void findAllNotificationMe_NoNotifications_ShouldReturn404() throws Exception {
+        // Mocking the service to throw exception
+        Mockito.when(notificationService.findAllNotificationMe(anyLong()))
+                .thenThrow(new RepositoryException(ExceptionStatus.NOTIFICATION_NOT_FOUND));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/notification/me")
+                .header("Authorization", "Bearer " + token));  // 토큰 첨부
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(ExceptionStatus.NOTIFICATION_NOT_FOUND.getStatusCode()))
+                .andExpect(jsonPath("$.message").value(ExceptionStatus.NOTIFICATION_NOT_FOUND.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
 }

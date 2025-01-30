@@ -2,6 +2,8 @@ package org.clubs.blueheart.group.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.clubs.blueheart.config.jwt.JwtGenerator;
+import org.clubs.blueheart.exception.ExceptionStatus;
+import org.clubs.blueheart.exception.RepositoryException;
 import org.clubs.blueheart.group.application.GroupService;
 import org.clubs.blueheart.group.dto.request.GroupInfoRequestDto;
 import org.clubs.blueheart.group.dto.request.GroupUserRequestDto;
@@ -110,6 +112,37 @@ class GroupApiTest {
     }
 
     /**
+     * 1-1. 그룹 생성 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
+    @Test
+    @DisplayName("그룹 생성 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void createGroup_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: userId가 null인 경우
+        GroupInfoRequestDto requestDto = GroupInfoRequestDto.builder()
+                .userId(null)  // 유효하지 않은 userId
+                .username("홍길동")
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/group/create")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("userId: UserID must not be null"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
      * 2. 그룹 삭제 테스트
      */
     @Test
@@ -138,6 +171,40 @@ class GroupApiTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ResponseStatus.GROUP_DELETED.getStatusCode()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ResponseStatus.GROUP_DELETED.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").doesNotExist()) // 데이터 없음
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 2-1. 그룹 삭제 실패 테스트: 존재하지 않는 그룹 ID (404 Not Found)
+     */
+    @Test
+    @DisplayName("그룹 삭제 실패 테스트: 존재하지 않는 그룹 ID (404 Not Found)")
+    void deleteGroup_WithNonExistentId_ShouldReturn404() throws Exception {
+        // Given
+        GroupInfoRequestDto requestDto = GroupInfoRequestDto.builder()
+                .userId(999L)  // 존재하지 않는 그룹 ID
+                .username("홍길동")
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        Mockito.doThrow(new RepositoryException(ExceptionStatus.GROUP_NOT_FOUND))
+                .when(groupService).deleteGroup(Mockito.any(GroupInfoRequestDto.class));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/group/delete")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GROUP_NOT_FOUND.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionStatus.GROUP_NOT_FOUND.getMessage()))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
@@ -180,6 +247,37 @@ class GroupApiTest {
     }
 
     /**
+     * 3-1. 그룹에 사용자 추가 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
+    @Test
+    @DisplayName("그룹에 사용자 추가 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void addGroupUser_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: groupId가 null인 경우
+        GroupUserRequestDto requestDto = GroupUserRequestDto.builder()
+                .groupId(null)  // 유효하지 않은 groupId
+                .userId(2L)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/group/add")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("groupId: GroupId must not be null"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
      * 4. 그룹에서 사용자 제거 테스트
      */
     @Test
@@ -213,6 +311,102 @@ class GroupApiTest {
 
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
+    /**
+     * 4-1. 그룹에서 사용자 제거 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)
+     */
+    @Test
+    @DisplayName("그룹에서 사용자 제거 실패 테스트: 잘못된 입력 데이터 (400 Bad Request)")
+    void removeGroupUser_WithInvalidInput_ShouldReturn400() throws Exception {
+        // Given: groupId가 null인 경우
+        GroupUserRequestDto requestDto = GroupUserRequestDto.builder()
+                .groupId(null)  // 유효하지 않은 groupId
+                .userId(2L)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/group/remove")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GENERAL_BAD_REQUEST.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("groupId: GroupId must not be null"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 4-2. 그룹에서 사용자 제거 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("그룹에서 사용자 제거 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void removeGroupUser_WithInvalidToken_ShouldReturn401() throws Exception {
+        // Given
+        GroupUserRequestDto requestDto = GroupUserRequestDto.builder()
+                .groupId(1L)
+                .userId(2L)
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/group/remove")
+                .header("Authorization", "Bearer invalid_token")  // 유효하지 않은 토큰
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 4-3. 그룹에서 사용자 제거 실패 테스트: 존재하지 않는 사용자 (404 Not Found)
+     */
+    @Test
+    @DisplayName("그룹에서 사용자 제거 실패 테스트: 존재하지 않는 사용자 (404 Not Found)")
+    void removeGroupUser_WithNonExistentUser_ShouldReturn404() throws Exception {
+        // Given: 존재하지 않는 userId
+        GroupUserRequestDto requestDto = GroupUserRequestDto.builder()
+                .groupId(1L)
+                .userId(999L)  // 존재하지 않는 userId
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        Mockito.doThrow(new RepositoryException(ExceptionStatus.GROUP_USER_NOT_FOUND))
+                .when(groupService).removeGroupUserById(Mockito.any(GroupUserRequestDto.class));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/group/remove")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GROUP_USER_NOT_FOUND.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionStatus.GROUP_USER_NOT_FOUND.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
 
     /**
      * 5. 현재 사용자의 그룹 정보 조회 테스트
@@ -262,4 +456,51 @@ class GroupApiTest {
 
         System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
     }
+
+    /**
+     * 5-1. 현재 사용자의 그룹 정보 조회 실패 테스트: 인증 실패 (401 Unauthorized)
+     */
+    @Test
+    @DisplayName("현재 사용자의 그룹 정보 조회 실패 테스트: 인증 실패 (401 Unauthorized)")
+    void getMyGroupInfo_WithInvalidToken_ShouldReturn401() throws Exception {
+        // When: 유효하지 않은 토큰 사용
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/group/me")
+                .header("Authorization", "Bearer invalid_token"));  // 유효하지 않은 토큰
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionStatus.AUTH_COOKIE_UNAUTHORIZED.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
+    /**
+     * 5-2. 현재 사용자의 그룹 정보 조회 실패 테스트: 그룹 정보 없음 (404 Not Found)
+     */
+    @Test
+    @DisplayName("현재 사용자의 그룹 정보 조회 실패 테스트: 그룹 정보 없음 (404 Not Found)")
+    void getMyGroupInfo_WithNoGroup_ShouldReturn404() throws Exception {
+        // Mocking the service to throw exception
+        Mockito.when(groupService.getMyGroupInfoByUserId(ArgumentMatchers.anyLong()))
+                .thenThrow(new RepositoryException(ExceptionStatus.GROUP_NOT_FOUND));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/group/me")
+                .header("Authorization", "Bearer " + token));
+
+        // Then
+        MvcResult mvcResult = resultActions
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(ExceptionStatus.GROUP_NOT_FOUND.getStatusCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionStatus.GROUP_NOT_FOUND.getMessage()))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("Response: " + mvcResult.getResponse().getContentAsString());
+    }
+
 }

@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 public class GroupInfoRequestDto {
 
-    @NotNull(message = "UserID must not be blank")
+    @NotNull(message = "UserID must not be null")
     @Min(value = 1, message = "사용자ID는 1이상이어야합니다.")
     private Long userId;
 

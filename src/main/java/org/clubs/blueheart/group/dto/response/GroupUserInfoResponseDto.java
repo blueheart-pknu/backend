@@ -12,7 +12,7 @@ import org.clubs.blueheart.user.domain.UserRole;
 @Builder
 public class GroupUserInfoResponseDto {
 
-    @NotNull(message = "UserId must not be blank")
+    @NotNull(message = "UserId must not be null")
     @Min(value = 1, message = "사용자ID는 1이상이어야합니다.")
     private Long userId;
 

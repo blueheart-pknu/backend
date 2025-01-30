@@ -8,11 +8,11 @@ import lombok.Data;
 @Builder
 public class NotificationRequestDto {
 
-    @NotNull(message = "SenderID must not be blank")
+    @NotNull(message = "SenderID must not be null")
     @Min(value = 1, message = "송신자ID는 1이상이어야합니다.")
     private Long senderId;
 
-    @NotNull(message = "ReceiverID must not be blank")
+    @NotNull(message = "ReceiverID must not be null")
     @Min(value = 1, message = "수신자ID는 1이상이어야합니다.")
     private Long receiverId;
 
