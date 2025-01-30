@@ -32,11 +32,16 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      # 4. Grant execute permission for Gradle wrapper
+      # 4. Load environment variables
+      - name: Set up environment variables
+        run: |
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+
+      # 5. Grant execute permission for Gradle wrapper
       - name: Set Gradle wrapper permissions
         run: chmod +x gradlew
 
-      # 5. Run only API tests
+      # 6. Run only API tests
       - name: Run API tests
         run: |
           ./gradlew test --tests "org.clubs.blueheart.activity.api.*" \
